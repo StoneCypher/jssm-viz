@@ -1,6 +1,6 @@
 {
   "name": "jssm-viz",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Visualization of JSSM machines using viz.js",
   "main": "src/js/jssm-viz.js",
   "scripts": {
@@ -16,8 +16,10 @@
     "fsm",
     "finite-state-machine",
     "finite_state_machine",
+    "finite state machine",
     "state-machine",
     "state_machine",
+    "state machine",
     "finite",
     "state",
     "machine",
@@ -27,12 +29,35 @@
     "graph",
     "fsm-graph",
     "vis",
-    "viz"
+    "viz",
+    "svg"
   ],
   "author": "John Haugeland <stonecypher@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/StoneCypher/jssm-viz/issues"
   },
-  "homepage": "https://github.com/StoneCypher/jssm-viz#readme"
+  "homepage": "https://github.com/StoneCypher/jssm-viz#readme",
+  "devDependencies": {
+    "ava": "^0.20.0",
+    "ava-spec": "^1.1.0",
+    "babel": "^6.23.0",
+    "babel-eslint": "^7.2.3",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-flow": "^6.23.0",
+    "browserify": "^14.4.0",
+    "coveralls": "^2.13.1",
+    "del-cli": "^1.1.0",
+    "documentation": "^4.0.0-rc.1",
+    "eslint": "^4.1.1",
+    "eslint-plugin-flowtype": "^2.34.1",
+    "flow-bin": "^0.49.1",
+    "gulp-string-replace": "^0.4.0",
+    "nyc": "^11.0.3",
+    "pegjs": "^0.10.0",
+    "rimraf": "^2.6.1",
+    "uglify-js": "^3.0.23",
+    "viz.js": "^1.8.0"
+  }
 }
