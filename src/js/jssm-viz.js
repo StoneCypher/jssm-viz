@@ -6,7 +6,15 @@ const version = null; // replaced from package.js in build
 
 
 
-const viz = (jssm:any) => {  // whargarbl jssm isn't an any
+const svg = (dot:string) : string => {  // whargarbl jssm isn't an any
+    return '<svg><g><text>todo</text></g></svg>';
+}
+
+
+
+
+
+const dot = (jssm:any) => {  // whargarbl jssm isn't an any
 
   const l_states = jssm.states();
 
@@ -112,4 +120,4 @@ const viz = (jssm:any) => {  // whargarbl jssm isn't an any
 
 
 
-export { viz };
+export { dot, svg };

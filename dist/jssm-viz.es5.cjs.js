@@ -5,10 +5,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var version = '0.5.0'; // replaced from package.js in build
+var version = '0.6.0'; // replaced from package.js in build
 
 
-var viz = function viz(jssm) {
+var svg = function svg(dot) {
+  // whargarbl jssm isn't an any
+  return '<svg><g><text>todo</text></g></svg>';
+};
+
+var dot = function dot(jssm) {
   // whargarbl jssm isn't an any
 
   var l_states = jssm.states();
@@ -104,6 +109,7 @@ var viz = function viz(jssm) {
   return 'digraph G {\n  fontname="helvetica neue";\n  style=filled;\n  bgcolor=lightgrey;\n  node [fontsize=14; shape=box; style=filled; fillcolor=white; fontname="helvetica neue"];\n  edge [fontsize=6;fontname="helvetica neue"];\n\n  ' + nodes + '\n\n  ' + edges + '\n}';
 };
 
-exports.viz = viz;
+exports.dot = dot;
+exports.svg = svg;
 
 },{}]},{},[]);

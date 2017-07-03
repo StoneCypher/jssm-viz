@@ -2,8 +2,41 @@
 <html>
 
   <head>
+
     <title>Viz test</title>
+
+    <script defer type="text/javascript" src="../../../jssm/dist/jssm.es5.cjs.js"></script>
     <script type="text/javascript" src="../../dist/jssm-viz.es5.cjs.js"></script>
+
+    <script defer type="text/javascript">
+
+      window.onload = () => {
+
+        const jssm = require('jssm'),
+              jviz = require('jssm-viz');
+
+        const trs = [
+                { name: 'SwitchToWarn', action: 'Proceed', from:'Green',  to:'Yellow' },
+                { name: 'SwitchToHalt', action: 'Proceed', from:'Yellow', to:'Red'    },
+                { name: 'SwitchToGo',   action: 'Proceed', from:'Red',    to:'Green'  }
+              ],
+
+              machine = new jssm.machine({
+                initial_state : 'Red',
+                transitions   : trs
+              });
+
+        const dot = jviz.dot(machine),
+              svg = jviz.svg(dot);
+
+        console.log( dot );
+        console.log( svg );
+
+      }
+
+    </script>
+
+
   </head>
 
   <body>
