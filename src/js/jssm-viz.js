@@ -1,4 +1,11 @@
 
+// @flow
+const version = null; // replaced from package.js in build
+
+
+
+
+
 const viz = jssm => {
 
   const l_states = jssm.states();
