@@ -1,0 +1,38 @@
+{
+  "name": "jssm-viz",
+  "version": "0.1.0",
+  "description": "Visualization of JSSM machines using viz.js",
+  "main": "src/js/jssm-viz.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/StoneCypher/jssm-viz.git"
+  },
+  "keywords": [
+    "jssm",
+    "visualization",
+    "fsm",
+    "finite-state-machine",
+    "finite_state_machine",
+    "state-machine",
+    "state_machine",
+    "finite",
+    "state",
+    "machine",
+    "flowchart",
+    "chart",
+    "layout",
+    "graph",
+    "fsm-graph",
+    "vis",
+    "viz"
+  ],
+  "author": "John Haugeland <stonecypher@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/StoneCypher/jssm-viz/issues"
+  },
+  "homepage": "https://github.com/StoneCypher/jssm-viz#readme"
+}
