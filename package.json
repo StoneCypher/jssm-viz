@@ -1,6 +1,6 @@
 {
   "name": "jssm-viz",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "description": "Visualization of JSSM machines using viz.js",
   "main": "src/js/jssm-viz.js",
   "scripts": {
@@ -63,6 +63,9 @@
     "url": "https://github.com/StoneCypher/jssm-viz/issues"
   },
   "homepage": "https://github.com/StoneCypher/jssm-viz#readme",
+  "peerDependencies": {
+    "jssm": ">=2.0.0"
+  },
   "devDependencies": {
     "ava": "^0.20.0",
     "ava-spec": "^1.1.0",
