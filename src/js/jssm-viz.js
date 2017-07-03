@@ -6,7 +6,7 @@ const version = null; // replaced from package.js in build
 
 
 
-const viz = jssm => {
+const viz = (jssm:any) => {  // whargarbl jssm isn't an any
 
   const l_states = jssm.states();
 
