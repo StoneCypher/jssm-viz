@@ -2,13 +2,69 @@
 // @flow
 const version = null; // replaced from package.js in build
 
+const vizjs   = require('viz.js');
+
+
+
+const default_viz_colors = {
+
+    'fill_final'         : '#eeeeff',
+    'fill_terminal'      : '#ffeeee',
+    'fill_complete'      : '#eeffee',
+
+    'normal_line_1'      : '#999999',
+    'normal_line_2'      : '#888888',
+    'normal_line_solo'   : '#888888',
+
+    'line_final_1'       : '#8888bb',
+    'line_final_2'       : '#7777aa',
+    'line_final_solo'    : '#7777aa',
+
+    'line_terminal_1'    : '#bb8888',
+    'line_terminal_2'    : '#aa7777',
+    'line_terminal_solo' : '#aa7777',
+
+    'line_complete_1'    : '#88bb88',
+    'line_complete_2'    : '#77aa77',
+    'line_complete_solo' : '#77aa77',
+
+    'text_final_1'       : '#000088',
+    'text_final_2'       : '#000088',
+    'text_final_solo'    : '#000088',
+
+    'text_terminal_1'    : '#880000',
+    'text_terminal_2'    : '#880000',
+    'text_terminal_solo' : '#880000',
+
+    'text_complete_1'    : '#007700',
+    'text_complete_2'    : '#007700',
+    'text_complete_solo' : '#007700'
+
+}
+
 
 
 
 
 const svg = (dot:string) : string => {  // whargarbl jssm isn't an any
-    return '<svg><g><text>todo</text></g></svg>';
-}
+    return vizjs(dot);
+};
+
+
+
+
+
+const svg_el = (dot:string) : Document => {
+    return new DOMParser().parseFromString( svg(dot), 'text/html' );
+};
+
+
+
+
+
+const png_el = (dot:string) : HTMLImageElement => {  // whargarbl jssm isn't an any // whargarbl should return an image element, not a string
+    return vizjs(dot, { format: "png-image-element" });
+};
 
 
 
@@ -19,7 +75,7 @@ const dot = (jssm:any) => {  // whargarbl jssm isn't an any
   const l_states = jssm.states();
 
   const node_of  = state => `n${l_states.indexOf(state)}`,
-        vc       = col   => (jssm._viz_colors:any)[col] || '';
+        vc       = col   => (default_viz_colors:any)[col] || '';  // todo make these configurable
 
   const nodes : string = l_states.map( (s:any) => {
 
@@ -114,10 +170,10 @@ const dot = (jssm:any) => {  // whargarbl jssm isn't an any
 
   return `digraph G {\n  fontname="helvetica neue";\n  style=filled;\n  bgcolor=lightgrey;\n  node [fontsize=14; shape=box; style=filled; fillcolor=white; fontname="helvetica neue"];\n  edge [fontsize=6;fontname="helvetica neue"];\n\n  ${nodes}\n\n  ${edges}\n}`;
 
-}
+};
 
 
 
 
 
-export { dot, svg };
+export { dot, svg, png_el, vizjs };

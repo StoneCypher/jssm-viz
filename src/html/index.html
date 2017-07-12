@@ -5,7 +5,18 @@
 
     <title>Viz test</title>
 
-    <script defer type="text/javascript" src="../../../jssm/dist/jssm.es5.cjs.js"></script>
+    <style type="text/css">
+
+      html, body, table, textarea { height: 100%; width: 100%; margin: 0; padding: 0; border: 0; border-collapse: collapse; }
+      th, td                      { margin: 0; padding: 0.5em; border: 0; }
+      th                          { height: 1em; border-bottom: 1px solid #ddd; background: #eee; font-weight: normal; font-family: sans-serif; text-align: left; }
+      #textrow                    { height: 50%; }
+      #textrow td                 { background-color: #eee; border-top: 1px solid #ddd; }
+      #textrow textarea           { resize: none; }
+
+    </style>
+
+    <script defer type="text/javascript" src="jssm.es5.cjs.js"></script>
     <script type="text/javascript" src="../../dist/jssm-viz.es5.cjs.js"></script>
 
     <script defer type="text/javascript">
@@ -15,7 +26,7 @@
         const jssm = require('jssm'),
               jviz = require('jssm-viz');
 
-        const trs = [
+        const trs  = [
                 { name: 'SwitchToWarn', action: 'Proceed', from:'Green',  to:'Yellow' },
                 { name: 'SwitchToHalt', action: 'Proceed', from:'Yellow', to:'Red'    },
                 { name: 'SwitchToGo',   action: 'Proceed', from:'Red',    to:'Green'  }
@@ -40,6 +51,29 @@
   </head>
 
   <body>
+
+    <table>
+
+      <tr>
+        <th>SVG version</th>
+        <th>PNG version</th>
+      </tr>
+
+      <tr>
+        <td id="svg_target"></td>
+        <td id="png_target"></td>
+      </tr>
+
+      <tr id="textheader">
+        <th colspan="2">Use the JSSM string notation for FSMs below.</th>
+      </tr>
+
+      <tr id="textrow">
+        <td colspan="2"><textarea id="editor"></textarea></td>
+      </tr>
+
+    </table>
+
   </body>
 
 </html>
