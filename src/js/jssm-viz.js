@@ -8,37 +8,73 @@ const vizjs   = require('viz.js');
 
 const default_viz_colors = {
 
-    'fill_final'         : '#eeeeff',
-    'fill_terminal'      : '#ffeeee',
-    'fill_complete'      : '#eeffee',
+    'fill_final'           : '#eeeeff',
+    'fill_terminal'        : '#ffeeee',
+    'fill_complete'        : '#eeffee',
 
-    'normal_line_1'      : '#999999',
-    'normal_line_2'      : '#888888',
-    'normal_line_solo'   : '#888888',
 
-    'line_final_1'       : '#8888bb',
-    'line_final_2'       : '#7777aa',
-    'line_final_solo'    : '#7777aa',
+    'legal_1'              : '#888888',
+    'legal_2'              : '#777777',
+    'legal_solo'           : '#777777',
 
-    'line_terminal_1'    : '#bb8888',
-    'line_terminal_2'    : '#aa7777',
-    'line_terminal_solo' : '#aa7777',
+    'legal_final_1'        : '#7777aa',
+    'legal_final_2'        : '#666699',
+    'legal_final_solo'     : '#666699',
 
-    'line_complete_1'    : '#88bb88',
-    'line_complete_2'    : '#77aa77',
-    'line_complete_solo' : '#77aa77',
+    'legal_terminal_1'     : '#aa7777',
+    'legal_terminal_2'     : '#996666',
+    'legal_terminal_solo'  : '#996666',
 
-    'text_final_1'       : '#000088',
-    'text_final_2'       : '#000088',
-    'text_final_solo'    : '#000088',
+    'legal_complete_1'     : '#77aa77',
+    'legal_complete_2'     : '#669966',
+    'legal_complete_solo'  : '#669966',
 
-    'text_terminal_1'    : '#880000',
-    'text_terminal_2'    : '#880000',
-    'text_terminal_solo' : '#880000',
 
-    'text_complete_1'    : '#007700',
-    'text_complete_2'    : '#007700',
-    'text_complete_solo' : '#007700'
+    'main_1'               : '#444444',
+    'main_2'               : '#333333',
+    'main_solo'            : '#333333',
+
+    'main_final_1'         : '#333366',
+    'main_final_2'         : '#222255',
+    'main_final_solo'      : '#222255',
+
+    'main_terminal_1'      : '#663333',
+    'main_terminal_2'      : '#552222',
+    'main_terminal_solo'   : '#552222',
+
+    'main_complete_1'      : '#336633',
+    'main_complete_2'      : '#225522',
+    'main_complete_solo'   : '#225522',
+
+
+    'forced_1'             : '#cccccc',
+    'forced_2'             : '#bbbbbb',
+    'forced_solo'          : '#bbbbbb',
+
+    'forced_final_1'       : '#bbbbee',
+    'forced_final_2'       : '#aaaadd',
+    'forced_final_solo'    : '#aaaadd',
+
+    'forced_terminal_1'    : '#eebbbb',
+    'forced_terminal_2'    : '#ddaaaa',
+    'forced_terminal_solo' : '#ddaaaa',
+
+    'forced_complete_1'    : '#bbeebb',
+    'forced_complete_2'    : '#aaddaa',
+    'forced_complete_solo' : '#aaddaa',
+
+
+    'text_final_1'         : '#000088',
+    'text_final_2'         : '#000088',
+    'text_final_solo'      : '#000088',
+
+    'text_terminal_1'      : '#880000',
+    'text_terminal_2'      : '#880000',
+    'text_terminal_solo'   : '#880000',
+
+    'text_complete_1'      : '#007700',
+    'text_complete_2'      : '#007700',
+    'text_complete_solo'   : '#007700'
 
 }
 
@@ -46,24 +82,25 @@ const default_viz_colors = {
 
 
 
-const svg = (dot:string) : string => {  // whargarbl jssm isn't an any
-    return vizjs(dot);
+const dot_to_svg = (dot:string, config?:Object) : string => {  // whargarbl jssm isn't an any
+    return vizjs(dot, config);
 };
 
 
 
 
 
-const svg_el = (dot:string) : Document => {
-    return new DOMParser().parseFromString( svg(dot), 'text/html' );
+const svg_el = (dot:string, config?:Object) : Document => {
+    return new DOMParser().parseFromString( dot_to_svg(dot, config), 'text/html' );
 };
 
 
 
 
 
-const png_el = (dot:string) : HTMLImageElement => {  // whargarbl jssm isn't an any // whargarbl should return an image element, not a string
-    return vizjs(dot, { format: "png-image-element" });
+const png_el = (dot:string, config?:Object) : HTMLImageElement => {  // whargarbl jssm isn't an any // whargarbl should return an image element, not a string
+    var cfg = Object.assign({}, config, { format: "png-image-element" });
+    return vizjs(dot, cfg);
 };
 
 
@@ -99,6 +136,7 @@ const dot = (jssm:any) => {  // whargarbl jssm isn't an any
   }).join(' ');
 
   const strike = [];
+
   const edges  = jssm.states().map( (s:any) =>
 
     jssm.list_exits(s).map( (ex:any) => {
@@ -133,11 +171,11 @@ const dot = (jssm:any) => {  // whargarbl jssm isn't an any
             t_complete   = jssm.state_is_complete(ex),
             t_terminal   = jssm.state_is_terminal(ex),
 
-            lineColor    = (final, complete, terminal, _solo_1_2 = '_solo') =>
-                             final   ? (vc('line_final'    + _solo_1_2)) :
-                            (complete? (vc('line_complete' + _solo_1_2)) :
-                            (terminal? (vc('line_terminal' + _solo_1_2)) :
-                                        vc('normal_line'   + _solo_1_2))),
+            lineColor    = (final, complete, terminal, lkind, _solo_1_2 = '_solo') =>
+                             final   ? (vc(`${lkind}_final`    + _solo_1_2)) :
+                            (complete? (vc(`${lkind}_complete` + _solo_1_2)) :
+                            (terminal? (vc(`${lkind}_terminal` + _solo_1_2)) :
+                                        vc(`${lkind}`          + _solo_1_2))),
 
             textColor    = (final, complete, terminal, _solo_1_2 = '_solo') : string =>
                              final   ? (vc('text_final'    + _solo_1_2)) :
@@ -158,12 +196,12 @@ const dot = (jssm:any) => {  // whargarbl jssm isn't an any
                            .map(    r       => `${r.which}=${(r.color)? `<<font color="${(r.color:any)}">${(r.whether : any)}</font>>` : `"${(r.whether : any)}"`};`)
                            .join(' '),
 
-            tc1          = lineColor(t_final, t_complete, t_terminal, '_1'),
-            tc2          = lineColor(h_final, h_complete, h_terminal, '_2'),
-            tcd          = lineColor(t_final, t_complete, t_terminal, '_solo'),
+            tc1          = lineColor(t_final, t_complete, t_terminal, edge_tr.kind,       '_1'),
+            tc2          = lineColor(h_final, h_complete, h_terminal, (pair_tr||{}).kind, '_2'),
+            tcd          = lineColor(t_final, t_complete, t_terminal, edge_tr.kind,       '_solo'),
 
-            arrowHead    =           edge_tr.forced_only? 'ediamond' : (edge_tr.main_path? 'normal' : 'empty'),
-            arrowTail    = pair_tr? (pair_tr.forced_only? 'ediamond' : (edge_tr.main_path? 'normal' : 'empty')) : '',
+            arrowHead    =           edge_tr.forced_only? 'ediamond' : (edge_tr.main_path? 'normal;weight=5' : 'empty'),
+            arrowTail    = pair_tr? (pair_tr.forced_only? 'ediamond' : (pair_tr.main_path? 'normal;weight=5' : 'empty')) : '',
 
             edgeInline   = edge  ? (double? `arrowhead=${arrowHead};arrowtail=${arrowTail};dir=both;color="${tc1}:${tc2}"`
                                           : `arrowhead=${arrowHead};color="${tcd}"`)
@@ -185,4 +223,4 @@ const dot = (jssm:any) => {  // whargarbl jssm isn't an any
 
 
 
-export { dot, svg, png_el, vizjs };
+export { dot, dot_to_svg, svg_el, png_el, vizjs };

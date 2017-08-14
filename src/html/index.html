@@ -38,7 +38,7 @@
               });
 
         const dot = jviz.dot(machine),
-              svg = jviz.svg(dot);
+              svg = jviz.dot_to_svg(dot);
 
         console.log( dot );
         document.getElementById('svg_target').innerHTML = svg;

@@ -2338,21 +2338,53 @@ var default_viz_colors = {
     'fill_terminal': '#ffeeee',
     'fill_complete': '#eeffee',
 
-    'normal_line_1': '#999999',
-    'normal_line_2': '#888888',
-    'normal_line_solo': '#888888',
+    'legal_1': '#888888',
+    'legal_2': '#777777',
+    'legal_solo': '#777777',
 
-    'line_final_1': '#8888bb',
-    'line_final_2': '#7777aa',
-    'line_final_solo': '#7777aa',
+    'legal_final_1': '#7777aa',
+    'legal_final_2': '#666699',
+    'legal_final_solo': '#666699',
 
-    'line_terminal_1': '#bb8888',
-    'line_terminal_2': '#aa7777',
-    'line_terminal_solo': '#aa7777',
+    'legal_terminal_1': '#aa7777',
+    'legal_terminal_2': '#996666',
+    'legal_terminal_solo': '#996666',
 
-    'line_complete_1': '#88bb88',
-    'line_complete_2': '#77aa77',
-    'line_complete_solo': '#77aa77',
+    'legal_complete_1': '#77aa77',
+    'legal_complete_2': '#669966',
+    'legal_complete_solo': '#669966',
+
+    'main_1': '#444444',
+    'main_2': '#333333',
+    'main_solo': '#333333',
+
+    'main_final_1': '#333366',
+    'main_final_2': '#222255',
+    'main_final_solo': '#222255',
+
+    'main_terminal_1': '#663333',
+    'main_terminal_2': '#552222',
+    'main_terminal_solo': '#552222',
+
+    'main_complete_1': '#336633',
+    'main_complete_2': '#225522',
+    'main_complete_solo': '#225522',
+
+    'forced_1': '#cccccc',
+    'forced_2': '#bbbbbb',
+    'forced_solo': '#bbbbbb',
+
+    'forced_final_1': '#bbbbee',
+    'forced_final_2': '#aaaadd',
+    'forced_final_solo': '#aaaadd',
+
+    'forced_terminal_1': '#eebbbb',
+    'forced_terminal_2': '#ddaaaa',
+    'forced_terminal_solo': '#ddaaaa',
+
+    'forced_complete_1': '#bbeebb',
+    'forced_complete_2': '#aaddaa',
+    'forced_complete_solo': '#aaddaa',
 
     'text_final_1': '#000088',
     'text_final_2': '#000088',
@@ -2368,18 +2400,19 @@ var default_viz_colors = {
 
 };
 
-var svg = function svg(dot) {
+var dot_to_svg = function dot_to_svg(dot, config) {
     // whargarbl jssm isn't an any
-    return vizjs(dot);
+    return vizjs(dot, config);
 };
 
-var svg_el = function svg_el(dot) {
-    return new DOMParser().parseFromString(svg(dot), 'text/html');
+var svg_el = function svg_el(dot, config) {
+    return new DOMParser().parseFromString(dot_to_svg(dot, config), 'text/html');
 };
 
-var png_el = function png_el(dot) {
+var png_el = function png_el(dot, config) {
     // whargarbl jssm isn't an any // whargarbl should return an image element, not a string
-    return vizjs(dot, { format: "png-image-element" });
+    var cfg = Object.assign({}, config, { format: "png-image-element" });
+    return vizjs(dot, cfg);
 };
 
 var dot = function dot(jssm) {
@@ -2409,6 +2442,7 @@ var dot = function dot(jssm) {
     }).join(' ');
 
     var strike = [];
+
     var edges = jssm.states().map(function (s) {
         return jssm.list_exits(s).map(function (ex) {
 
@@ -2443,10 +2477,10 @@ var dot = function dot(jssm) {
                 t_final = jssm.state_is_final(ex),
                 t_complete = jssm.state_is_complete(ex),
                 t_terminal = jssm.state_is_terminal(ex),
-                lineColor = function lineColor(final, complete, terminal) {
-                var _solo_1_2 = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '_solo';
+                lineColor = function lineColor(final, complete, terminal, lkind) {
+                var _solo_1_2 = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : '_solo';
 
-                return final ? vc('line_final' + _solo_1_2) : complete ? vc('line_complete' + _solo_1_2) : terminal ? vc('line_terminal' + _solo_1_2) : vc('normal_line' + _solo_1_2);
+                return final ? vc(lkind + '_final' + _solo_1_2) : complete ? vc(lkind + '_complete' + _solo_1_2) : terminal ? vc(lkind + '_terminal' + _solo_1_2) : vc('' + lkind + _solo_1_2);
             },
                 textColor = function textColor(final, complete, terminal) {
                 var _solo_1_2 = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '_solo';
@@ -2466,11 +2500,11 @@ var dot = function dot(jssm) {
             }).map(function (r) {
                 return r.which + '=' + (r.color ? '<<font color="' + r.color + '">' + r.whether + '</font>>' : '"' + r.whether + '"') + ';';
             }).join(' '),
-                tc1 = lineColor(t_final, t_complete, t_terminal, '_1'),
-                tc2 = lineColor(h_final, h_complete, h_terminal, '_2'),
-                tcd = lineColor(t_final, t_complete, t_terminal, '_solo'),
-                arrowHead = edge_tr.forced_only ? 'ediamond' : edge_tr.main_path ? 'normal' : 'empty',
-                arrowTail = pair_tr ? pair_tr.forced_only ? 'ediamond' : edge_tr.main_path ? 'normal' : 'empty' : '',
+                tc1 = lineColor(t_final, t_complete, t_terminal, edge_tr.kind, '_1'),
+                tc2 = lineColor(h_final, h_complete, h_terminal, (pair_tr || {}).kind, '_2'),
+                tcd = lineColor(t_final, t_complete, t_terminal, edge_tr.kind, '_solo'),
+                arrowHead = edge_tr.forced_only ? 'ediamond' : edge_tr.main_path ? 'normal;weight=5' : 'empty',
+                arrowTail = pair_tr ? pair_tr.forced_only ? 'ediamond' : pair_tr.main_path ? 'normal;weight=5' : 'empty' : '',
                 edgeInline = edge ? double ? 'arrowhead=' + arrowHead + ';arrowtail=' + arrowTail + ';dir=both;color="' + tc1 + ':' + tc2 + '"' : 'arrowhead=' + arrowHead + ';color="' + tcd + '"' : '';
 
             if (pair) {
@@ -2485,7 +2519,8 @@ var dot = function dot(jssm) {
 };
 
 exports.dot = dot;
-exports.svg = svg;
+exports.dot_to_svg = dot_to_svg;
+exports.svg_el = svg_el;
 exports.png_el = png_el;
 exports.vizjs = vizjs;
 
