@@ -108,8 +108,12 @@ const dot = (jssm:any) => {  // whargarbl jssm isn't an any
       }
 
       const edge         = jssm.list_transitions(s, ex),
+            edge_id      = jssm.get_transition_by_state_names(s, ex),
+            edge_tr      = jssm.lookup_transition_for(s, ex),
             pair         = jssm.list_transitions(ex, s),
-            double       = pair && (s !== ex),
+            pair_id      = jssm.get_transition_by_state_names(ex, s),
+            pair_tr      = jssm.lookup_transition_for(ex, s),
+            double       = pair_id && (s !== ex),
 
             head_state   = jssm.state_for(s),
             tail_state   = jssm.state_for(ex),
@@ -158,7 +162,12 @@ const dot = (jssm:any) => {  // whargarbl jssm isn't an any
             tc2          = lineColor(h_final, h_complete, h_terminal, '_2'),
             tcd          = lineColor(t_final, t_complete, t_terminal, '_solo'),
 
-            edgeInline   = edge  ? (double? `dir=both;color="${tc1}:${tc2}"` : `color="${tcd}"`) : '';
+            arrowHead    =           edge_tr.forced_only? 'ediamond' : (edge_tr.main_path? 'normal' : 'empty'),
+            arrowTail    = pair_tr? (pair_tr.forced_only? 'ediamond' : (edge_tr.main_path? 'normal' : 'empty')) : '',
+
+            edgeInline   = edge  ? (double? `arrowhead=${arrowHead};arrowtail=${arrowTail};dir=both;color="${tc1}:${tc2}"`
+                                          : `arrowhead=${arrowHead};color="${tcd}"`)
+                                 : '';
 
       if (pair) { strike.push([ex, s]); }
 

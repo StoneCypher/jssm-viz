@@ -223,7 +223,7 @@ function from (value, encodingOrOffset, length) {
     throw new TypeError('"value" argument must not be a number')
   }
 
-  if (value instanceof ArrayBuffer) {
+  if (isArrayBuffer(value)) {
     return fromArrayBuffer(value, encodingOrOffset, length)
   }
 
@@ -483,7 +483,7 @@ function byteLength (string, encoding) {
   if (Buffer.isBuffer(string)) {
     return string.length
   }
-  if (isArrayBufferView(string) || string instanceof ArrayBuffer) {
+  if (isArrayBufferView(string) || isArrayBuffer(string)) {
     return string.byteLength
   }
   if (typeof string !== 'string') {
@@ -1815,6 +1815,14 @@ function blitBuffer (src, dst, offset, length) {
   return i
 }
 
+// ArrayBuffers from another context (i.e. an iframe) do not pass the `instanceof` check
+// but they should be treated as valid. See: https://github.com/feross/buffer/issues/166
+function isArrayBuffer (obj) {
+  return obj instanceof ArrayBuffer ||
+    (obj != null && obj.constructor != null && obj.constructor.name === 'ArrayBuffer' &&
+      typeof obj.byteLength === 'number')
+}
+
 // Node 0.10 supports `ArrayBuffer` but lacks `ArrayBuffer.isView`
 function isArrayBufferView (obj) {
   return (typeof ArrayBuffer.isView === 'function') && ArrayBuffer.isView(obj)
@@ -2320,7 +2328,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var version = '0.6.4'; // replaced from package.js in build
+var version = '0.8.0'; // replaced from package.js in build
 
 var vizjs = require('viz.js');
 
@@ -2411,8 +2419,12 @@ var dot = function dot(jssm) {
             }
 
             var edge = jssm.list_transitions(s, ex),
+                edge_id = jssm.get_transition_by_state_names(s, ex),
+                edge_tr = jssm.lookup_transition_for(s, ex),
                 pair = jssm.list_transitions(ex, s),
-                double = pair && s !== ex,
+                pair_id = jssm.get_transition_by_state_names(ex, s),
+                pair_tr = jssm.lookup_transition_for(ex, s),
+                double = pair_id && s !== ex,
                 head_state = jssm.state_for(s),
                 tail_state = jssm.state_for(ex),
 
@@ -2457,7 +2469,9 @@ var dot = function dot(jssm) {
                 tc1 = lineColor(t_final, t_complete, t_terminal, '_1'),
                 tc2 = lineColor(h_final, h_complete, h_terminal, '_2'),
                 tcd = lineColor(t_final, t_complete, t_terminal, '_solo'),
-                edgeInline = edge ? double ? 'dir=both;color="' + tc1 + ':' + tc2 + '"' : 'color="' + tcd + '"' : '';
+                arrowHead = edge_tr.forced_only ? 'ediamond' : edge_tr.main_path ? 'normal' : 'empty',
+                arrowTail = pair_tr ? pair_tr.forced_only ? 'ediamond' : edge_tr.main_path ? 'normal' : 'empty' : '',
+                edgeInline = edge ? double ? 'arrowhead=' + arrowHead + ';arrowtail=' + arrowTail + ';dir=both;color="' + tc1 + ':' + tc2 + '"' : 'arrowhead=' + arrowHead + ';color="' + tcd + '"' : '';
 
             if (pair) {
                 strike.push([ex, s]);
