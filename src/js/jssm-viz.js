@@ -162,21 +162,6 @@ const dot = (jssm:any) => {  // whargarbl jssm isn't an any
 
             nlJoinIfAny    = items => items.filter(item => !([undefined, ''].includes(item))).join('\n'),
 
-            label          = edge_tr ? ( nlJoinIfAny([edge_tr.action, edge_tr.probability]) ) : undefined,
-/*            label          = edge_tr ? ([`${((edge_tr.action || ''):any)}`,`${((edge_tr.probability || ''):any)}`]
-                                          .filter(not_empty => not_empty !== '')
-                                          .join('\n') || undefined
-                                       ) : undefined,
-*/
-            maybeLabel     = label? `taillabel="${doublequote(label)}";` : '',
-
-            rlabel         = pair_tr ? ([`${((pair_tr.action || ''):any)}`,`${((pair_tr.probability || ''):any)}`]
-                                     .filter(not_empty => not_empty !== '')
-                                       .join('\n') || undefined
-                                      ) : undefined,
-
-            maybeRLabel    = rlabel? `headlabel="${doublequote(rlabel)}";` : '',
-
             if_obj_field   = (obj:any, field) => obj? (obj[field] || '') : '',
 
             h_final        = jssm.state_is_final(s),
@@ -211,6 +196,21 @@ const dot = (jssm:any) => {  // whargarbl jssm isn't an any
                              .filter( present => present.whether )
                              .map(    r       => `${r.which}=${(r.color)? `<<font color="${(r.color:any)}">${(r.whether : any)}</font>>` : `"${(r.whether : any)}"`};`)
                              .join(' '),
+
+//          label          = edge_tr ? ( nlJoinIfAny([edge_tr.action, edge_tr.probability]) ) : undefined,
+            label          = edge_tr ? ([`${((edge_tr.action || ''):any)}`,`${((edge_tr.probability || ''):any)}`]
+                                          .filter(not_empty => not_empty !== '')
+                                          .join('\n') || undefined
+                                       ) : undefined,
+
+            maybeLabel     = label? `taillabel="${doublequote(label)}";` : '',
+
+            rlabel         = pair_tr ? ([`${((pair_tr.action || ''):any)}`,`${((pair_tr.probability || ''):any)}`]
+                                     .filter(not_empty => not_empty !== '')
+                                       .join('\n') || undefined
+                                      ) : undefined,
+
+            maybeRLabel    = rlabel? `headlabel="${doublequote(rlabel)}";` : '',
 
             tc1            = lineColor(t_final, t_complete, t_terminal, edge_tr.kind,       '_1'),
             tc2            = lineColor(h_final, h_complete, h_terminal, (pair_tr||{}).kind, '_2'),
