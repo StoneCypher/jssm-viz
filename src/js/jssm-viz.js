@@ -8,9 +8,11 @@ const vizjs   = require('viz.js');
 
 const default_viz_colors = {
 
-    'fill_final'           : '#eeeeff',
-    'fill_terminal'        : '#ffeeee',
-    'fill_complete'        : '#eeffee',
+    'graph_bg_color'       : '#eeeeee',
+
+    'fill_final'           : '#ddddff',
+    'fill_terminal'        : '#ffdddd',
+    'fill_complete'        : '#ddffdd',
 
 
     'legal_1'              : '#888888',
@@ -145,67 +147,81 @@ const dot = (jssm:any) => {  // whargarbl jssm isn't an any
           return '';  // already did the pair
       }
 
-      const edge         = jssm.list_transitions(s, ex),
-            edge_id      = jssm.get_transition_by_state_names(s, ex),
-            edge_tr      = jssm.lookup_transition_for(s, ex),
-            pair         = jssm.list_transitions(ex, s),
-            pair_id      = jssm.get_transition_by_state_names(ex, s),
-            pair_tr      = jssm.lookup_transition_for(ex, s),
-            double       = pair_id && (s !== ex),
+      const doublequote    = txt => txt.replace('"', '\\"');
 
-            head_state   = jssm.state_for(s),
-            tail_state   = jssm.state_for(ex),
+      const edge           = jssm.list_transitions(s, ex),
+            edge_id        = jssm.get_transition_by_state_names(s, ex),
+            edge_tr        = jssm.lookup_transition_for(s, ex),
+            pair           = jssm.list_transitions(ex, s),
+            pair_id        = jssm.get_transition_by_state_names(ex, s),
+            pair_tr        = jssm.lookup_transition_for(ex, s),
+            double         = pair_id && (s !== ex),
 
-//          label        = edge  ? ([edge.name?`${(edge.name:any)}`:undefined,`${(edge.probability:any)}`]
-//                                 .filter(not_undef => !!not_undef)
-//                                   .join('\n') || undefined
-//                                  ) : undefined,
+            head_state     = jssm.state_for(s),
+            tail_state     = jssm.state_for(ex),
 
-            if_obj_field = (obj:any, field) => obj? (obj[field] || '') : '',
+            nlJoinIfAny    = items => items.filter(item => !([undefined, ''].includes(item))).join('\n'),
 
-            h_final      = jssm.state_is_final(s),
-            h_complete   = jssm.state_is_complete(s),
-            h_terminal   = jssm.state_is_terminal(s),
+            label          = edge_tr ? ( nlJoinIfAny([edge_tr.action, edge_tr.probability]) ) : undefined,
+/*            label          = edge_tr ? ([`${((edge_tr.action || ''):any)}`,`${((edge_tr.probability || ''):any)}`]
+                                          .filter(not_empty => not_empty !== '')
+                                          .join('\n') || undefined
+                                       ) : undefined,
+*/
+            maybeLabel     = label? `taillabel="${doublequote(label)}";` : '',
 
-            t_final      = jssm.state_is_final(ex),
-            t_complete   = jssm.state_is_complete(ex),
-            t_terminal   = jssm.state_is_terminal(ex),
+            rlabel         = pair_tr ? ([`${((pair_tr.action || ''):any)}`,`${((pair_tr.probability || ''):any)}`]
+                                     .filter(not_empty => not_empty !== '')
+                                       .join('\n') || undefined
+                                      ) : undefined,
 
-            lineColor    = (final, complete, terminal, lkind, _solo_1_2 = '_solo') =>
-                             final   ? (vc(`${lkind}_final`    + _solo_1_2)) :
-                            (complete? (vc(`${lkind}_complete` + _solo_1_2)) :
-                            (terminal? (vc(`${lkind}_terminal` + _solo_1_2)) :
-                                        vc(`${lkind}`          + _solo_1_2))),
+            maybeRLabel    = rlabel? `headlabel="${doublequote(rlabel)}";` : '',
 
-            textColor    = (final, complete, terminal, _solo_1_2 = '_solo') : string =>
-                             final   ? (vc('text_final'    + _solo_1_2)) :
-                            (complete? (vc('text_complete' + _solo_1_2)) :
-                            (terminal? (vc('text_terminal' + _solo_1_2)) :
-                                       '')),
+            if_obj_field   = (obj:any, field) => obj? (obj[field] || '') : '',
 
-            headColor    = textColor(h_final, h_complete, h_terminal, double? '_1' : '_solo'),
-            tailColor    = textColor(t_final, t_complete, t_terminal, double? '_2' : '_solo'),
+            h_final        = jssm.state_is_final(s),
+            h_complete     = jssm.state_is_complete(s),
+            h_terminal     = jssm.state_is_terminal(s),
 
-            labelInline  = [
-//                           [edge, 'name',        'label',     true],
-                             [pair, 'probability', 'headlabel', 'name', 'action', double, headColor],
-                             [edge, 'probability', 'taillabel', 'name', 'action', true,   tailColor]
-                           ]
-                           .map(    r       => ({ which: r[2], whether: (r[5]? ([(if_obj_field(r[0], r[5]):any), (if_obj_field(r[0], r[1]):any), (if_obj_field(r[0], r[3]):any)].filter(q=>q).join('<br/>') || '') : ''), color: r[6] }) )
-                           .filter( present => present.whether )
-                           .map(    r       => `${r.which}=${(r.color)? `<<font color="${(r.color:any)}">${(r.whether : any)}</font>>` : `"${(r.whether : any)}"`};`)
-                           .join(' '),
+            t_final        = jssm.state_is_final(ex),
+            t_complete     = jssm.state_is_complete(ex),
+            t_terminal     = jssm.state_is_terminal(ex),
 
-            tc1          = lineColor(t_final, t_complete, t_terminal, edge_tr.kind,       '_1'),
-            tc2          = lineColor(h_final, h_complete, h_terminal, (pair_tr||{}).kind, '_2'),
-            tcd          = lineColor(t_final, t_complete, t_terminal, edge_tr.kind,       '_solo'),
+            lineColor      = (final, complete, terminal, lkind, _solo_1_2 = '_solo') =>
+                               final   ? (vc(`${lkind}_final`    + _solo_1_2)) :
+                              (complete? (vc(`${lkind}_complete` + _solo_1_2)) :
+                              (terminal? (vc(`${lkind}_terminal` + _solo_1_2)) :
+                                          vc(`${lkind}`          + _solo_1_2))),
 
-            arrowHead    =           edge_tr.forced_only? 'ediamond' : (edge_tr.main_path? 'normal;weight=5' : 'empty'),
-            arrowTail    = pair_tr? (pair_tr.forced_only? 'ediamond' : (pair_tr.main_path? 'normal;weight=5' : 'empty')) : '',
+            textColor      = (final, complete, terminal, _solo_1_2 = '_solo') : string =>
+                               final   ? (vc('text_final'    + _solo_1_2)) :
+                              (complete? (vc('text_complete' + _solo_1_2)) :
+                              (terminal? (vc('text_terminal' + _solo_1_2)) :
+                                         '')),
 
-            edgeInline   = edge  ? (double? `arrowhead=${arrowHead};arrowtail=${arrowTail};dir=both;color="${tc1}:${tc2}"`
-                                          : `arrowhead=${arrowHead};color="${tcd}"`)
-                                 : '';
+            headColor      = textColor(h_final, h_complete, h_terminal, double? '_1' : '_solo'),
+            tailColor      = textColor(t_final, t_complete, t_terminal, double? '_2' : '_solo'),
+
+            labelInline    = [
+//                             [edge, 'name',        'label',     true],
+                               [pair, 'probability', 'headlabel', 'name', 'action', double, headColor],
+                               [edge, 'probability', 'taillabel', 'name', 'action', true,   tailColor]
+                             ]
+                             .map(    r       => ({ which: r[2], whether: (r[5]? ([(if_obj_field(r[0], r[5]):any), (if_obj_field(r[0], r[1]):any), (if_obj_field(r[0], r[3]):any)].filter(q=>q).join('<br/>') || '') : ''), color: r[6] }) )
+                             .filter( present => present.whether )
+                             .map(    r       => `${r.which}=${(r.color)? `<<font color="${(r.color:any)}">${(r.whether : any)}</font>>` : `"${(r.whether : any)}"`};`)
+                             .join(' '),
+
+            tc1            = lineColor(t_final, t_complete, t_terminal, edge_tr.kind,       '_1'),
+            tc2            = lineColor(h_final, h_complete, h_terminal, (pair_tr||{}).kind, '_2'),
+            tcd            = lineColor(t_final, t_complete, t_terminal, edge_tr.kind,       '_solo'),
+
+            arrowHead      =           edge_tr.forced_only? 'ediamond' : (edge_tr.main_path? 'normal;weight=5' : 'empty'),
+            arrowTail      = pair_tr? (pair_tr.forced_only? 'ediamond' : (pair_tr.main_path? 'normal;weight=5' : 'empty')) : '',
+
+            edgeInline     = edge  ? (double? `${maybeLabel}${maybeRLabel}arrowhead=${arrowHead};arrowtail=${arrowTail};dir=both;color="${tc1}:${tc2}"`
+                                            : `${maybeLabel}arrowhead=${arrowHead};color="${tcd}"`)
+                                   : '';
 
       if (pair) { strike.push([ex, s]); }
 
@@ -215,7 +231,7 @@ const dot = (jssm:any) => {  // whargarbl jssm isn't an any
 
   ).join(' ');
 
-  return `digraph G {\n  fontname="helvetica neue";\n  style=filled;\n  bgcolor=lightgrey;\n  node [fontsize=14; shape=box; style=filled; fillcolor=white; fontname="helvetica neue"];\n  edge [fontsize=6;fontname="helvetica neue"];\n\n  ${nodes}\n\n  ${edges}\n}`;
+  return `digraph G {\n  fontname="helvetica neue";\n  style=filled;\n  bgcolor="${vc('graph_bg_color')}";\n  node [fontsize=14; shape=box; style=filled; fillcolor=white; fontname="helvetica neue"];\n  edge [fontsize=6;fontname="helvetica neue"];\n\n  ${nodes}\n\n  ${edges}\n}`;
 
 };
 

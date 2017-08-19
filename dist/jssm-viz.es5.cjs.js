@@ -2328,15 +2328,17 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var version = '1.0.0'; // replaced from package.js in build
+var version = '1.1.0'; // replaced from package.js in build
 
 var vizjs = require('viz.js');
 
 var default_viz_colors = {
 
-    'fill_final': '#eeeeff',
-    'fill_terminal': '#ffeeee',
-    'fill_complete': '#eeffee',
+    'graph_bg_color': '#eeeeee',
+
+    'fill_final': '#ddddff',
+    'fill_terminal': '#ffdddd',
+    'fill_complete': '#ddffdd',
 
     'legal_1': '#888888',
     'legal_2': '#777777',
@@ -2452,6 +2454,10 @@ var dot = function dot(jssm) {
                 return ''; // already did the pair
             }
 
+            var doublequote = function doublequote(txt) {
+                return txt.replace('"', '\\"');
+            };
+
             var edge = jssm.list_transitions(s, ex),
                 edge_id = jssm.get_transition_by_state_names(s, ex),
                 edge_tr = jssm.lookup_transition_for(s, ex),
@@ -2461,14 +2467,24 @@ var dot = function dot(jssm) {
                 double = pair_id && s !== ex,
                 head_state = jssm.state_for(s),
                 tail_state = jssm.state_for(ex),
+                nlJoinIfAny = function nlJoinIfAny(items) {
+                return items.filter(function (item) {
+                    return ![undefined, ''].includes(item);
+                }).join('\n');
+            },
+                label = edge_tr ? nlJoinIfAny([edge_tr.action, edge_tr.probability]) : undefined,
 
-
-            //          label        = edge  ? ([edge.name?`${(edge.name:any)}`:undefined,`${(edge.probability:any)}`]
-            //                                 .filter(not_undef => !!not_undef)
-            //                                   .join('\n') || undefined
-            //                                  ) : undefined,
-
-            if_obj_field = function if_obj_field(obj, field) {
+            /*            label          = edge_tr ? ([`${((edge_tr.action || ''):any)}`,`${((edge_tr.probability || ''):any)}`]
+                                                      .filter(not_empty => not_empty !== '')
+                                                      .join('\n') || undefined
+                                                   ) : undefined,
+            */
+            maybeLabel = label ? 'taillabel="' + doublequote(label) + '";' : '',
+                rlabel = pair_tr ? ['' + (pair_tr.action || ''), '' + (pair_tr.probability || '')].filter(function (not_empty) {
+                return not_empty !== '';
+            }).join('\n') || undefined : undefined,
+                maybeRLabel = rlabel ? 'headlabel="' + doublequote(rlabel) + '";' : '',
+                if_obj_field = function if_obj_field(obj, field) {
                 return obj ? obj[field] || '' : '';
             },
                 h_final = jssm.state_is_final(s),
@@ -2490,7 +2506,7 @@ var dot = function dot(jssm) {
                 headColor = textColor(h_final, h_complete, h_terminal, double ? '_1' : '_solo'),
                 tailColor = textColor(t_final, t_complete, t_terminal, double ? '_2' : '_solo'),
                 labelInline = [
-            //                           [edge, 'name',        'label',     true],
+            //                             [edge, 'name',        'label',     true],
             [pair, 'probability', 'headlabel', 'name', 'action', double, headColor], [edge, 'probability', 'taillabel', 'name', 'action', true, tailColor]].map(function (r) {
                 return { which: r[2], whether: r[5] ? [if_obj_field(r[0], r[5]), if_obj_field(r[0], r[1]), if_obj_field(r[0], r[3])].filter(function (q) {
                         return q;
@@ -2505,7 +2521,7 @@ var dot = function dot(jssm) {
                 tcd = lineColor(t_final, t_complete, t_terminal, edge_tr.kind, '_solo'),
                 arrowHead = edge_tr.forced_only ? 'ediamond' : edge_tr.main_path ? 'normal;weight=5' : 'empty',
                 arrowTail = pair_tr ? pair_tr.forced_only ? 'ediamond' : pair_tr.main_path ? 'normal;weight=5' : 'empty' : '',
-                edgeInline = edge ? double ? 'arrowhead=' + arrowHead + ';arrowtail=' + arrowTail + ';dir=both;color="' + tc1 + ':' + tc2 + '"' : 'arrowhead=' + arrowHead + ';color="' + tcd + '"' : '';
+                edgeInline = edge ? double ? '' + maybeLabel + maybeRLabel + 'arrowhead=' + arrowHead + ';arrowtail=' + arrowTail + ';dir=both;color="' + tc1 + ':' + tc2 + '"' : maybeLabel + 'arrowhead=' + arrowHead + ';color="' + tcd + '"' : '';
 
             if (pair) {
                 strike.push([ex, s]);
@@ -2515,7 +2531,7 @@ var dot = function dot(jssm) {
         }).join(' ');
     }).join(' ');
 
-    return 'digraph G {\n  fontname="helvetica neue";\n  style=filled;\n  bgcolor=lightgrey;\n  node [fontsize=14; shape=box; style=filled; fillcolor=white; fontname="helvetica neue"];\n  edge [fontsize=6;fontname="helvetica neue"];\n\n  ' + nodes + '\n\n  ' + edges + '\n}';
+    return 'digraph G {\n  fontname="helvetica neue";\n  style=filled;\n  bgcolor="' + vc('graph_bg_color') + '";\n  node [fontsize=14; shape=box; style=filled; fillcolor=white; fontname="helvetica neue"];\n  edge [fontsize=6;fontname="helvetica neue"];\n\n  ' + nodes + '\n\n  ' + edges + '\n}';
 };
 
 exports.dot = dot;
