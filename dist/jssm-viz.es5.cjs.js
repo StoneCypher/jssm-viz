@@ -2328,7 +2328,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var version = '1.1.0'; // replaced from package.js in build
+var version = '1.1.4'; // replaced from package.js in build
 
 var vizjs = require('viz.js');
 
@@ -2472,18 +2472,6 @@ var dot = function dot(jssm) {
                     return ![undefined, ''].includes(item);
                 }).join('\n');
             },
-                label = edge_tr ? nlJoinIfAny([edge_tr.action, edge_tr.probability]) : undefined,
-
-            /*            label          = edge_tr ? ([`${((edge_tr.action || ''):any)}`,`${((edge_tr.probability || ''):any)}`]
-                                                      .filter(not_empty => not_empty !== '')
-                                                      .join('\n') || undefined
-                                                   ) : undefined,
-            */
-            maybeLabel = label ? 'taillabel="' + doublequote(label) + '";' : '',
-                rlabel = pair_tr ? ['' + (pair_tr.action || ''), '' + (pair_tr.probability || '')].filter(function (not_empty) {
-                return not_empty !== '';
-            }).join('\n') || undefined : undefined,
-                maybeRLabel = rlabel ? 'headlabel="' + doublequote(rlabel) + '";' : '',
                 if_obj_field = function if_obj_field(obj, field) {
                 return obj ? obj[field] || '' : '';
             },
@@ -2516,6 +2504,17 @@ var dot = function dot(jssm) {
             }).map(function (r) {
                 return r.which + '=' + (r.color ? '<<font color="' + r.color + '">' + r.whether + '</font>>' : '"' + r.whether + '"') + ';';
             }).join(' '),
+
+
+            //          label          = edge_tr ? ( nlJoinIfAny([edge_tr.action, edge_tr.probability]) ) : undefined,
+            label = edge_tr ? ['' + (edge_tr.action || ''), '' + (edge_tr.probability || '')].filter(function (not_empty) {
+                return not_empty !== '';
+            }).join('\n') || undefined : undefined,
+                maybeLabel = label ? 'taillabel="' + doublequote(label) + '";' : '',
+                rlabel = pair_tr ? ['' + (pair_tr.action || ''), '' + (pair_tr.probability || '')].filter(function (not_empty) {
+                return not_empty !== '';
+            }).join('\n') || undefined : undefined,
+                maybeRLabel = rlabel ? 'headlabel="' + doublequote(rlabel) + '";' : '',
                 tc1 = lineColor(t_final, t_complete, t_terminal, edge_tr.kind, '_1'),
                 tc2 = lineColor(h_final, h_complete, h_terminal, (pair_tr || {}).kind, '_2'),
                 tcd = lineColor(t_final, t_complete, t_terminal, edge_tr.kind, '_solo'),

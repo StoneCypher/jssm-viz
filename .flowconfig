@@ -3,6 +3,7 @@
 
 [ignore]
 .*/node_modules/documentation/.*
+.*/node_modules/jssm/.*
 
 [include]
 
