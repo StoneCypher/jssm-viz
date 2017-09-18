@@ -62,7 +62,7 @@
   },
   "homepage": "https://github.com/StoneCypher/jssm-viz#readme",
   "dependencies": {
-    "jssm": "^5.6.1"
+    "jssm": "^5.10.0"
   },
   "devDependencies": {
     "ava": "^0.20.0",

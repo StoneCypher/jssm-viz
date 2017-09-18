@@ -2328,7 +2328,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var version = '1.1.4'; // replaced from package.js in build
+var version = '1.1.5'; // replaced from package.js in build
 
 var vizjs = require('viz.js');
 
