@@ -120,7 +120,7 @@ function fromByteArray (uint8) {
 /*!
  * The buffer module from node.js, for the browser.
  *
- * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+ * @author   Feross Aboukhadijeh <https://feross.org>
  * @license  MIT
  */
 /* eslint-disable no-proto */
@@ -2328,7 +2328,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var version = '1.1.6'; // replaced from package.js in build
+var version = '1.1.8'; // replaced from package.js in build
 
 var vizjs = require('viz.js');
 
@@ -2533,7 +2533,7 @@ var dot = function dot(jssm) {
     // todo lol just do this right, jerk
     var MaybeRankDir = window ? window.lrGViz ? 'rankdir=LR;' : '' : '';
 
-    return 'digraph G {\n' + MaybeRankDir + '  fontname="helvetica neue";\n  style=filled;\n  bgcolor="' + vc('graph_bg_color') + '";\n  node [fontsize=14; shape=box; style=filled; fillcolor=white; fontname="helvetica neue"];\n  edge [fontsize=6;fontname="helvetica neue"];\n\n  ' + nodes + '\n\n  ' + edges + '\n}';
+    return 'digraph G {\n' + MaybeRankDir + '  fontname="Open Sans";\n  style=filled;\n  bgcolor="' + vc('graph_bg_color') + '";\n  node [fontsize=14; shape=box; style=filled; fillcolor=white; fontname="Open Sans"];\n  edge [fontsize=6;fontname="Open Sans"];\n\n  ' + nodes + '\n\n  ' + edges + '\n}';
 };
 
 exports.dot = dot;
