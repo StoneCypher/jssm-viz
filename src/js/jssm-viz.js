@@ -231,7 +231,10 @@ const dot = (jssm:any) => {  // whargarbl jssm isn't an any
 
   ).join(' ');
 
-  return `digraph G {\n  fontname="helvetica neue";\n  style=filled;\n  bgcolor="${vc('graph_bg_color')}";\n  node [fontsize=14; shape=box; style=filled; fillcolor=white; fontname="helvetica neue"];\n  edge [fontsize=6;fontname="helvetica neue"];\n\n  ${nodes}\n\n  ${edges}\n}`;
+  // todo lol just do this right, jerk
+  let MaybeRankDir = window? (window.lrGViz? 'rankdir=LR;' : '') : '';
+
+  return `digraph G {\n${MaybeRankDir}  fontname="helvetica neue";\n  style=filled;\n  bgcolor="${vc('graph_bg_color')}";\n  node [fontsize=14; shape=box; style=filled; fillcolor=white; fontname="helvetica neue"];\n  edge [fontsize=6;fontname="helvetica neue"];\n\n  ${nodes}\n\n  ${edges}\n}`;
 
 };
 

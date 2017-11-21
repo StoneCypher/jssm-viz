@@ -2328,7 +2328,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var version = '1.1.5'; // replaced from package.js in build
+var version = '1.1.6'; // replaced from package.js in build
 
 var vizjs = require('viz.js');
 
@@ -2530,7 +2530,10 @@ var dot = function dot(jssm) {
         }).join(' ');
     }).join(' ');
 
-    return 'digraph G {\n  fontname="helvetica neue";\n  style=filled;\n  bgcolor="' + vc('graph_bg_color') + '";\n  node [fontsize=14; shape=box; style=filled; fillcolor=white; fontname="helvetica neue"];\n  edge [fontsize=6;fontname="helvetica neue"];\n\n  ' + nodes + '\n\n  ' + edges + '\n}';
+    // todo lol just do this right, jerk
+    var MaybeRankDir = window ? window.lrGViz ? 'rankdir=LR;' : '' : '';
+
+    return 'digraph G {\n' + MaybeRankDir + '  fontname="helvetica neue";\n  style=filled;\n  bgcolor="' + vc('graph_bg_color') + '";\n  node [fontsize=14; shape=box; style=filled; fillcolor=white; fontname="helvetica neue"];\n  edge [fontsize=6;fontname="helvetica neue"];\n\n  ' + nodes + '\n\n  ' + edges + '\n}';
 };
 
 exports.dot = dot;
