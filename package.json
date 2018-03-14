@@ -1,6 +1,6 @@
 {
   "name": "jssm-viz",
-  "version": "1.1.9",
+  "version": "1.1.10",
   "description": "Visualization of JSSM machines using viz.js",
   "main": "src/js/jssm-viz.js",
   "scripts": {
@@ -77,14 +77,14 @@
     "coveralls": "^2.13.1",
     "del-cli": "^1.1.0",
     "documentation": "^4.0.0-rc.1",
-    "eslint": "^4.1.1",
-    "eslint-plugin-flowtype": "^2.34.1",
+    "eslint": "^4.18.2",
+    "eslint-plugin-flowtype": "^2.46.1",
     "flow-bin": "^0.49.1",
     "gulp-string-replace": "^0.4.0",
-    "nyc": "^11.0.3",
+    "nyc": "^11.6.0",
     "pegjs": "^0.10.0",
     "rimraf": "^2.6.1",
-    "uglify-js": "^3.0.23",
-    "viz.js": "^1.8.0"
+    "uglify-js": "^3.3.14",
+    "viz.js": "^1.8.1"
   }
 }
