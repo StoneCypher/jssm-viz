@@ -27,7 +27,8 @@
     "minify": "uglifyjs ./build/jssm-viz.es5.cjs.js -o ./build/jssm-viz.es5.cjs.min.js --compress",
     "dist": "cp build/jssm-viz.es5.cjs.* dist/",
     "docs": "documentation build src/js/** -f html -o docs/lib",
-    "travis": "npm run nyc-test && npm run coverage"
+    "travis": "npm run nyc-test && npm run coverage",
+    "ci": "npm run build"
   },
   "repository": {
     "type": "git",
