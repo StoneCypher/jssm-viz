@@ -1,6 +1,7 @@
 
-const version: string = null; // replaced from package.js in build
-const vizjs           = require('viz.js');
+//import vizjs from 'viz.js';
+// const { Module, render } = require('viz.js/lite.render.js');
+
 
 
 
@@ -82,8 +83,15 @@ const default_viz_colors = {
 
 
 
+// apparently this is how you get at global.Viz
+// declare var Viz: Function;
+
 function dot_to_svg(dot: string, config? : Object): string {  // whargarbl jssm isn't an any
-  return vizjs(dot, config);
+//  return vizjs(dot, config);
+  // if (Viz) {
+  //   return Viz(dot, config);
+  // }
+  throw new TypeError('No global viz');
 }
 
 
@@ -97,11 +105,13 @@ function svg_el(dot: string, config? : Object): Document {
 
 
 
-
+/* todo
 function png_el(dot: string, config? : Object): HTMLImageElement {  // whargarbl jssm isn't an any // whargarbl should return an image element, not a string
   var cfg = Object.assign({}, config, { format: "png-image-element" });
-  return vizjs(dot, cfg);
+//  return vizjs(dot, cfg);
+return 'todo';
 }
+*/
 
 
 
@@ -241,4 +251,4 @@ function dot(jssm: any) {  // whargarbl jssm isn't an any
 
 
 
-export { dot, dot_to_svg, svg_el, png_el, vizjs };
+export { dot, dot_to_svg, svg_el /*, todo png_el */ /*, vizjs todo */ };

@@ -20,7 +20,7 @@
     "build": "npm run make && npm run vet && npm run test-verbose && npm run audit && npm run dist",
     "nyc-build": "npm run vet && npm run make && npm run test-verbose && npm run audit && npm run nyc-test",
     "minify": "uglifyjs ./build/jssm-viz.cjs.js -o ./build/jssm-viz.es5.cjs.min.js --compress",
-    "dist": "cp build/jssm-viz.* dist/",
+    "dist": "cp build/jssm-viz.* dist/ && cp src/html/* docs/ && cp dist/* docs/ && cp node_modules/viz.js/lite.render.js docs/ && cp node_modules/viz.js/viz.js docs/",
     "docs": "documentation build src/ts/** -f html -o docs/lib",
     "travis": "npm run nyc-test && npm run coverage"
   },
@@ -78,6 +78,6 @@
     "rollup-plugin-typescript2": "^0.18.0",
     "typescript": "^3.2.1",
     "uglify-js": "^3.3.22",
-    "viz.js": "^2.0.0"
+    "viz.js": "^2.1.1"
   }
 }
