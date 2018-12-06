@@ -1,5 +1,7 @@
 {
-  "plugins"    : ["transform-flow-strip-types"],
-  "presets"    : ["es2015"],
+  "plugins"    : ["@babel/transform-flow-strip-types"],
+  "presets"    : [
+    [ "@babel/preset-env", { "targets": "> 0.25%, not dead" } ]
+  ],
   "sourceMaps" : "inline"
 }
