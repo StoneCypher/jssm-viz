@@ -74,10 +74,11 @@
     "rimraf": "^2.6.2",
     "rollup": "^0.67.1",
     "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-ignore": "^1.0.4",
     "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-typescript2": "^0.18.0",
     "typescript": "^3.2.1",
     "uglify-js": "^3.3.22",
-    "viz.js": "^2.1.1"
+    "viz.js": "^2.1.2"
   }
 }
