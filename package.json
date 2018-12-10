@@ -17,7 +17,7 @@
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "vet": "npm run eslint",
     "audit": "text_audit -t major wasteful any mixed fixme checkme testme stochable todo comeback whargarbl",
-    "build": "npm run make && npm run vet && npm run test-verbose && npm run audit && npm run dist",
+    "build": "npm run make && npm run vet && npm run audit && npm run dist",
     "nyc-build": "npm run vet && npm run make && npm run test-verbose && npm run audit && npm run nyc-test",
     "minify": "uglifyjs ./build/jssm-viz.cjs.js -o ./build/jssm-viz.es5.cjs.min.js --compress",
     "dist": "cp build/jssm-viz.* dist/ && cp src/html/* docs/ && cp dist/* docs/ && cp node_modules/viz.js/lite.render.js docs/ && cp node_modules/viz.js/viz.js docs/",
