@@ -2,8 +2,13 @@
 import nodeResolve from 'rollup-plugin-node-resolve';
 import typescript  from 'rollup-plugin-typescript2';
 import commonjs    from 'rollup-plugin-commonjs';
+import ignore      from 'rollup-plugin-ignore';
 
 const pkg = require('./package');
+
+
+
+
 
 const es6config = {
 
@@ -18,13 +23,13 @@ const es6config = {
 
   plugins   : [
 
+    ignore(['fs', 'path', 'crypto']),
+
     typescript(),
 
-    // commonjs({
-    //   namedExports : {
-    //     'node_modules/viz.js/index.js': ['edit']
-    //   },
-    // }),
+    commonjs({
+      include: 'node_modules/**'
+    }),
 
     nodeResolve({
       module         : true,
@@ -55,7 +60,13 @@ const cjsconfig = {
 
   plugins   : [
 
+    ignore(['fs', 'path', 'crypto']),
+
     typescript(),
+
+    commonjs({
+      include: 'node_modules/**'
+    }),
 
     nodeResolve({
       module         : true,
@@ -86,7 +97,13 @@ const iifeconfig = {
 
   plugins   : [
 
+    ignore(['fs', 'path', 'crypto']),
+
     typescript(),
+
+    commonjs({
+      include: 'node_modules/**'
+    }),
 
     nodeResolve({
       module         : true,

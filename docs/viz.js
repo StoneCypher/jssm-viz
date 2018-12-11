@@ -1,5 +1,5 @@
 /*
-Viz.js 2.1.1 (Graphviz 2.40.1, Expat 2.2.5, Emscripten 1.37.36)
+Viz.js 2.1.2 (Graphviz 2.40.1, Expat 2.2.5, Emscripten 1.37.36)
 Copyright (c) 2014-2018 Michael Daines
 Licensed under MIT license
 

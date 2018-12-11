@@ -1,6 +1,6 @@
 {
   "name": "jssm-viz",
-  "version": "1.1.14",
+  "version": "1.2.0",
   "description": "Visualization of JSSM machines using viz.js",
   "main": "src/js/jssm-viz.js",
   "scripts": {
@@ -17,7 +17,7 @@
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "vet": "npm run eslint",
     "audit": "text_audit -t major wasteful any mixed fixme checkme testme stochable todo comeback whargarbl",
-    "build": "npm run make && npm run vet && npm run test-verbose && npm run audit && npm run dist",
+    "build": "npm run make && npm run vet && npm run audit && npm run dist",
     "nyc-build": "npm run vet && npm run make && npm run test-verbose && npm run audit && npm run nyc-test",
     "minify": "uglifyjs ./build/jssm-viz.cjs.js -o ./build/jssm-viz.es5.cjs.min.js --compress",
     "dist": "cp build/jssm-viz.* dist/ && cp src/html/* docs/ && cp dist/* docs/ && cp node_modules/viz.js/lite.render.js docs/ && cp node_modules/viz.js/viz.js docs/",
@@ -74,10 +74,11 @@
     "rimraf": "^2.6.2",
     "rollup": "^0.67.1",
     "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-ignore": "^1.0.4",
     "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-typescript2": "^0.18.0",
     "typescript": "^3.2.1",
     "uglify-js": "^3.3.22",
-    "viz.js": "^2.1.1"
+    "viz.js": "^2.1.2"
   }
 }
