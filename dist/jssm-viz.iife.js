@@ -563,6 +563,9 @@ var jssm_viz = (function (exports) {
 	exports.dot = dot;
 	exports.dot_to_svg = dot_to_svg;
 	exports.svg_el = svg_el;
+	exports.Viz = viz;
+	exports.Module = full_render_2;
+	exports.render = full_render_1;
 
 	return exports;
 

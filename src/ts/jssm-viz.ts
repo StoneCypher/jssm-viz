@@ -257,4 +257,7 @@ function dot(jssm: any) {  // whargarbl jssm isn't an any
 
 
 
-export { dot, dot_to_svg, svg_el /*, todo png_el */ /*, vizjs todo */ };
+export {
+  dot, dot_to_svg, svg_el,
+  Viz, Module, render
+};

@@ -557,5 +557,5 @@ function dot(jssm) {
     return `digraph G {\n${MaybeRankDir}  fontname="Open Sans";\n  style=filled;\n  bgcolor="${vc('graph_bg_color')}";\n  node [fontsize=14; shape=box; style=filled; fillcolor=white; fontname="Times New Roman"];\n  edge [fontsize=6;fontname="Open Sans"];\n\n  ${nodes}\n\n  ${edges}\n}`;
 }
 
-export { dot, dot_to_svg, svg_el };
+export { dot, dot_to_svg, svg_el, viz as Viz, full_render_2 as Module, full_render_1 as render };
 //# sourceMappingURL=jssm-viz.es6.js.map
