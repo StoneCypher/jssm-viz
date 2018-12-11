@@ -1,6 +1,6 @@
 {
   "name": "jssm-viz",
-  "version": "1.1.14",
+  "version": "1.2.0",
   "description": "Visualization of JSSM machines using viz.js",
   "main": "src/js/jssm-viz.js",
   "scripts": {
