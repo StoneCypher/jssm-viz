@@ -17,7 +17,7 @@ var viz = new Viz({ Module, render });
 
 
 
-function dot_to_svg(dot: string, config? : Object): string {  // whargarbl jssm isn't an any
+function dot_to_svg(dot: string, config? : Object): Promise<string> {  // whargarbl jssm isn't an any
   return viz.renderString(dot);
 }
 
@@ -25,9 +25,9 @@ function dot_to_svg(dot: string, config? : Object): string {  // whargarbl jssm 
 
 
 
-function svg_el(dot: string, config? : Object): Document {
-  return new DOMParser().parseFromString( dot_to_svg(dot, config), 'text/html' );
-}
+// function svg_el(dot: string, config? : Object): Document {
+//   return new DOMParser().parseFromString( dot_to_svg(dot, config), 'text/html' );
+// }
 
 
 
@@ -196,7 +196,7 @@ function fsl_to_dot(fsl: string): string {
 
 
 
-function fsl_to_svg_string(fsl: string): string {
+function fsl_to_svg_string(fsl: string): Promise<string> {
   return dot_to_svg(fsl_to_dot(fsl));
 }
 
@@ -213,7 +213,7 @@ function fsl_to_svg_string(fsl: string): string {
 
 
 export {
-  dot, dot_to_svg, svg_el,
+  dot, dot_to_svg, // svg_el,
   fsl_to_dot, fsl_to_svg_string,
   machine_to_dot,
   jssm

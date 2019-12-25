@@ -14672,9 +14672,6 @@ var viz$1 = new viz({ Module: full_render_2, render: full_render_1 });
 function dot_to_svg(dot, config) {
     return viz$1.renderString(dot);
 }
-function svg_el(dot, config) {
-    return new DOMParser().parseFromString(dot_to_svg(dot, config), 'text/html');
-}
 function dot(jssm) {
     machine_to_dot(jssm);
 }
@@ -14736,5 +14733,5 @@ function fsl_to_svg_string(fsl) {
     return dot_to_svg(fsl_to_dot(fsl));
 }
 
-export { dot, dot_to_svg, svg_el, fsl_to_dot, fsl_to_svg_string, machine_to_dot, jssm_es5_cjs$2 as jssm };
+export { dot, dot_to_svg, fsl_to_dot, fsl_to_svg_string, machine_to_dot, jssm_es5_cjs$2 as jssm };
 //# sourceMappingURL=jssm-viz.es6.js.map

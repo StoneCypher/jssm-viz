@@ -14676,9 +14676,6 @@ var viz$1 = new viz({ Module: full_render_2, render: full_render_1 });
 function dot_to_svg(dot, config) {
     return viz$1.renderString(dot);
 }
-function svg_el(dot, config) {
-    return new DOMParser().parseFromString(dot_to_svg(dot, config), 'text/html');
-}
 function dot(jssm) {
     machine_to_dot(jssm);
 }
@@ -14742,7 +14739,6 @@ function fsl_to_svg_string(fsl) {
 
 exports.dot = dot;
 exports.dot_to_svg = dot_to_svg;
-exports.svg_el = svg_el;
 exports.fsl_to_dot = fsl_to_dot;
 exports.fsl_to_svg_string = fsl_to_svg_string;
 exports.machine_to_dot = machine_to_dot;

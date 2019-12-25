@@ -1,11 +1,11 @@
 {
   "name": "jssm-viz",
-  "version": "1.5.2",
+  "version": "1.5.4",
   "description": "Visualization of JSSM machines using viz.js",
-  "main": "dist/jssm-viz.es6.js",
+  "main": "dist/jssm-viz.cjs.js",
   "module": "dist/jssm-viz.es6.js",
   "scripts": {
-    "test": "nyc ava src/ts/tests/general.js",
+    "test": "ava src/ts/tests/general.js",
     "test-verbose": "nyc ava src/ts/tests/*.js -v",
     "removedir": "rimraf build -f && rimraf dist -f && rimraf docs -f",
     "createdir": "mkdir build && mkdir dist && mkdir docs && cd docs && mkdir docs && cd ..",

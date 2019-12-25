@@ -5,9 +5,6 @@ import {sm}             from 'jssm';
 const jv = require('../../../dist/jssm-viz.cjs.js');  // TODO FIXME should be es6 ready too
 
 // nyc isn't able to mark something this large, it seems
-// const jssm = require('../../../build/jssm-viz.cjs.js');
-
-// save this setup for OS calls later at least
 
 
 
@@ -17,13 +14,15 @@ describe('stub/0', async it => {
   it('2+2 is 4', t => t.deepEqual(4, 2+2));
 });
 
-describe('renders jssm machine', async it => {
-
+describe('renders jssm machine to dot', async it => {
   const machine = sm`a->b;`,
-        dot     = jv.dot(machine);
-
+        dot     = jv.machine_to_dot(machine);
   it('to dot', t => t.true(dot.includes('digraph')) );
-
 });
 
-// stochable
+describe('renders fsl', async it => {
+  it('to dot', t => t.true(jv.fsl_to_dot('a -> b;').includes('digraph')) );
+
+  const svg = await jv.fsl_to_svg_string('a -> b;');
+  it('to svg', t => t.true(svg.includes('<!DOCTYPE')) );
+});
