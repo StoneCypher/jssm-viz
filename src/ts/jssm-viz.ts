@@ -2,10 +2,10 @@
 import Viz from 'viz.js';
 import { Module, render } from 'viz.js/full.render.js';
 
-var viz = new Viz({ Module, render });
+// var viz = new Viz({ Module, render });
 
-    viz.renderSVGElement('digraph { a -> b; }')
-       .then( element => document.body.appendChild(element) );
+//     viz.renderSVGElement('digraph { a -> b; }')
+//        .then( element => document.body.appendChild(element) );
 
 
 
@@ -259,5 +259,5 @@ function dot(jssm: any) {  // whargarbl jssm isn't an any
 
 export {
   dot, dot_to_svg, svg_el,
-  Viz, Module, render
+//  Viz, Module, render
 };
