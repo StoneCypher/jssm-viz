@@ -1,4 +1,7 @@
 
+import * as jssm from 'jssm';
+const sm = jssm.sm;
+
 import Viz from 'viz.js';
 import { Module, render } from 'viz.js/full.render.js';
 
@@ -41,7 +44,15 @@ return 'todo';
 
 
 
-function dot(jssm: any) { machine_to_dot(jssm); }  // compatability, remove in 2.0.0
+// compatability, remove in 2.0.0
+
+function dot(jssm: any) {
+  machine_to_dot(jssm);
+}
+
+
+
+
 
 function machine_to_dot(jssm: any) {  // whargarbl jssm isn't an any
 
@@ -177,7 +188,33 @@ function machine_to_dot(jssm: any) {  // whargarbl jssm isn't an any
 
 
 
+function fsl_to_dot(fsl: string): string {
+  return machine_to_dot(sm`${fsl}`);
+}
+
+
+
+
+
+function fsl_to_svg_string(fsl: string): string {
+  return dot_to_svg(fsl_to_dot(fsl));
+}
+
+
+
+
+
+// function fsl_to_parsed_svg(fsl: string): SVGElement {
+//   return fsl_to_svg_string(fsl);
+// }
+
+
+
+
+
 export {
   dot, dot_to_svg, svg_el,
-  machine_to_dot
+  fsl_to_dot, fsl_to_svg_string,
+  machine_to_dot,
+  jssm
 };
