@@ -1,9 +1,12 @@
 {
   "name": "jssm-viz",
-  "version": "1.5.4",
+  "version": "1.6.1",
   "description": "Visualization of JSSM machines using viz.js",
   "main": "dist/jssm-viz.cjs.js",
   "module": "dist/jssm-viz.es6.js",
+  "bin": {
+    "jssm-viz": "dist/bin.js"
+  },
   "scripts": {
     "test": "ava src/ts/tests/general.js",
     "test-verbose": "nyc ava src/ts/tests/*.js -v",
@@ -62,6 +65,7 @@
   "devDependencies": {
     "ava": "^1.4.1",
     "ava-spec": "^1.1.1",
+    "commander": "^4.0.1",
     "del-cli": "^1.1.0",
     "documentation": "^12.1.2",
     "eslint": "^4.19.1",
@@ -72,6 +76,7 @@
     "rollup": "^0.67.1",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-ignore": "^1.0.5",
+    "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-typescript2": "^0.24.3",
     "typescript": "^3.6.4",
