@@ -1,12 +1,9 @@
 {
   "name": "jssm-viz",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "Visualization of JSSM machines using viz.js",
   "main": "dist/jssm-viz.cjs.js",
   "module": "dist/jssm-viz.es6.js",
-  "bin": {
-    "jssm-viz": "dist/bin.js"
-  },
   "scripts": {
     "test": "ava src/ts/tests/general.js",
     "test-verbose": "nyc ava src/ts/tests/*.js -v",
