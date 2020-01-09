@@ -24,14 +24,6 @@ function dot_to_svg(dot: string, config? : Object): Promise<string> {  // wharga
 
 
 
-
-// function svg_el(dot: string, config? : Object): Document {
-//   return new DOMParser().parseFromString( dot_to_svg(dot, config), 'text/html' );
-// }
-
-
-
-
 /* todo
 function png_el(dot: string, config? : Object): HTMLImageElement {  // whargarbl jssm isn't an any // whargarbl should return an image element, not a string
   var cfg = Object.assign({}, config, { format: "png-image-element" });
@@ -44,29 +36,51 @@ return 'todo';
 
 
 
-// compatability, remove in 2.0.0
+function dot_template(MaybeRankDir, GraphBgColor, nodes, edges) {
+  return `digraph G {
+${MaybeRankDir}
+fontname="Open Sans";
+style=filled;
+bgcolor="${GraphBgColor}";
+node [fontsize=14; shape=box; style=filled; fillcolor=white; fontname="Times New Roman"];
+edge [fontsize=6; fontname="Open Sans"];
 
-function dot(jssm: any) {
-  machine_to_dot(jssm);
+${nodes}
+
+${edges}
+}`;
+
 }
 
 
 
 
 
-function machine_to_dot(jssm: any) {  // whargarbl jssm isn't an any
+function vc(col) {
+  return default_viz_colors[col] || '';  // todo make these configurable
+}
 
-  const l_states = jssm.states();
 
-  const node_of  = state => `n${l_states.indexOf(state)}`,
-        vc       = col   => ( default_viz_colors[col] || '' );  // todo make these configurable
 
-  const nodes : string = l_states.map( (s) => {
 
-    const this_state = jssm.state_for(s),
-          terminal   = jssm.state_is_terminal(s),
-          final      = jssm.state_is_final(s),
-          complete   = jssm.state_is_complete(s),
+
+function node_of(state, l_states): string {
+  return `n${l_states.indexOf(state)}`;
+}
+
+
+
+
+
+function states_to_nodes_string(u_jssm, l_states) : string {
+
+  return l_states.map( (s) => {
+
+    const this_state = u_jssm.state_for(s),
+//        opening    = u_jssm.state_is_start_state(s),   TODO COMEBACK FIXME
+          terminal   = u_jssm.state_is_terminal(s),
+          final      = u_jssm.state_is_final(s),
+          complete   = u_jssm.state_is_complete(s),
           features   = [
                         ['label',       s],
                         ['peripheries', complete? 2 : 1  ],
@@ -78,15 +92,27 @@ function machine_to_dot(jssm: any) {  // whargarbl jssm isn't an any
                         .filter(r => r[1])
                         .map(   r => `${r[0]}="${r[1]}"`)
                         .join(' ');
-    return `${node_of(s)} [${features}];`;
+    return `${node_of(s, l_states)} [${features}];`;
 
   }).join(' ');
 
+}
+
+
+
+
+
+function machine_to_dot(u_jssm: any) {  // whargarbl jssm isn't an any
+
+  const l_states = u_jssm.states();
+
+  const nodes : string = states_to_nodes_string(u_jssm, l_states);
+
   const strike = [];
 
-  const edges  = jssm.states().map( (s) =>
+  const edges  = u_jssm.states().map( (s) =>
 
-    jssm.list_exits(s).map( (ex) => {
+    u_jssm.list_exits(s).map( (ex) => {
 
       if ( strike.find(row => (row[0] === s) && (row[1] == ex) ) ) {
           return '';  // already did the pair
@@ -94,28 +120,28 @@ function machine_to_dot(jssm: any) {  // whargarbl jssm isn't an any
 
       const doublequote    = txt => txt.replace('"', '\\"');
 
-      const edge           = jssm.list_transitions(s, ex),
-            edge_id        = jssm.get_transition_by_state_names(s, ex),
-            edge_tr        = jssm.lookup_transition_for(s, ex),
-            pair           = jssm.list_transitions(ex, s),
-            pair_id        = jssm.get_transition_by_state_names(ex, s),
-            pair_tr        = jssm.lookup_transition_for(ex, s),
+      const edge           = u_jssm.list_transitions(s, ex),
+            edge_id        = u_jssm.get_transition_by_state_names(s, ex),
+            edge_tr        = u_jssm.lookup_transition_for(s, ex),
+            pair           = u_jssm.list_transitions(ex, s),
+            pair_id        = u_jssm.get_transition_by_state_names(ex, s),
+            pair_tr        = u_jssm.lookup_transition_for(ex, s),
             double         = pair_id && (s !== ex),
 
-            head_state     = jssm.state_for(s),
-            tail_state     = jssm.state_for(ex),
+            head_state     = u_jssm.state_for(s),
+            tail_state     = u_jssm.state_for(ex),
 
             nlJoinIfAny    = items => items.filter(item => !([undefined, ''].includes(item))).join('\n'),
 
             if_obj_field   = (obj, field) => obj? (obj[field] || '') : '',
 
-            h_final        = jssm.state_is_final(s),
-            h_complete     = jssm.state_is_complete(s),
-            h_terminal     = jssm.state_is_terminal(s),
+            h_final        = u_jssm.state_is_final(s),
+            h_complete     = u_jssm.state_is_complete(s),
+            h_terminal     = u_jssm.state_is_terminal(s),
 
-            t_final        = jssm.state_is_final(ex),
-            t_complete     = jssm.state_is_complete(ex),
-            t_terminal     = jssm.state_is_terminal(ex),
+            t_final        = u_jssm.state_is_final(ex),
+            t_complete     = u_jssm.state_is_complete(ex),
+            t_terminal     = u_jssm.state_is_terminal(ex),
 
             lineColor      = (final, complete, terminal, lkind, _solo_1_2 = '_solo') =>
                                final   ? (vc(`${lkind}_final`    + _solo_1_2)) :
@@ -170,30 +196,28 @@ function machine_to_dot(jssm: any) {  // whargarbl jssm isn't an any
 
       if (pair) { strike.push([ex, s]); }
 
-      return `${node_of(s)}->${node_of(ex)} [${labelInline}${edgeInline}];`;
+      return `${node_of(s, l_states)}->${node_of(ex, l_states)} [${labelInline}${edgeInline}];`;
 
     }).join(' ')
 
   ).join(' ');
 
-  // todo lol just do this right, jerk
+  // TODO FIXME lol just do this right, jerk
 //  let MaybeRankDir = window? (window.lrGViz? 'rankdir=LR;' : '') : '';
   let MaybeRankDir = 'rankdir=LR;';
 
-  return `
-    digraph G {
-      ${MaybeRankDir}
-      fontname="Open Sans";
-      style=filled;
-      bgcolor="${vc('graph_bg_color')}";
-      node [fontsize=14; shape=box; style=filled; fillcolor=white; fontname="Times New Roman"];
-      edge [fontsize=6; fontname="Open Sans"];
+  return dot_template(MaybeRankDir, vc('graph_bg_color'), nodes, edges);
 
-      ${nodes}
+}
 
-      ${edges}
-    }`;
 
+
+
+
+// compatability, remove in 2.0.0
+
+function dot(jssm: any) {
+  machine_to_dot(jssm);
 }
 
 

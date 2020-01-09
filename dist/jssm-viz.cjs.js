@@ -14933,14 +14933,29 @@ var viz$1 = new viz({ Module: full_render_2, render: full_render_1 });
 function dot_to_svg(dot, config) {
     return viz$1.renderString(dot);
 }
-function dot(jssm) {
-    machine_to_dot(jssm);
+function dot_template(MaybeRankDir, GraphBgColor, nodes, edges) {
+    return `digraph G {
+${MaybeRankDir}
+fontname="Open Sans";
+style=filled;
+bgcolor="${GraphBgColor}";
+node [fontsize=14; shape=box; style=filled; fillcolor=white; fontname="Times New Roman"];
+edge [fontsize=6; fontname="Open Sans"];
+
+${nodes}
+
+${edges}
+}`;
 }
-function machine_to_dot(jssm) {
-    const l_states = jssm.states();
-    const node_of = state => `n${l_states.indexOf(state)}`, vc = col => (default_viz_colors[col] || '');
-    const nodes = l_states.map((s) => {
-        const this_state = jssm.state_for(s), terminal = jssm.state_is_terminal(s), final = jssm.state_is_final(s), complete = jssm.state_is_complete(s), features = [
+function vc(col) {
+    return default_viz_colors[col] || '';
+}
+function node_of(state, l_states) {
+    return `n${l_states.indexOf(state)}`;
+}
+function states_to_nodes_string(u_jssm, l_states) {
+    return l_states.map((s) => {
+        const this_state = u_jssm.state_for(s), terminal = u_jssm.state_is_terminal(s), final = u_jssm.state_is_final(s), complete = u_jssm.state_is_complete(s), features = [
             ['label', s],
             ['peripheries', complete ? 2 : 1],
             ['fillcolor', final ? vc('fill_final') :
@@ -14951,15 +14966,19 @@ function machine_to_dot(jssm) {
             .filter(r => r[1])
             .map(r => `${r[0]}="${r[1]}"`)
             .join(' ');
-        return `${node_of(s)} [${features}];`;
+        return `${node_of(s, l_states)} [${features}];`;
     }).join(' ');
+}
+function machine_to_dot(u_jssm) {
+    const l_states = u_jssm.states();
+    const nodes = states_to_nodes_string(u_jssm, l_states);
     const strike = [];
-    const edges = jssm.states().map((s) => jssm.list_exits(s).map((ex) => {
+    const edges = u_jssm.states().map((s) => u_jssm.list_exits(s).map((ex) => {
         if (strike.find(row => (row[0] === s) && (row[1] == ex))) {
             return '';
         }
         const doublequote = txt => txt.replace('"', '\\"');
-        const edge = jssm.list_transitions(s, ex), edge_id = jssm.get_transition_by_state_names(s, ex), edge_tr = jssm.lookup_transition_for(s, ex), pair = jssm.list_transitions(ex, s), pair_id = jssm.get_transition_by_state_names(ex, s), pair_tr = jssm.lookup_transition_for(ex, s), double = pair_id && (s !== ex), head_state = jssm.state_for(s), tail_state = jssm.state_for(ex), if_obj_field = (obj, field) => obj ? (obj[field] || '') : '', h_final = jssm.state_is_final(s), h_complete = jssm.state_is_complete(s), h_terminal = jssm.state_is_terminal(s), t_final = jssm.state_is_final(ex), t_complete = jssm.state_is_complete(ex), t_terminal = jssm.state_is_terminal(ex), lineColor = (final, complete, terminal, lkind, _solo_1_2 = '_solo') => final ? (vc(`${lkind}_final` + _solo_1_2)) :
+        const edge = u_jssm.list_transitions(s, ex), edge_id = u_jssm.get_transition_by_state_names(s, ex), edge_tr = u_jssm.lookup_transition_for(s, ex), pair = u_jssm.list_transitions(ex, s), pair_id = u_jssm.get_transition_by_state_names(ex, s), pair_tr = u_jssm.lookup_transition_for(ex, s), double = pair_id && (s !== ex), head_state = u_jssm.state_for(s), tail_state = u_jssm.state_for(ex), if_obj_field = (obj, field) => obj ? (obj[field] || '') : '', h_final = u_jssm.state_is_final(s), h_complete = u_jssm.state_is_complete(s), h_terminal = u_jssm.state_is_terminal(s), t_final = u_jssm.state_is_final(ex), t_complete = u_jssm.state_is_complete(ex), t_terminal = u_jssm.state_is_terminal(ex), lineColor = (final, complete, terminal, lkind, _solo_1_2 = '_solo') => final ? (vc(`${lkind}_final` + _solo_1_2)) :
             (complete ? (vc(`${lkind}_complete` + _solo_1_2)) :
                 (terminal ? (vc(`${lkind}_terminal` + _solo_1_2)) :
                     vc(`${lkind}` + _solo_1_2))), textColor = (final, complete, terminal, _solo_1_2 = '_solo') => final ? (vc('text_final' + _solo_1_2)) :
@@ -14982,22 +15001,13 @@ function machine_to_dot(jssm) {
         if (pair) {
             strike.push([ex, s]);
         }
-        return `${node_of(s)}->${node_of(ex)} [${labelInline}${edgeInline}];`;
+        return `${node_of(s, l_states)}->${node_of(ex, l_states)} [${labelInline}${edgeInline}];`;
     }).join(' ')).join(' ');
     let MaybeRankDir = 'rankdir=LR;';
-    return `
-    digraph G {
-      ${MaybeRankDir}
-      fontname="Open Sans";
-      style=filled;
-      bgcolor="${vc('graph_bg_color')}";
-      node [fontsize=14; shape=box; style=filled; fillcolor=white; fontname="Times New Roman"];
-      edge [fontsize=6;fontname="Open Sans"];
-
-      ${nodes}
-
-      ${edges}
-    }`;
+    return dot_template(MaybeRankDir, vc('graph_bg_color'), nodes, edges);
+}
+function dot(jssm) {
+    machine_to_dot(jssm);
 }
 function fsl_to_dot(fsl) {
     return machine_to_dot(sm `${fsl}`);
