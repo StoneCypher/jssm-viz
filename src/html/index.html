@@ -8,8 +8,14 @@
     <script defer type="text/javascript">
 
       window.onload = async () => {
-        const ExMachine = 'Hello -> "I am an FSL machine" -> "Nice to meet you";';
+
+        const ExMachine = `
+          Green => Yellow => Red => Green;
+          [Red Yellow Green] ~> Off -> Red;
+        `;
+
         document.getElementById('tgt').innerHTML = await window.jssm_viz.fsl_to_svg_string(ExMachine);
+
       }
 
     </script>

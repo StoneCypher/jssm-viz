@@ -180,7 +180,19 @@ function machine_to_dot(jssm: any) {  // whargarbl jssm isn't an any
 //  let MaybeRankDir = window? (window.lrGViz? 'rankdir=LR;' : '') : '';
   let MaybeRankDir = 'rankdir=LR;';
 
-  return `digraph G {\n${MaybeRankDir}  fontname="Open Sans";\n  style=filled;\n  bgcolor="${vc('graph_bg_color')}";\n  node [fontsize=14; shape=box; style=filled; fillcolor=white; fontname="Times New Roman"];\n  edge [fontsize=6;fontname="Open Sans"];\n\n  ${nodes}\n\n  ${edges}\n}`;
+  return `
+    digraph G {
+      ${MaybeRankDir}
+      fontname="Open Sans";
+      style=filled;
+      bgcolor="${vc('graph_bg_color')}";
+      node [fontsize=14; shape=box; style=filled; fillcolor=white; fontname="Times New Roman"];
+      edge [fontsize=6; fontname="Open Sans"];
+
+      ${nodes}
+
+      ${edges}
+    }`;
 
 }
 

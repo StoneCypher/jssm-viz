@@ -14985,7 +14985,19 @@ function machine_to_dot(jssm) {
         return `${node_of(s)}->${node_of(ex)} [${labelInline}${edgeInline}];`;
     }).join(' ')).join(' ');
     let MaybeRankDir = 'rankdir=LR;';
-    return `digraph G {\n${MaybeRankDir}  fontname="Open Sans";\n  style=filled;\n  bgcolor="${vc('graph_bg_color')}";\n  node [fontsize=14; shape=box; style=filled; fillcolor=white; fontname="Times New Roman"];\n  edge [fontsize=6;fontname="Open Sans"];\n\n  ${nodes}\n\n  ${edges}\n}`;
+    return `
+    digraph G {
+      ${MaybeRankDir}
+      fontname="Open Sans";
+      style=filled;
+      bgcolor="${vc('graph_bg_color')}";
+      node [fontsize=14; shape=box; style=filled; fillcolor=white; fontname="Times New Roman"];
+      edge [fontsize=6;fontname="Open Sans"];
+
+      ${nodes}
+
+      ${edges}
+    }`;
 }
 function fsl_to_dot(fsl) {
     return machine_to_dot(sm `${fsl}`);
