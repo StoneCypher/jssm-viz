@@ -6,9 +6,20 @@
   	<script defer type="text/javascript" src="viz.js"></script>
   	<script defer type="text/javascript" src="lite.render.js"></script>
   	<script defer type="text/javascript" src="jssm-viz.iife.js"></script>
+
+    <script defer type="text/javascript">
+
+      window.onload = async () => {
+        const ExMachine = 'Hello -> "I am an FSL machine" -> "Nice to meet you";';
+        document.getElementById('tgt').innerHTML = await window.jssm_viz.fsl_to_svg_string(ExMachine);
+      }
+
+    </script>
+
   </head>
 
   <body>
+    <div id="tgt"></div>
   </body>
 
 </html>
