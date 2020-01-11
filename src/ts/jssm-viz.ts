@@ -72,7 +72,7 @@ function node_of(state, l_states): string {
 
 
 
-function states_to_nodes_string(u_jssm, l_states) : string {
+function states_to_nodes_string(u_jssm, l_states): string {
 
   return l_states.map( (s) => {
 
@@ -102,15 +102,9 @@ function states_to_nodes_string(u_jssm, l_states) : string {
 
 
 
-function machine_to_dot(u_jssm: any) {  // whargarbl jssm isn't an any
+function states_to_edges_string(u_jssm, l_states, strike): string {
 
-  const l_states = u_jssm.states();
-
-  const nodes : string = states_to_nodes_string(u_jssm, l_states);
-
-  const strike = [];
-
-  const edges  = u_jssm.states().map( (s) =>
+  return u_jssm.states().map( (s) =>
 
     u_jssm.list_exits(s).map( (ex) => {
 
@@ -201,6 +195,21 @@ function machine_to_dot(u_jssm: any) {  // whargarbl jssm isn't an any
     }).join(' ')
 
   ).join(' ');
+
+}
+
+
+
+
+
+function machine_to_dot(u_jssm: any) {  // whargarbl jssm isn't an any
+
+  const l_states = u_jssm.states();
+
+  const nodes : string = states_to_nodes_string(u_jssm, l_states);
+
+  const strike = [];
+  const edges  = states_to_edges_string(u_jssm, l_states, strike);
 
   // TODO FIXME lol just do this right, jerk
 //  let MaybeRankDir = window? (window.lrGViz? 'rankdir=LR;' : '') : '';

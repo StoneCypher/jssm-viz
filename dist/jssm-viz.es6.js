@@ -14965,11 +14965,8 @@ function states_to_nodes_string(u_jssm, l_states) {
         return `${node_of(s, l_states)} [${features}];`;
     }).join(' ');
 }
-function machine_to_dot(u_jssm) {
-    const l_states = u_jssm.states();
-    const nodes = states_to_nodes_string(u_jssm, l_states);
-    const strike = [];
-    const edges = u_jssm.states().map((s) => u_jssm.list_exits(s).map((ex) => {
+function states_to_edges_string(u_jssm, l_states, strike) {
+    return u_jssm.states().map((s) => u_jssm.list_exits(s).map((ex) => {
         if (strike.find(row => (row[0] === s) && (row[1] == ex))) {
             return '';
         }
@@ -14999,6 +14996,12 @@ function machine_to_dot(u_jssm) {
         }
         return `${node_of(s, l_states)}->${node_of(ex, l_states)} [${labelInline}${edgeInline}];`;
     }).join(' ')).join(' ');
+}
+function machine_to_dot(u_jssm) {
+    const l_states = u_jssm.states();
+    const nodes = states_to_nodes_string(u_jssm, l_states);
+    const strike = [];
+    const edges = states_to_edges_string(u_jssm, l_states, strike);
     let MaybeRankDir = 'rankdir=LR;';
     return dot_template(MaybeRankDir, vc('graph_bg_color'), nodes, edges);
 }
