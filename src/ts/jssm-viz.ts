@@ -36,9 +36,14 @@ return 'todo';
 
 
 
-function dot_template(MaybeRankDir, GraphBgColor, nodes, edges) {
+function dot_template(RankDir, GraphBgColor, nodes, edges, preamble = "") {
+
+console.log(preamble);
+
   return `digraph G {
-${MaybeRankDir}
+${preamble}
+
+${RankDir}
 fontname="Open Sans";
 style=filled;
 bgcolor="${GraphBgColor}";
@@ -115,15 +120,15 @@ function states_to_edges_string(u_jssm, l_states, strike): string {
       const doublequote    = txt => txt.replace('"', '\\"');
 
       const edge           = u_jssm.list_transitions(s, ex),
-            edge_id        = u_jssm.get_transition_by_state_names(s, ex),
+//          edge_id        = u_jssm.get_transition_by_state_names(s, ex),
             edge_tr        = u_jssm.lookup_transition_for(s, ex),
             pair           = u_jssm.list_transitions(ex, s),
             pair_id        = u_jssm.get_transition_by_state_names(ex, s),
             pair_tr        = u_jssm.lookup_transition_for(ex, s),
             double         = pair_id && (s !== ex),
 
-            head_state     = u_jssm.state_for(s),
-            tail_state     = u_jssm.state_for(ex),
+//            head_state     = u_jssm.state_for(s),
+//            tail_state     = u_jssm.state_for(ex),
 
             nlJoinIfAny    = items => items.filter(item => !([undefined, ''].includes(item))).join('\n'),
 
@@ -202,6 +207,25 @@ function states_to_edges_string(u_jssm, l_states, strike): string {
 
 
 
+function flow_direction_to_rankdir(flow_direction) {
+
+  switch (flow_direction) {
+
+    case 'up'    : return 'rankdir=BT;'
+    case 'right' : return 'rankdir=LR;'
+    case 'down'  : return 'rankdir=TB;'
+    case 'left'  : return 'rankdir=RL;'
+
+    default      : throw new TypeError(`unknown flow direction '${flow_direction}'`);
+
+  }
+
+}
+
+
+
+
+
 function machine_to_dot(u_jssm: any) {  // whargarbl jssm isn't an any
 
   const l_states = u_jssm.states();
@@ -211,11 +235,10 @@ function machine_to_dot(u_jssm: any) {  // whargarbl jssm isn't an any
   const strike = [];
   const edges  = states_to_edges_string(u_jssm, l_states, strike);
 
-  // TODO FIXME lol just do this right, jerk
-//  let MaybeRankDir = window? (window.lrGViz? 'rankdir=LR;' : '') : '';
-  let MaybeRankDir = 'rankdir=LR;';
+  let RankDir  = flow_direction_to_rankdir(u_jssm.flow() || 'down'),
+      preamble = u_jssm.dot_preamble() || '';
 
-  return dot_template(MaybeRankDir, vc('graph_bg_color'), nodes, edges);
+  return dot_template(RankDir, vc('graph_bg_color'), nodes, edges, preamble);
 
 }
 

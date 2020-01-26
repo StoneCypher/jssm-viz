@@ -3,19 +3,50 @@
 
   <head>
   	<title>jssm-viz test</title>
+
+    <style type="text/css">
+
+      html     { margin: 0; padding: 0;    border: 0; }
+      body     { margin: 0; padding: 20px; border: 0; }
+
+      #code    { width: 500px; height: 200px; margin-bottom: 1em; }
+      #err     { position: absolute; right: 20px; left: 540px; height: 200px; color: #600; }
+
+      .inError { background-color: #fee; }
+
+    </style>
+
   	<script defer type="text/javascript" src="jssm-viz.iife.js"></script>
 
     <script defer type="text/javascript">
 
+      let editor, image, error;
+
+      async function update() {
+
+        try {
+          image.innerHTML  = await window.jssm_viz.fsl_to_svg_string(editor.value);
+          editor.className = '';
+          error.innerText  = '';
+        } catch (e) {
+          console.log(e);
+          editor.className = 'inError';
+          error.innerText  = e.message;
+        }
+
+      }
+
       window.onload = async () => {
 
-        const ExMachine = `
-          Green => Yellow => Red => Green;
-          [Red Yellow Green] ~> Off -> Red;
-        `;
+        console.log(`JSSM version ${window.jssm_viz.jssm.version}`);
 
-        document.getElementById('tgt').innerHTML = await window.jssm_viz.fsl_to_svg_string(ExMachine);
+        image          = document.getElementById('tgt');
+        error          = document.getElementById('err');
+        editor         = document.getElementById('code');
 
+        editor.onkeyup = update;
+
+        update();
       }
 
     </script>
@@ -23,6 +54,11 @@
   </head>
 
   <body>
+    <div id="err"></div>
+    <textarea id="code">
+Green => Yellow => Red => Green;
+[Red Yellow Green] ~> Off -> Red;
+    </textarea>
     <div id="tgt"></div>
   </body>
 
