@@ -18,7 +18,7 @@ var viz = new Viz({ Module, render });
 
 
 function dot_to_svg(dot: string, config? : Object): Promise<string> {  // whargarbl jssm isn't an any
-  return viz.renderString(dot);
+  return viz.renderString(dot).catch(e => console.log(e));
 }
 
 
@@ -77,9 +77,30 @@ function node_of(state, l_states): string {
 
 
 
+// function color8to6(color8: rgba8): rgb6 { // TODO we could enforce types here
+// TODO FIXME we're just throwing opacity away here
+function color8to6(color8: string): string {
+
+  if (color8.length !== 9) { throw 'not a color8'; }
+  if (color8[0] !== '#')   { throw 'not a color8'; }
+
+  return `#${color8.substring(1,7)}`;
+
+}
+
+
+
+
+
 function states_to_nodes_string(u_jssm, l_states): string {
 
   return l_states.map( (s) => {
+
+    const d_color = u_jssm._state_declarations
+                      ? (u_jssm._state_declarations.get(s)
+                          ? color8to6(u_jssm._state_declarations.get(s).color)
+                          : undefined)
+                      : undefined;
 
     const this_state = u_jssm.state_for(s),
 //        opening    = u_jssm.state_is_start_state(s),   TODO COMEBACK FIXME
@@ -88,7 +109,8 @@ function states_to_nodes_string(u_jssm, l_states): string {
           complete   = u_jssm.state_is_complete(s),
           features   = [
                         ['label',       s],
-                        ['peripheries', complete? 2 : 1  ],
+                        ['peripheries', complete? 2 : 1  ],  // TODO COMEBACK use peripheries for current state instead
+                        ['color',       d_color || 'black' ],
                         ['fillcolor',   final   ? vc('fill_final')    :
                                        (complete? vc('fill_complete') :
                                        (terminal? vc('fill_terminal') :
