@@ -15352,7 +15352,7 @@ var jssm_viz = (function (exports) {
 	const sm = jssm_es5_cjs_10;
 	var viz$1 = new viz({ Module: full_render_2, render: full_render_1 });
 	function dot_to_svg(dot, config) {
-	    return viz$1.renderString(dot);
+	    return viz$1.renderString(dot).catch(e => console.log(e));
 	}
 	function dot_template(RankDir, GraphBgColor, nodes, edges, preamble = "") {
 	    console.log(preamble);
@@ -15377,11 +15377,26 @@ ${edges}
 	function node_of(state, l_states) {
 	    return `n${l_states.indexOf(state)}`;
 	}
+	function color8to6(color8) {
+	    if (color8.length !== 9) {
+	        throw 'not a color8';
+	    }
+	    if (color8[0] !== '#') {
+	        throw 'not a color8';
+	    }
+	    return `#${color8.substring(1, 6)}`;
+	}
 	function states_to_nodes_string(u_jssm, l_states) {
 	    return l_states.map((s) => {
+	        const d_color = u_jssm._state_declarations
+	            ? (u_jssm._state_declarations.get(s)
+	                ? color8to6(u_jssm._state_declarations.get(s).color)
+	                : undefined)
+	            : undefined;
 	        const this_state = u_jssm.state_for(s), terminal = u_jssm.state_is_terminal(s), final = u_jssm.state_is_final(s), complete = u_jssm.state_is_complete(s), features = [
 	            ['label', s],
 	            ['peripheries', complete ? 2 : 1],
+	            ['color', d_color || 'black'],
 	            ['fillcolor', final ? vc('fill_final') :
 	                    (complete ? vc('fill_complete') :
 	                        (terminal ? vc('fill_terminal') :
