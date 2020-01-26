@@ -17,8 +17,9 @@ var viz = new Viz({ Module, render });
 
 
 
-function dot_to_svg(dot: string, config? : Object): Promise<string> {  // whargarbl jssm isn't an any
-  return viz.renderString(dot).catch(e => console.log(e));  // TODO FIXME better way to export errors
+function dot_to_svg(dot: string, config? : Object, errorHandler? : Function): Promise<string> {  // whargarbl jssm isn't an any
+  return viz
+    .renderString(dot);
 }
 
 
@@ -37,8 +38,6 @@ return 'todo';
 
 
 function dot_template(RankDir, GraphBgColor, nodes, edges, preamble = "") {
-
-console.log(preamble);
 
   return `digraph G {
 ${preamble}
@@ -130,6 +129,25 @@ function text_color_for_state(u_jssm, state): string | undefined {
 
 
 
+function shape_for_state(u_jssm, state): string | undefined {
+
+  const d_color = u_jssm._state_declarations;
+  if (!d_color) { return undefined; }
+
+  const decls = u_jssm._state_declarations;
+  if (!decls) { return undefined; }
+
+  const state_decl = decls.get(state);
+  if (!state_decl) { return undefined; }
+
+  return state_decl.shape;
+
+}
+
+
+
+
+
 function background_color_for_state(u_jssm, state): string | undefined {
 
   const d_color = u_jssm._state_declarations;
@@ -164,6 +182,7 @@ function states_to_nodes_string(u_jssm, l_states): string {
           complete   = u_jssm.state_is_complete(s),
           features   = [
                         ['label',       s],
+                        ['shape',       shape_for_state(u_jssm, s) || 'box'],
                         ['peripheries', complete? 2 : 1  ],  // TODO COMEBACK use peripheries for current state instead
                         ['color',       bordercolor || 'black' ],
                         ['fillcolor',   bgcolor     || 'white' ],
@@ -343,8 +362,8 @@ function fsl_to_dot(fsl: string): string {
 
 
 
-function fsl_to_svg_string(fsl: string): Promise<string> {
-  return dot_to_svg(fsl_to_dot(fsl));
+function fsl_to_svg_string(fsl: string, errorHandler?: Function): Promise<string> {
+  return dot_to_svg(fsl_to_dot(fsl), errorHandler);
 }
 
 

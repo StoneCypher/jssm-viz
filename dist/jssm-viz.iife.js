@@ -15693,11 +15693,11 @@ var jssm_viz = (function (exports) {
 
 	const sm = jssm_es5_cjs_10;
 	var viz$1 = new viz({ Module: full_render_2, render: full_render_1 });
-	function dot_to_svg(dot, config) {
-	    return viz$1.renderString(dot).catch(e => console.log(e));
+	function dot_to_svg(dot, config, errorHandler) {
+	    return viz$1
+	        .renderString(dot);
 	}
 	function dot_template(RankDir, GraphBgColor, nodes, edges, preamble = "") {
-	    console.log(preamble);
 	    return `digraph G {
 ${preamble}
 
@@ -15749,6 +15749,21 @@ ${edges}
 	    }
 	    return state_decl.textColor;
 	}
+	function shape_for_state(u_jssm, state) {
+	    const d_color = u_jssm._state_declarations;
+	    if (!d_color) {
+	        return undefined;
+	    }
+	    const decls = u_jssm._state_declarations;
+	    if (!decls) {
+	        return undefined;
+	    }
+	    const state_decl = decls.get(state);
+	    if (!state_decl) {
+	        return undefined;
+	    }
+	    return state_decl.shape;
+	}
 	function background_color_for_state(u_jssm, state) {
 	    const d_color = u_jssm._state_declarations;
 	    if (!d_color) {
@@ -15769,6 +15784,7 @@ ${edges}
 	        const bordercolor = border_color_for_state(u_jssm, s), bgcolor = background_color_for_state(u_jssm, s), fgcolor = text_color_for_state(u_jssm, s);
 	        const this_state = u_jssm.state_for(s), terminal = u_jssm.state_is_terminal(s), final = u_jssm.state_is_final(s), complete = u_jssm.state_is_complete(s), features = [
 	            ['label', s],
+	            ['shape', shape_for_state(u_jssm, s) || 'box'],
 	            ['peripheries', complete ? 2 : 1],
 	            ['color', bordercolor || 'black'],
 	            ['fillcolor', bgcolor || 'white'],
@@ -15839,8 +15855,8 @@ ${edges}
 	function fsl_to_dot(fsl) {
 	    return machine_to_dot(sm `${fsl}`);
 	}
-	function fsl_to_svg_string(fsl) {
-	    return dot_to_svg(fsl_to_dot(fsl));
+	function fsl_to_svg_string(fsl, errorHandler) {
+	    return dot_to_svg(fsl_to_dot(fsl), errorHandler);
 	}
 
 	exports.dot = dot;

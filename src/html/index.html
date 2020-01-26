@@ -28,14 +28,14 @@
       async function update() {
 
         try {
-          image.innerHTML   = await window.jssm_viz.fsl_to_svg_string(editor.value);
+          image.innerHTML   = await window.jssm_viz.fsl_to_svg_string(editor.value).catch(e => true);
           dotdump.innerHTML = await window.jssm_viz.fsl_to_dot(editor.value);
           editor.className  = '';
           error.innerText   = '';
         } catch (e) {
-          console.log(e);
+//        console.log(e);
           editor.className  = 'inError';
-          error.innerText   = e.message;
+          error.innerText   = `line ${e.location.start.line} col ${e.location.start.column}: ${e.message}`;
         }
 
       }
@@ -59,8 +59,19 @@
 
   <body>
     <textarea id="code">
-Green => Yellow => Red => Green;
-[Red Yellow Green] ~> Off -> Red;
+machine_name: "Traffic light";
+
+flow: up;
+
+Off 'Enable' -> Red;
+Red 'Proceed' => Green 'Proceed' => Yellow 'Proceed' => Red;
+
+[Red Yellow Green] ~> Off;
+
+state Red    : { background-color: pink; };
+state Yellow : { background-color: lightyellow; };
+state Green  : { background-color: lightgreen; };
+state Off    : { background-color: steelblue; text-color: white; shape: octagon; };
     </textarea>
     <div id="err"></div>
     <div id="tgt"></div>
