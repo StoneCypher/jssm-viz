@@ -18,7 +18,7 @@ var viz = new Viz({ Module, render });
 
 
 function dot_to_svg(dot: string, config? : Object): Promise<string> {  // whargarbl jssm isn't an any
-  return viz.renderString(dot).catch(e => console.log(e));
+  return viz.renderString(dot).catch(e => console.log(e));  // TODO FIXME better way to export errors
 }
 
 
@@ -92,15 +92,70 @@ function color8to6(color8: string): string {
 
 
 
+function border_color_for_state(u_jssm, state): string | undefined {
+
+  const d_color = u_jssm._state_declarations;
+  if (!d_color) { return undefined; }
+
+  const decls = u_jssm._state_declarations;
+  if (!decls) { return undefined; }
+
+  const state_decl = decls.get(state);
+  if (!state_decl) { return undefined; }
+
+  return state_decl.borderColor;
+
+}
+
+
+
+
+
+function text_color_for_state(u_jssm, state): string | undefined {
+
+  const d_color = u_jssm._state_declarations;
+  if (!d_color) { return undefined; }
+
+  const decls = u_jssm._state_declarations;
+  if (!decls) { return undefined; }
+
+  const state_decl = decls.get(state);
+  if (!state_decl) { return undefined; }
+
+  return state_decl.textColor;
+
+}
+
+
+
+
+
+function background_color_for_state(u_jssm, state): string | undefined {
+
+  const d_color = u_jssm._state_declarations;
+  if (!d_color) { return undefined; }
+
+  const decls = u_jssm._state_declarations;
+  if (!decls) { return undefined; }
+
+  const state_decl = decls.get(state);
+  if (!state_decl) { return undefined; }
+
+  return state_decl.backgroundColor;
+
+}
+
+
+
+
+
 function states_to_nodes_string(u_jssm, l_states): string {
 
   return l_states.map( (s) => {
 
-    const d_color = u_jssm._state_declarations
-                      ? (u_jssm._state_declarations.get(s)
-                          ? color8to6(u_jssm._state_declarations.get(s).color)
-                          : undefined)
-                      : undefined;
+    const bordercolor = border_color_for_state(u_jssm, s),
+          bgcolor     = background_color_for_state(u_jssm, s),
+          fgcolor     = text_color_for_state(u_jssm, s);
 
     const this_state = u_jssm.state_for(s),
 //        opening    = u_jssm.state_is_start_state(s),   TODO COMEBACK FIXME
@@ -110,7 +165,9 @@ function states_to_nodes_string(u_jssm, l_states): string {
           features   = [
                         ['label',       s],
                         ['peripheries', complete? 2 : 1  ],  // TODO COMEBACK use peripheries for current state instead
-                        ['color',       d_color || 'black' ],
+                        ['color',       bordercolor || 'black' ],
+                        ['fillcolor',   bgcolor     || 'white' ],
+                        ['fontcolor',   fgcolor     || 'black' ],
                         ['fillcolor',   final   ? vc('fill_final')    :
                                        (complete? vc('fill_complete') :
                                        (terminal? vc('fill_terminal') :
