@@ -15381,7 +15381,7 @@ function color8to6(color8) {
     if (color8[0] !== '#') {
         throw 'not a color8';
     }
-    return `#${color8.substring(1, 6)}`;
+    return `#${color8.substring(1, 7)}`;
 }
 function states_to_nodes_string(u_jssm, l_states) {
     return l_states.map((s) => {

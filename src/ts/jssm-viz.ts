@@ -84,7 +84,7 @@ function color8to6(color8: string): string {
   if (color8.length !== 9) { throw 'not a color8'; }
   if (color8[0] !== '#')   { throw 'not a color8'; }
 
-  return `#${color8.substring(1,6)}`;
+  return `#${color8.substring(1,7)}`;
 
 }
 
