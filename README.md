@@ -8,6 +8,16 @@ Visualization of [JSSM](https://github.com/StoneCypher/jssm/) machines using [vi
 
 ## TL;DR
 
+Easy to use `fsl` to `svg` through `jssm`.
+
+
+
+
+
+<br/><br/>
+
+### Node
+
 ```shell
 cd ~/projects && mkdir jssm-viz-demo && cd jssm-viz-demo
 npm init -y && npm install --save-dev jssm-viz
@@ -35,6 +45,42 @@ node ./dump_svg.js
 ```
 
 Et voila: `svg` of your `fsl`.
+
+
+
+
+
+
+<br/><br/>
+
+### Browser
+
+```html
+<!doctype html><html><head><title>jssm-viz example</title>
+    <script defer type="text/javascript" src="jssm-viz.iife.js"></script>
+    <script defer type="text/javascript">
+
+      window.onload = async () => {
+
+        const ExMachine = `
+          Green => Yellow => Red => Green;
+          [Red Yellow Green] ~> Off -> Red;
+        `;
+
+        document.getElementById('tgt').innerHTML = await window.jssm_viz.fsl_to_svg_string(ExMachine);
+
+      }
+
+    </script>
+
+  </head>
+
+  <body><div id="tgt"></div></body>
+
+</html>
+```
+
+
 
 
 
