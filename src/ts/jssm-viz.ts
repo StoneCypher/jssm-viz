@@ -148,6 +148,28 @@ function shape_for_state(u_jssm, state): string | undefined {
 
 
 
+function corners_for_state(u_jssm, state): string | undefined {
+
+  const d_color = u_jssm._state_declarations;
+  if (!d_color) { return undefined; }
+
+  const decls = u_jssm._state_declarations;
+  if (!decls) { return undefined; }
+
+  const state_decl = decls.get(state);
+  if (!state_decl) { return undefined; }
+
+  return {
+    rounded: 'rounded,filled',
+    lined:   'diagonals,filled'
+  }[state_decl.corners];
+
+}
+
+
+
+
+
 function background_color_for_state(u_jssm, state): string | undefined {
 
   const d_color = u_jssm._state_declarations;
@@ -182,15 +204,16 @@ function states_to_nodes_string(u_jssm, l_states): string {
           complete   = u_jssm.state_is_complete(s),
           features   = [
                         ['label',       s],
-                        ['shape',       shape_for_state(u_jssm, s) || 'box'],
+                        ['shape',       shape_for_state(u_jssm, s)   || ''],
                         ['peripheries', complete? 2 : 1  ],  // TODO COMEBACK use peripheries for current state instead
-                        ['color',       bordercolor || 'black' ],
-                        ['fillcolor',   bgcolor     || 'white' ],
-                        ['fontcolor',   fgcolor     || 'black' ],
-                        ['fillcolor',   final   ? vc('fill_final')    :
+                        ['color',       bordercolor                  || '' ],
+                        ['style',       corners_for_state(u_jssm, s) || '' ],
+                        ['fontcolor',   fgcolor                      || '' ],
+                        ['fillcolor',   bgcolor ? bgcolor             :
+                                       (final   ? vc('fill_final')    :
                                        (complete? vc('fill_complete') :
                                        (terminal? vc('fill_terminal') :
-                                                  '')) ]
+                                                  ''))) ]
                        ]
                         .filter(r => r[1])
                         .map(   r => `${r[0]}="${r[1]}"`)
