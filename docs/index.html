@@ -35,7 +35,9 @@
         } catch (e) {
 //        console.log(e);
           editor.className  = 'inError';
-          error.innerText   = `line ${e.location.start.line} col ${e.location.start.column}: ${e.message}`;
+          error.innerText   = e.location
+                                ? `line ${e.location.start.line} col ${e.location.start.column}: ${e.message}`
+                                : e.message;
         }
 
       }

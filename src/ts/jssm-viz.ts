@@ -37,7 +37,7 @@ return 'todo';
 
 
 
-function dot_template(RankDir, GraphBgColor, nodes, edges, preamble = "") {
+function dot_template(RankDir, GraphBgColor, nodes, edges, arranges, preamble = "") {
 
   return `digraph G {
 ${preamble}
@@ -52,6 +52,8 @@ edge [fontsize=6; fontname="Open Sans"];
 ${nodes}
 
 ${edges}
+
+${arranges}
 }`;
 
 }
@@ -91,10 +93,16 @@ function color8to6(color8: string): string {
 
 
 
-function border_color_for_state(u_jssm, state): string | undefined {
+function u_color8to6(color8?: string): string | undefined {
+  if (color8 === undefined) { return undefined; }
+  return color8to6(color8);
+}
 
-  const d_color = u_jssm._state_declarations;
-  if (!d_color) { return undefined; }
+
+
+
+
+function border_color_for_state(u_jssm, state): string | undefined {
 
   const decls = u_jssm._state_declarations;
   if (!decls) { return undefined; }
@@ -102,7 +110,7 @@ function border_color_for_state(u_jssm, state): string | undefined {
   const state_decl = decls.get(state);
   if (!state_decl) { return undefined; }
 
-  return state_decl.borderColor;
+  return u_color8to6( state_decl.borderColor );
 
 }
 
@@ -112,16 +120,13 @@ function border_color_for_state(u_jssm, state): string | undefined {
 
 function text_color_for_state(u_jssm, state): string | undefined {
 
-  const d_color = u_jssm._state_declarations;
-  if (!d_color) { return undefined; }
-
   const decls = u_jssm._state_declarations;
   if (!decls) { return undefined; }
 
   const state_decl = decls.get(state);
   if (!state_decl) { return undefined; }
 
-  return state_decl.textColor;
+  return u_color8to6( state_decl.textColor );
 
 }
 
@@ -130,9 +135,6 @@ function text_color_for_state(u_jssm, state): string | undefined {
 
 
 function shape_for_state(u_jssm, state): string | undefined {
-
-  const d_color = u_jssm._state_declarations;
-  if (!d_color) { return undefined; }
 
   const decls = u_jssm._state_declarations;
   if (!decls) { return undefined; }
@@ -149,9 +151,6 @@ function shape_for_state(u_jssm, state): string | undefined {
 
 
 function corners_for_state(u_jssm, state): string | undefined {
-
-  const d_color = u_jssm._state_declarations;
-  if (!d_color) { return undefined; }
 
   const decls = u_jssm._state_declarations;
   if (!decls) { return undefined; }
@@ -172,16 +171,13 @@ function corners_for_state(u_jssm, state): string | undefined {
 
 function background_color_for_state(u_jssm, state): string | undefined {
 
-  const d_color = u_jssm._state_declarations;
-  if (!d_color) { return undefined; }
-
   const decls = u_jssm._state_declarations;
   if (!decls) { return undefined; }
 
   const state_decl = decls.get(state);
   if (!state_decl) { return undefined; }
 
-  return state_decl.backgroundColor;
+  return u_color8to6( state_decl.backgroundColor );
 
 }
 
@@ -218,6 +214,7 @@ function states_to_nodes_string(u_jssm, l_states): string {
                         .filter(r => r[1])
                         .map(   r => `${r[0]}="${r[1]}"`)
                         .join(' ');
+
     return `${node_of(s, l_states)} [${features}];`;
 
   }).join(' ');
@@ -347,6 +344,20 @@ function flow_direction_to_rankdir(flow_direction) {
 
 
 
+function arranges_for(u_jssm: any, l_states: any) {
+  if (u_jssm._arrange_declaration) {
+    // TODO FIXME items in d almost certainly need to be escaped
+    // ugh
+    return u_jssm._arrange_declaration.map(d => `{rank=same; ${d.map(di => node_of(di, l_states)).join('; ')};};`).join('\n');
+  } else {
+    return '';
+  }
+}
+
+
+
+
+
 function machine_to_dot(u_jssm: any) {  // whargarbl jssm isn't an any
 
   const l_states = u_jssm.states();
@@ -356,10 +367,12 @@ function machine_to_dot(u_jssm: any) {  // whargarbl jssm isn't an any
   const strike = [];
   const edges  = states_to_edges_string(u_jssm, l_states, strike);
 
+  const arranges = arranges_for(u_jssm, l_states);
+
   let RankDir  = flow_direction_to_rankdir(u_jssm.flow() || 'down'),
       preamble = u_jssm.dot_preamble() || '';
 
-  return dot_template(RankDir, vc('graph_bg_color'), nodes, edges, preamble);
+  return dot_template(RankDir, vc('graph_bg_color'), nodes, edges, arranges, preamble);
 
 }
 

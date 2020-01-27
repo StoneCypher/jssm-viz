@@ -1,6 +1,6 @@
 {
   "name": "jssm-viz",
-  "version": "1.12.0",
+  "version": "1.13.0",
   "description": "Visualization of JSSM machines using viz.js",
   "main": "dist/jssm-viz.cjs.js",
   "module": "dist/jssm-viz.es6.js",

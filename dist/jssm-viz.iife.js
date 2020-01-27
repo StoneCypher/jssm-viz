@@ -16088,7 +16088,7 @@ var jssm_viz = (function (exports) {
 	    return viz$1
 	        .renderString(dot);
 	}
-	function dot_template(RankDir, GraphBgColor, nodes, edges, preamble = "") {
+	function dot_template(RankDir, GraphBgColor, nodes, edges, arranges, preamble = "") {
 	    return `digraph G {
 ${preamble}
 
@@ -16102,6 +16102,8 @@ edge [fontsize=6; fontname="Open Sans"];
 ${nodes}
 
 ${edges}
+
+${arranges}
 }`;
 	}
 	function vc(col) {
@@ -16110,11 +16112,22 @@ ${edges}
 	function node_of(state, l_states) {
 	    return `n${l_states.indexOf(state)}`;
 	}
-	function border_color_for_state(u_jssm, state) {
-	    const d_color = u_jssm._state_declarations;
-	    if (!d_color) {
+	function color8to6(color8) {
+	    if (color8.length !== 9) {
+	        throw 'not a color8';
+	    }
+	    if (color8[0] !== '#') {
+	        throw 'not a color8';
+	    }
+	    return `#${color8.substring(1, 7)}`;
+	}
+	function u_color8to6(color8) {
+	    if (color8 === undefined) {
 	        return undefined;
 	    }
+	    return color8to6(color8);
+	}
+	function border_color_for_state(u_jssm, state) {
 	    const decls = u_jssm._state_declarations;
 	    if (!decls) {
 	        return undefined;
@@ -16123,13 +16136,9 @@ ${edges}
 	    if (!state_decl) {
 	        return undefined;
 	    }
-	    return state_decl.borderColor;
+	    return u_color8to6(state_decl.borderColor);
 	}
 	function text_color_for_state(u_jssm, state) {
-	    const d_color = u_jssm._state_declarations;
-	    if (!d_color) {
-	        return undefined;
-	    }
 	    const decls = u_jssm._state_declarations;
 	    if (!decls) {
 	        return undefined;
@@ -16138,13 +16147,9 @@ ${edges}
 	    if (!state_decl) {
 	        return undefined;
 	    }
-	    return state_decl.textColor;
+	    return u_color8to6(state_decl.textColor);
 	}
 	function shape_for_state(u_jssm, state) {
-	    const d_color = u_jssm._state_declarations;
-	    if (!d_color) {
-	        return undefined;
-	    }
 	    const decls = u_jssm._state_declarations;
 	    if (!decls) {
 	        return undefined;
@@ -16156,10 +16161,6 @@ ${edges}
 	    return state_decl.shape;
 	}
 	function corners_for_state(u_jssm, state) {
-	    const d_color = u_jssm._state_declarations;
-	    if (!d_color) {
-	        return undefined;
-	    }
 	    const decls = u_jssm._state_declarations;
 	    if (!decls) {
 	        return undefined;
@@ -16174,10 +16175,6 @@ ${edges}
 	    }[state_decl.corners];
 	}
 	function background_color_for_state(u_jssm, state) {
-	    const d_color = u_jssm._state_declarations;
-	    if (!d_color) {
-	        return undefined;
-	    }
 	    const decls = u_jssm._state_declarations;
 	    if (!decls) {
 	        return undefined;
@@ -16186,7 +16183,7 @@ ${edges}
 	    if (!state_decl) {
 	        return undefined;
 	    }
-	    return state_decl.backgroundColor;
+	    return u_color8to6(state_decl.backgroundColor);
 	}
 	function states_to_nodes_string(u_jssm, l_states) {
 	    return l_states.map((s) => {
@@ -16251,13 +16248,22 @@ ${edges}
 	        default: throw new TypeError(`unknown flow direction '${flow_direction}'`);
 	    }
 	}
+	function arranges_for(u_jssm, l_states) {
+	    if (u_jssm._arrange_declaration) {
+	        return u_jssm._arrange_declaration.map(d => `{rank=same; ${d.map(di => node_of(di, l_states)).join('; ')};};`).join('\n');
+	    }
+	    else {
+	        return '';
+	    }
+	}
 	function machine_to_dot(u_jssm) {
 	    const l_states = u_jssm.states();
 	    const nodes = states_to_nodes_string(u_jssm, l_states);
 	    const strike = [];
 	    const edges = states_to_edges_string(u_jssm, l_states, strike);
+	    const arranges = arranges_for(u_jssm, l_states);
 	    let RankDir = flow_direction_to_rankdir(u_jssm.flow() || 'down'), preamble = u_jssm.dot_preamble() || '';
-	    return dot_template(RankDir, vc('graph_bg_color'), nodes, edges, preamble);
+	    return dot_template(RankDir, vc('graph_bg_color'), nodes, edges, arranges, preamble);
 	}
 	function dot(jssm) {
 	    machine_to_dot(jssm);
