@@ -16330,7 +16330,7 @@ ${arranges}
 	    }
 	    return state_decl.shape;
 	}
-	function corners_for_state(u_jssm, state) {
+	function style_for_state(u_jssm, state) {
 	    const decls = u_jssm._state_declarations;
 	    if (!decls) {
 	        return undefined;
@@ -16339,10 +16339,18 @@ ${arranges}
 	    if (!state_decl) {
 	        return undefined;
 	    }
-	    return {
-	        rounded: 'rounded,filled',
-	        lined: 'diagonals,filled'
+	    const corners = {
+	        rounded: 'rounded',
+	        lined: 'diagonals'
 	    }[state_decl.corners];
+	    const lines = {
+	        dashed: 'dashed',
+	        dotted: 'dotted'
+	    }[state_decl.linestyle];
+	    const style = [corners, lines]
+	        .filter(f => f !== '')
+	        .join(',');
+	    return style ? `${style},filled` : '';
 	}
 	function background_color_for_state(u_jssm, state) {
 	    const decls = u_jssm._state_declarations;
@@ -16363,7 +16371,7 @@ ${arranges}
 	            ['shape', shape_for_state(u_jssm, s) || ''],
 	            ['peripheries', complete ? 2 : 1],
 	            ['color', bordercolor || ''],
-	            ['style', corners_for_state(u_jssm, s) || ''],
+	            ['style', style_for_state(u_jssm, s) || ''],
 	            ['fontcolor', fgcolor || ''],
 	            ['fillcolor', bgcolor ? bgcolor :
 	                    (final ? vc('fill_final') :
