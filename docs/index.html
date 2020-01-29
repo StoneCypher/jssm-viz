@@ -66,18 +66,22 @@ machine_name: "Example toy";
 
 flow: down;
 
+
+
 arrange [Red Yellow];
-arrange-end [Green];
 
 Off 'Enable' -> Red;
 Red 'Proceed' => Green 'Proceed' => Yellow 'Proceed' => Red;
 
 [Red Yellow Green] ~> Off;
 
-state Red    : { background-color: pink; linestyle: dashed; };
-state Yellow : { background-color: lightyellow; };
-state Green  : { background-color: lightgreen; };
+state Red    : { background-color: pink;        corners: rounded; };
+state Yellow : { background-color: lightyellow; corners: rounded; };
+state Green  : { background-color: lightgreen;  corners: rounded; };
+
 state Off    : { background-color: steelblue; text-color: white; shape: octagon; };
+
+
 
 a -> b;
 

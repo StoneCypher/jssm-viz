@@ -150,7 +150,7 @@ function shape_for_state(u_jssm, state): string | undefined {
 
 
 
-function corners_for_state(u_jssm, state): string | undefined {
+function style_for_state(u_jssm, state): string | undefined {
 
   const decls = u_jssm._state_declarations;
   if (!decls) { return undefined; }
@@ -158,10 +158,21 @@ function corners_for_state(u_jssm, state): string | undefined {
   const state_decl = decls.get(state);
   if (!state_decl) { return undefined; }
 
-  return {
-    rounded: 'rounded,filled',
-    lined:   'diagonals,filled'
+  const corners = {
+    rounded: 'rounded',
+    lined:   'diagonals'
   }[state_decl.corners];
+
+  const lines = {
+    dashed: 'dashed',
+    dotted: 'dotted'
+  }[state_decl.linestyle];
+
+  const style = [corners, lines]
+                  .filter(f => f !== '')
+                  .join(',');
+
+  return style? `${style},filled` : '';
 
 }
 
@@ -203,7 +214,7 @@ function states_to_nodes_string(u_jssm, l_states): string {
                         ['shape',       shape_for_state(u_jssm, s)   || ''],
                         ['peripheries', complete? 2 : 1  ],  // TODO COMEBACK use peripheries for current state instead
                         ['color',       bordercolor                  || '' ],
-                        ['style',       corners_for_state(u_jssm, s) || '' ],
+                        ['style',       style_for_state(u_jssm, s)   || '' ],
                         ['fontcolor',   fgcolor                      || '' ],
                         ['fillcolor',   bgcolor ? bgcolor             :
                                        (final   ? vc('fill_final')    :
