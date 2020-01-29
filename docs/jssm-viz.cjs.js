@@ -893,6 +893,9 @@ function reduce(from) {
 var reduceTo6391 = { reduce: reduce, reductions: reductions };
 var reduceTo6391_1 = reduceTo6391.reduce;
 
+var array_box_if_string = function (n) {
+    return typeof n === 'string' ? [n] : n;
+};
 // this is explicitly about other peoples' data, so it has to be weakly typed
 /* eslint-disable flowtype/no-weak-types */
 var weighted_rand_select = function (options, probability_property) {
@@ -2359,6 +2362,13 @@ function peg$parse(input, options) {
       peg$c1262 = "arrange",
       peg$c1263 = peg$literalExpectation("arrange", false),
       peg$c1264 = function(value) { return { key: 'arrange_declaration', value }; },
+      peg$c1265 = "arrange-start",
+      peg$c1266 = peg$literalExpectation("arrange-start", false),
+      peg$c1267 = function(value) { return { key: 'arrange_start_declaration', value }; },
+      peg$c1268 = "arrange-end",
+      peg$c1269 = peg$literalExpectation("arrange-end", false),
+      peg$c1270 = function(value) { return { key: 'arrange_end_declaration', value }; },
+      peg$c1271 = peg$otherExpectation("arrange declaration"),
 
       peg$currPos          = 0,
       peg$savedPos         = 0,
@@ -14627,7 +14637,7 @@ function peg$parse(input, options) {
     return s0;
   }
 
-  function peg$parseArrangeDeclaration() {
+  function peg$parseRegularArrangeDeclaration() {
     var s0, s1, s2, s3, s4, s5, s6;
 
     s0 = peg$currPos;
@@ -14695,6 +14705,161 @@ function peg$parse(input, options) {
     return s0;
   }
 
+  function peg$parseArrangeStartDeclaration() {
+    var s0, s1, s2, s3, s4, s5, s6;
+
+    s0 = peg$currPos;
+    if (input.substr(peg$currPos, 13) === peg$c1265) {
+      s1 = peg$c1265;
+      peg$currPos += 13;
+    } else {
+      s1 = peg$FAILED;
+      if (peg$silentFails === 0) { peg$fail(peg$c1266); }
+    }
+    if (s1 !== peg$FAILED) {
+      s2 = peg$parseWS();
+      if (s2 === peg$FAILED) {
+        s2 = null;
+      }
+      if (s2 !== peg$FAILED) {
+        s3 = peg$parseLabelOrLabelList();
+        if (s3 !== peg$FAILED) {
+          s4 = peg$parseWS();
+          if (s4 === peg$FAILED) {
+            s4 = null;
+          }
+          if (s4 !== peg$FAILED) {
+            if (input.charCodeAt(peg$currPos) === 59) {
+              s5 = peg$c1072;
+              peg$currPos++;
+            } else {
+              s5 = peg$FAILED;
+              if (peg$silentFails === 0) { peg$fail(peg$c1073); }
+            }
+            if (s5 !== peg$FAILED) {
+              s6 = peg$parseWS();
+              if (s6 === peg$FAILED) {
+                s6 = null;
+              }
+              if (s6 !== peg$FAILED) {
+                peg$savedPos = s0;
+                s1 = peg$c1267(s3);
+                s0 = s1;
+              } else {
+                peg$currPos = s0;
+                s0 = peg$FAILED;
+              }
+            } else {
+              peg$currPos = s0;
+              s0 = peg$FAILED;
+            }
+          } else {
+            peg$currPos = s0;
+            s0 = peg$FAILED;
+          }
+        } else {
+          peg$currPos = s0;
+          s0 = peg$FAILED;
+        }
+      } else {
+        peg$currPos = s0;
+        s0 = peg$FAILED;
+      }
+    } else {
+      peg$currPos = s0;
+      s0 = peg$FAILED;
+    }
+
+    return s0;
+  }
+
+  function peg$parseArrangeEndDeclaration() {
+    var s0, s1, s2, s3, s4, s5, s6;
+
+    s0 = peg$currPos;
+    if (input.substr(peg$currPos, 11) === peg$c1268) {
+      s1 = peg$c1268;
+      peg$currPos += 11;
+    } else {
+      s1 = peg$FAILED;
+      if (peg$silentFails === 0) { peg$fail(peg$c1269); }
+    }
+    if (s1 !== peg$FAILED) {
+      s2 = peg$parseWS();
+      if (s2 === peg$FAILED) {
+        s2 = null;
+      }
+      if (s2 !== peg$FAILED) {
+        s3 = peg$parseLabelOrLabelList();
+        if (s3 !== peg$FAILED) {
+          s4 = peg$parseWS();
+          if (s4 === peg$FAILED) {
+            s4 = null;
+          }
+          if (s4 !== peg$FAILED) {
+            if (input.charCodeAt(peg$currPos) === 59) {
+              s5 = peg$c1072;
+              peg$currPos++;
+            } else {
+              s5 = peg$FAILED;
+              if (peg$silentFails === 0) { peg$fail(peg$c1073); }
+            }
+            if (s5 !== peg$FAILED) {
+              s6 = peg$parseWS();
+              if (s6 === peg$FAILED) {
+                s6 = null;
+              }
+              if (s6 !== peg$FAILED) {
+                peg$savedPos = s0;
+                s1 = peg$c1270(s3);
+                s0 = s1;
+              } else {
+                peg$currPos = s0;
+                s0 = peg$FAILED;
+              }
+            } else {
+              peg$currPos = s0;
+              s0 = peg$FAILED;
+            }
+          } else {
+            peg$currPos = s0;
+            s0 = peg$FAILED;
+          }
+        } else {
+          peg$currPos = s0;
+          s0 = peg$FAILED;
+        }
+      } else {
+        peg$currPos = s0;
+        s0 = peg$FAILED;
+      }
+    } else {
+      peg$currPos = s0;
+      s0 = peg$FAILED;
+    }
+
+    return s0;
+  }
+
+  function peg$parseArrangeDeclaration() {
+    var s0;
+
+    peg$silentFails++;
+    s0 = peg$parseArrangeStartDeclaration();
+    if (s0 === peg$FAILED) {
+      s0 = peg$parseArrangeEndDeclaration();
+      if (s0 === peg$FAILED) {
+        s0 = peg$parseRegularArrangeDeclaration();
+      }
+    }
+    peg$silentFails--;
+    if (s0 === peg$FAILED) {
+      if (peg$silentFails === 0) { peg$fail(peg$c1271); }
+    }
+
+    return s0;
+  }
+
   function peg$parseTerm() {
     var s0;
 
@@ -14757,7 +14922,7 @@ var jssmDot = {
 var jssmDot_1 = jssmDot.parse;
 
 // whargarbl lots of these return arrays could/should be sets
-var version = '5.28.0'; // replaced from package.js in build // TODO FIXME currently broken
+var version = '5.30.0'; // replaced from package.js in build // TODO FIXME currently broken
 /* eslint-disable complexity */
 function arrow_direction(arrow) {
     switch (String(arrow)) {
@@ -14964,8 +15129,9 @@ function compile_rule_handler(rule) {
         }
         return { agg_as: 'state_declaration', val: { state: rule.name, declarations: rule.value } };
     }
-    if (rule.key === 'arrange_declaration') {
-        return { agg_as: 'arrange_declaration', val: [rule.value] };
+    if (['arrange_declaration', 'arrange_start_declaration',
+        'arrange_end_declaration'].includes(rule.key)) {
+        return { agg_as: rule.key, val: [rule.value] };
     }
     var tautologies = [
         'graph_layout', 'start_states', 'end_states', 'machine_name', 'machine_version',
@@ -14999,6 +15165,8 @@ function compile(tree) {
         flow: [],
         dot_preamble: [],
         arrange_declaration: [],
+        arrange_start_declaration: [],
+        arrange_end_declaration: [],
         machine_version: []
     };
     tree.map(function (tr) {
@@ -15025,8 +15193,8 @@ function compile(tree) {
             }
         }
     });
-    ['arrange_declaration', 'machine_author', 'machine_contributor', 'machine_reference',
-        'state_declaration'].map(function (multiKey) {
+    ['arrange_declaration', 'arrange_start_declaration', 'arrange_end_declaration',
+        'machine_author', 'machine_contributor', 'machine_reference', 'state_declaration'].map(function (multiKey) {
         if (results[multiKey].length) {
             result_cfg[multiKey] = results[multiKey];
         }
@@ -15069,7 +15237,7 @@ var Machine = /** @class */ (function () {
     // whargarbl this badly needs to be broken up, monolith master
     function Machine(_a) {
         var _this = this;
-        var start_states = _a.start_states, _b = _a.complete, complete = _b === void 0 ? [] : _b, transitions = _a.transitions, machine_author = _a.machine_author, machine_comment = _a.machine_comment, machine_contributor = _a.machine_contributor, machine_definition = _a.machine_definition, machine_language = _a.machine_language, machine_license = _a.machine_license, machine_name = _a.machine_name, machine_version = _a.machine_version, state_declaration = _a.state_declaration, fsl_version = _a.fsl_version, _c = _a.dot_preamble, dot_preamble = _c === void 0 ? undefined : _c, _d = _a.arrange_declaration, arrange_declaration = _d === void 0 ? [] : _d, _e = _a.theme, theme = _e === void 0 ? 'default' : _e, _f = _a.flow, flow = _f === void 0 ? 'down' : _f, _g = _a.graph_layout, graph_layout = _g === void 0 ? 'dot' : _g;
+        var start_states = _a.start_states, _b = _a.complete, complete = _b === void 0 ? [] : _b, transitions = _a.transitions, machine_author = _a.machine_author, machine_comment = _a.machine_comment, machine_contributor = _a.machine_contributor, machine_definition = _a.machine_definition, machine_language = _a.machine_language, machine_license = _a.machine_license, machine_name = _a.machine_name, machine_version = _a.machine_version, state_declaration = _a.state_declaration, fsl_version = _a.fsl_version, _c = _a.dot_preamble, dot_preamble = _c === void 0 ? undefined : _c, _d = _a.arrange_declaration, arrange_declaration = _d === void 0 ? [] : _d, _e = _a.arrange_start_declaration, arrange_start_declaration = _e === void 0 ? [] : _e, _f = _a.arrange_end_declaration, arrange_end_declaration = _f === void 0 ? [] : _f, _g = _a.theme, theme = _g === void 0 ? 'default' : _g, _h = _a.flow, flow = _h === void 0 ? 'down' : _h, _j = _a.graph_layout, graph_layout = _j === void 0 ? 'dot' : _j;
         this._state = start_states[0];
         this._states = new Map();
         this._state_declarations = new Map();
@@ -15079,9 +15247,9 @@ var Machine = /** @class */ (function () {
         this._actions = new Map();
         this._reverse_actions = new Map();
         this._reverse_action_targets = new Map(); // todo
-        this._machine_author = typeof machine_author === 'string' ? [machine_author] : machine_author;
+        this._machine_author = array_box_if_string(machine_author);
         this._machine_comment = machine_comment;
-        this._machine_contributor = typeof machine_contributor === 'string' ? [machine_contributor] : machine_contributor;
+        this._machine_contributor = array_box_if_string(machine_contributor);
         this._machine_definition = machine_definition;
         this._machine_language = machine_language;
         this._machine_license = machine_license;
@@ -15090,6 +15258,8 @@ var Machine = /** @class */ (function () {
         this._raw_state_declaration = state_declaration || [];
         this._fsl_version = fsl_version;
         this._arrange_declaration = arrange_declaration;
+        this._arrange_start_declaration = arrange_start_declaration;
+        this._arrange_end_declaration = arrange_end_declaration;
         this._dot_preamble = dot_preamble;
         this._theme = theme;
         this._flow = flow;
@@ -16089,7 +16259,7 @@ function dot_to_svg(dot, config, errorHandler) {
     return viz$1
         .renderString(dot);
 }
-function dot_template(RankDir, GraphBgColor, nodes, edges, preamble = "") {
+function dot_template(RankDir, GraphBgColor, nodes, edges, arranges, preamble = "") {
     return `digraph G {
 ${preamble}
 
@@ -16103,6 +16273,8 @@ edge [fontsize=6; fontname="Open Sans"];
 ${nodes}
 
 ${edges}
+
+${arranges}
 }`;
 }
 function vc(col) {
@@ -16111,11 +16283,22 @@ function vc(col) {
 function node_of(state, l_states) {
     return `n${l_states.indexOf(state)}`;
 }
-function border_color_for_state(u_jssm, state) {
-    const d_color = u_jssm._state_declarations;
-    if (!d_color) {
+function color8to6(color8) {
+    if (color8.length !== 9) {
+        throw 'not a color8';
+    }
+    if (color8[0] !== '#') {
+        throw 'not a color8';
+    }
+    return `#${color8.substring(1, 7)}`;
+}
+function u_color8to6(color8) {
+    if (color8 === undefined) {
         return undefined;
     }
+    return color8to6(color8);
+}
+function border_color_for_state(u_jssm, state) {
     const decls = u_jssm._state_declarations;
     if (!decls) {
         return undefined;
@@ -16124,13 +16307,9 @@ function border_color_for_state(u_jssm, state) {
     if (!state_decl) {
         return undefined;
     }
-    return state_decl.borderColor;
+    return u_color8to6(state_decl.borderColor);
 }
 function text_color_for_state(u_jssm, state) {
-    const d_color = u_jssm._state_declarations;
-    if (!d_color) {
-        return undefined;
-    }
     const decls = u_jssm._state_declarations;
     if (!decls) {
         return undefined;
@@ -16139,13 +16318,9 @@ function text_color_for_state(u_jssm, state) {
     if (!state_decl) {
         return undefined;
     }
-    return state_decl.textColor;
+    return u_color8to6(state_decl.textColor);
 }
 function shape_for_state(u_jssm, state) {
-    const d_color = u_jssm._state_declarations;
-    if (!d_color) {
-        return undefined;
-    }
     const decls = u_jssm._state_declarations;
     if (!decls) {
         return undefined;
@@ -16157,10 +16332,6 @@ function shape_for_state(u_jssm, state) {
     return state_decl.shape;
 }
 function corners_for_state(u_jssm, state) {
-    const d_color = u_jssm._state_declarations;
-    if (!d_color) {
-        return undefined;
-    }
     const decls = u_jssm._state_declarations;
     if (!decls) {
         return undefined;
@@ -16175,10 +16346,6 @@ function corners_for_state(u_jssm, state) {
     }[state_decl.corners];
 }
 function background_color_for_state(u_jssm, state) {
-    const d_color = u_jssm._state_declarations;
-    if (!d_color) {
-        return undefined;
-    }
     const decls = u_jssm._state_declarations;
     if (!decls) {
         return undefined;
@@ -16187,7 +16354,7 @@ function background_color_for_state(u_jssm, state) {
     if (!state_decl) {
         return undefined;
     }
-    return state_decl.backgroundColor;
+    return u_color8to6(state_decl.backgroundColor);
 }
 function states_to_nodes_string(u_jssm, l_states) {
     return l_states.map((s) => {
@@ -16252,13 +16419,27 @@ function flow_direction_to_rankdir(flow_direction) {
         default: throw new TypeError(`unknown flow direction '${flow_direction}'`);
     }
 }
+function arranges_for(u_jssm, l_states) {
+    let decl = '';
+    if (u_jssm._arrange_declaration) {
+        decl += u_jssm._arrange_declaration.map(d => `{rank=same; ${d.map(di => node_of(di, l_states)).join('; ')};};`).join('\n');
+    }
+    if (u_jssm._arrange_start_declaration) {
+        decl += u_jssm._arrange_start_declaration.map(d => `{rank=min; ${d.map(di => node_of(di, l_states)).join('; ')};};`).join('\n');
+    }
+    if (u_jssm._arrange_end_declaration) {
+        decl += u_jssm._arrange_end_declaration.map(d => `{rank=max; ${d.map(di => node_of(di, l_states)).join('; ')};};`).join('\n');
+    }
+    return decl;
+}
 function machine_to_dot(u_jssm) {
     const l_states = u_jssm.states();
     const nodes = states_to_nodes_string(u_jssm, l_states);
     const strike = [];
     const edges = states_to_edges_string(u_jssm, l_states, strike);
+    const arranges = arranges_for(u_jssm, l_states);
     let RankDir = flow_direction_to_rankdir(u_jssm.flow() || 'down'), preamble = u_jssm.dot_preamble() || '';
-    return dot_template(RankDir, vc('graph_bg_color'), nodes, edges, preamble);
+    return dot_template(RankDir, vc('graph_bg_color'), nodes, edges, arranges, preamble);
 }
 function dot(jssm) {
     machine_to_dot(jssm);
