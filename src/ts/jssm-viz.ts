@@ -345,13 +345,29 @@ function flow_direction_to_rankdir(flow_direction) {
 
 
 function arranges_for(u_jssm: any, l_states: any) {
+
+  let decl = '';
+
   if (u_jssm._arrange_declaration) {
     // TODO FIXME items in d almost certainly need to be escaped
-    // ugh
-    return u_jssm._arrange_declaration.map(d => `{rank=same; ${d.map(di => node_of(di, l_states)).join('; ')};};`).join('\n');
-  } else {
-    return '';
+    // ugh WHARGARBL
+    decl += u_jssm._arrange_declaration.map(d => `{rank=same; ${d.map(di => node_of(di, l_states)).join('; ')};};`).join('\n');
   }
+
+  if (u_jssm._arrange_start_declaration) {
+    // TODO FIXME items in d almost certainly need to be escaped
+    // ugh WHARGARBL
+    decl += u_jssm._arrange_start_declaration.map(d => `{rank=min; ${d.map(di => node_of(di, l_states)).join('; ')};};`).join('\n');
+  }
+
+  if (u_jssm._arrange_end_declaration) {
+    // TODO FIXME items in d almost certainly need to be escaped
+    // ugh WHARGARBL
+    decl += u_jssm._arrange_end_declaration.map(d => `{rank=max; ${d.map(di => node_of(di, l_states)).join('; ')};};`).join('\n');
+  }
+
+  return decl;
+
 }
 
 

@@ -61,19 +61,33 @@
 
   <body>
     <textarea id="code">
-machine_name: "Traffic light";
 
-flow: up;
+machine_name: "Example toy";
+
+flow: down;
+
+
+
+arrange [Red Yellow];
 
 Off 'Enable' -> Red;
 Red 'Proceed' => Green 'Proceed' => Yellow 'Proceed' => Red;
 
 [Red Yellow Green] ~> Off;
 
-state Red    : { background-color: pink; };
-state Yellow : { background-color: lightyellow; };
-state Green  : { background-color: lightgreen; };
+state Red    : { background-color: pink;        corners: rounded; };
+state Yellow : { background-color: lightyellow; corners: rounded; };
+state Green  : { background-color: lightgreen;  corners: rounded; };
+
 state Off    : { background-color: steelblue; text-color: white; shape: octagon; };
+
+
+
+a -> b;
+
+arrange-start [a];
+arrange-end   [b];
+
     </textarea>
     <div id="err"></div>
     <div id="tgt"></div>
