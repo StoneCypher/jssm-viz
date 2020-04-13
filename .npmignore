@@ -67,14 +67,15 @@ build/
 docs/
 .github/
 .rpt_cache/
+.rpt2_cache/
 notes/
 src/assets/
 src/buildjs/
 src/machines/
 src/site/
 
-dist/jssm-viz.cjs.map
-dist/jssm-viz.iife.map
-dist/jssm-viz.es6.map
+dist/jssm-viz.cjs.js.map
+dist/jssm-viz.iife.js.map
+dist/jssm-viz.es6.js.map
 
 dist/jssm-viz.iife.js
