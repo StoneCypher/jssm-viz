@@ -1,6 +1,6 @@
 {
   "name": "jssm-viz",
-  "version": "1.17.3",
+  "version": "1.17.4",
   "description": "Visualization of JSSM machines using viz.js",
   "main": "dist/jssm-viz.cjs.js",
   "module": "dist/jssm-viz.es6.js",
@@ -57,6 +57,7 @@
   },
   "homepage": "https://github.com/StoneCypher/jssm-viz#readme",
   "dependencies": {
+    "jssm": "^5.32.15",
     "text_audit": "^0.9.2"
   },
   "devDependencies": {
@@ -65,7 +66,6 @@
     "del-cli": "^1.1.0",
     "documentation": "^12.1.2",
     "eslint": "^4.19.1",
-    "jssm": "^5.30.0",
     "nyc": "^14.1.1",
     "pegjs": "^0.10.0",
     "rimraf": "^2.7.1",
