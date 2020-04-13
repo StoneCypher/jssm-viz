@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         node-version: [8.x, 13.x]
-        node-version: ['macos-latest', 'windows-latest', 'ubuntu-latest']
+        os: ['macos-latest', 'windows-latest', 'ubuntu-latest']
 
     runs-on: ${{ matrix.os }}
 
