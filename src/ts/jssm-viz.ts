@@ -408,7 +408,6 @@ function machine_to_dot(u_jssm: any) {  // whargarbl jssm isn't an any
 
 
 // compatability, remove in 2.0.0
-
 function dot(jssm: any) {
   machine_to_dot(jssm);
 }

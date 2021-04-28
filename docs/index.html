@@ -28,7 +28,7 @@
       async function update() {
 
         try {
-          image.innerHTML   = await window.jssm_viz.fsl_to_svg_string(editor.value).catch(e => true);
+          image.innerHTML   = await window.jssm_viz.fsl_to_svg_string(editor.value);
           dotdump.innerHTML = await window.jssm_viz.fsl_to_dot(editor.value);
           editor.className  = '';
           error.innerText   = '';
