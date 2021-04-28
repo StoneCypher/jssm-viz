@@ -1,6 +1,6 @@
 {
   "name": "jssm-viz",
-  "version": "1.17.5",
+  "version": "1.17.6",
   "description": "Visualization of JSSM machines using viz.js",
   "main": "dist/jssm-viz.cjs.js",
   "module": "dist/jssm-viz.es6.js",
@@ -64,7 +64,7 @@
     "ava": "^1.4.1",
     "ava-spec": "^1.1.1",
     "del-cli": "^1.1.0",
-    "documentation": "^12.1.2",
+    "documentation": "^13.2.5",
     "eslint": "^4.19.1",
     "nyc": "^14.1.1",
     "pegjs": "^0.10.0",
