@@ -6,6 +6,7 @@
     "noEmitOnError"                  : true,
     "removeComments"                 : true,
     "sourceMap"                      : true,
+    "esModuleInterop"                : true,
     "target"                         : "ES2017",
     "lib"                            : [ "es2017", "dom" ],
     "outDir"                         : "./build/",

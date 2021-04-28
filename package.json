@@ -1,12 +1,11 @@
 {
   "name": "jssm-viz",
-  "version": "1.17.6",
+  "version": "1.18.0",
   "description": "Visualization of JSSM machines using viz.js",
   "main": "dist/jssm-viz.cjs.js",
   "module": "dist/jssm-viz.es6.js",
   "scripts": {
-    "test": "ava src/ts/tests/general.js",
-    "test-verbose": "nyc ava src/ts/tests/*.js -v",
+    "test": "jest --verbose",
     "removedir": "rimraf build -f && rimraf dist -f && rimraf docs -f",
     "createdir": "mkdir build && mkdir dist && mkdir docs && cd docs && mkdir docs && cd ..",
     "clean": "npm run removedir && npm run createdir",
@@ -61,11 +60,11 @@
     "text_audit": "^0.9.2"
   },
   "devDependencies": {
-    "ava": "^1.4.1",
-    "ava-spec": "^1.1.1",
+    "@types/jest": "^26.0.23",
     "del-cli": "^1.1.0",
     "documentation": "^13.2.5",
     "eslint": "^4.19.1",
+    "jest": "^26.6.3",
     "nyc": "^14.1.1",
     "pegjs": "^0.10.0",
     "rimraf": "^2.7.1",
@@ -75,6 +74,7 @@
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-typescript2": "^0.24.3",
+    "ts-jest": "^26.5.5",
     "typescript": "^3.6.4",
     "uglify-js": "^3.6.2",
     "viz.js": "^2.1.2"
