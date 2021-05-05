@@ -77,5 +77,3 @@ src/site/
 dist/jssm-viz.cjs.js.map
 dist/jssm-viz.iife.js.map
 dist/jssm-viz.es6.js.map
-
-dist/jssm-viz.iife.js
