@@ -24,4 +24,5 @@ jobs:
         cache: 'npm'
     - env: 
         LIBVERSION: ${{ inputs.libversion }}
-    - run: echo "Should update lib to $LIBVERSION here"
+      run: 
+        echo "Should update lib to $LIBVERSION here"
