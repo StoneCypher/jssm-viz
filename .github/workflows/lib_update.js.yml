@@ -1,25 +1,22 @@
 name: Update underlying JSSM
 
-on:
-  workflow_call:
-    inputs:
-      libversion:
-        required: true
-        type: string
+on: [repository_dispatch]
 
 jobs:
-  build:
-
+  remote-invoked-build:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
-    - name: Use Node.js 16
+    - name: Set up Node 16 for remote build
+      if: github.event.action == 'upgrade_jssm'
       uses: actions/setup-node@v3
       with:
         node-version: 16.x
         cache: 'npm'
-    - env: 
-        LIBVERSION: ${{ inputs.libversion }}
-      run: 
-        eval 'echo "Should update lib to $LIBVERSION here"'
+    - name: Remote-build 
+      if: github.event.action == 'upgrade_jssm'
+      run: |
+        echo "should upgrade to '"$"' "
+      env:
+        GITHUB_REPOSITORY: ${{ github.event.lib_version }}
