@@ -9,10 +9,13 @@
     "esModuleInterop"                : true,
     "target"                         : "ES2017",
     "lib"                            : [ "es2017", "dom" ],
-    "outDir"                         : "./build/",
+    "outDir"                         : "./build/typescript/",
     "resolveJsonModule"              : true
   },
   "include" : [
     "src/ts/**/*"
-  ]
+  ],
+  "exclude" : [
+    "src/ts/tests/**/*"
+  ],
 }
