@@ -18,8 +18,8 @@ jobs:
 #      if: github.event.action == 'upgrade_jssm'
       run: |
         echo "should upgrade to '${{ github.event.client_payload.lib_version }}' "
-        echo "could upgrade to '${{ GITHUB_REPOSITORY }}' "
+#        echo "could upgrade to '${{ GITHUB_REPOSITORY }}' "
         echo "would upgrade to '${ github.event.client_payload.lib_version }' "
-        echo "ould upgrade to '${ GITHUB_REPOSITORY }' "
-      env:
-        GITHUB_REPOSITORY: ${{ github.event.client_payload.lib_version }}
+#        echo "ould upgrade to '${ GITHUB_REPOSITORY }' "
+#      env:
+#        GITHUB_REPOSITORY: ${{ github.event.client_payload.lib_version }}
