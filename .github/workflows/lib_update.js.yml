@@ -45,7 +45,7 @@ jobs:
       run: |
         echo "Attempting automated upgrade to JSSM version '${{ github.event.client_payload.lib_version }}' "
         echo "  - Installing base"
-        npm run install
+        npm install
         echo "  - Upgrading JSSM"
         npm uninstall --save jssm && npm install --save jssm@${{ github.event.client_payload.lib_version }}
         echo "  - Analyzing new install"
