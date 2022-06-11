@@ -83,11 +83,7 @@ jobs:
         npm install
         echo "  - Upgrading JSSM"
         npm uninstall --save jssm && npm install --save jssm@${{ github.event.client_payload.lib_version }}
-        echo "  - Analyzing new install"
-        export NEWTAG=$(awk -F'"' '/"version": ".+"/{ print $4; exit; }' package.json)
-        echo "    * JSSM version newly installed is '${{ env:NEWTAG }}' "
-        echo "  - Updating local version"
-        npm version ${{ env:NEWTAG }} -f
+        npm version ${{ github.event.client_payload.lib_version }} -f
         echo "  - Running new build"
         npm run build
 
