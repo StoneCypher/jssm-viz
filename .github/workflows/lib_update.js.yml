@@ -12,8 +12,8 @@ jobs:
             os: ubuntu-latest
           - node-version: 18.x   # slowest, so run next. sort by slowest from here to get earliest end through parallelism
             os: macos-latest
-          - node-version: 18.x   # finish check big-3 on latest current
-            os: windows-latest
+          # - node-version: 18.x   # finish check big-3 on latest current
+          #   os: windows-latest
           - node-version: 10.x  # lastly check just ubuntu on historic node versions because speed, oldest (slowest) first
             os: ubuntu-latest
           - node-version: 11.x
@@ -57,8 +57,42 @@ jobs:
         echo "  - Running new build"
         npm run build
 
+
+  remote-invoked-windows-build:
+
+    strategy:
+      matrix:
+        include:
+          - node-version: 18.x   # finish check big-3 on latest current
+            os: windows-latest
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Node ${{ matrix.node-version }} ${{ matrix.os }} remote build
+      if: github.event.action == 'upgrade_jssm'
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+        cache: 'npm'
+    - name: Remote-build
+      run: |
+        echo "Attempting automated upgrade to JSSM version '${{ github.event.client_payload.lib_version }}' "
+        echo "  - Installing base"
+        npm install
+        echo "  - Upgrading JSSM"
+        npm uninstall --save jssm && npm install --save jssm@${{ github.event.client_payload.lib_version }}
+        echo "  - Analyzing new install"
+        export NEWTAG=$(awk -F'"' '/"version": ".+"/{ print $4; exit; }' package.json)
+        echo "    * JSSM version newly installed is '${{ env:NEWTAG }}' "
+        echo "  - Updating local version"
+        npm version ${{ env:NEWTAG }} -f
+        echo "  - Running new build"
+        npm run build
+
   completion:
-    needs: [remote-invoked-build]
+    needs: [remote-invoked-build, remote-invoked-windows-build]
     runs-on: ubuntu-latest
 
     steps:
@@ -74,7 +108,7 @@ jobs:
       run: |
         echo "Attempting automated upgrade to JSSM version '${{ github.event.client_payload.lib_version }}' "
 #        echo "  - Installing base"
-#        npm run install
+#        npm install
 #        echo "  - Upgrading JSSM"
 #        npm uninstall --save jssm && npm install --save jssm@${{ github.event.client_payload.lib_version }}
 #        echo "  - Analyzing new install"
