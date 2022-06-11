@@ -4,22 +4,102 @@ on: [repository_dispatch]
 
 jobs:
   remote-invoked-build:
-    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        include:
+          - node-version: 18.x   # fastest, so run first, to error fast
+            os: ubuntu-latest
+          - node-version: 18.x   # slowest, so run next. sort by slowest from here to get earliest end through parallelism
+            os: macos-latest
+          - node-version: 18.x   # finish check big-3 on latest current
+            os: windows-latest
+          - node-version: 10.x  # lastly check just ubuntu on historic node versions because speed, oldest (slowest) first
+            os: ubuntu-latest
+          - node-version: 11.x
+            os: ubuntu-latest
+          - node-version: 12.x
+            os: ubuntu-latest
+          - node-version: 13.x
+            os: ubuntu-latest
+          - node-version: 14.x
+            os: ubuntu-latest
+          - node-version: 15.x
+            os: ubuntu-latest
+          - node-version: 16.x
+            os: ubuntu-latest
+          - node-version: 17.x
+            os: ubuntu-latest
+
+    runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Node 16 for remote build
+    - name: Node ${{ matrix.node-version }} ${{ matrix.os }} remote build
       if: github.event.action == 'upgrade_jssm'
       uses: actions/setup-node@v3
       with:
-        node-version: 16.x
+        node-version: 18.x
         cache: 'npm'
     - name: Remote-build
-#      if: github.event.action == 'upgrade_jssm'
       run: |
-        echo "should upgrade to '${{ github.event.client_payload.lib_version }}' "
-#        echo "could upgrade to '${{ GITHUB_REPOSITORY }}' "
-#        echo "would upgrade to '${ github.event.client_payload.lib_version }' "
-#        echo "ould upgrade to '${ GITHUB_REPOSITORY }' "
-#      env:
-#        GITHUB_REPOSITORY: ${{ github.event.client_payload.lib_version }}
+        echo "Attempting automated upgrade to JSSM version '${{ github.event.client_payload.lib_version }}' "
+        echo "  - Installing base"
+        npm run install
+        echo "  - Upgrading JSSM"
+        npm uninstall --save jssm && npm install --save jssm@${{ github.event.client_payload.lib_version }}
+        echo "  - Analyzing new install"
+        export NEWTAG=$(awk -F'"' '/"version": ".+"/{ print $4; exit; }' package.json)
+        echo "NEWTAG=$NEWTAG" >> $GITHUB_ENV
+        echo "    * JSSM version newly installed is '${{ env.NEWTAG }}' "
+        echo "  - Updating local version"
+        npm version ${{ env.NEWTAG }} -f
+        echo "  - Running new build"
+        npm run build
+
+  completion:
+    needs: [remote-invoked-build]
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Use Node.js 18.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 18.x
+        registry-url: https://registry.npmjs.org/
+
+    - name: Remote final build
+      run: |
+        echo "Attempting automated upgrade to JSSM version '${{ github.event.client_payload.lib_version }}' "
+#        echo "  - Installing base"
+#        npm run install
+#        echo "  - Upgrading JSSM"
+#        npm uninstall --save jssm && npm install --save jssm@${{ github.event.client_payload.lib_version }}
+#        echo "  - Analyzing new install"
+#        export NEWTAG=$(awk -F'"' '/"version": ".+"/{ print $4; exit; }' package.json)
+#        echo "NEWTAG=$NEWTAG" >> $GITHUB_ENV
+#        echo "    * JSSM version newly installed is '${{ env.NEWTAG }}' "
+#        echo "  - Updating local version"
+#        npm version ${{ env.NEWTAG }} -f
+#        echo "  - Running new build"
+#        npm run build
+
+    # - name: Push tags
+    #   run: git push origin --tags
+
+    # - name: Create the release
+    #   uses: actions/create-release@v1
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #   with:
+    #     tag_name: ${{ env.TAG }}
+    #     release_name: ${{ env.TAG }}
+    #     body_path: CHANGELOG.md
+
+    # - name: Publish to npm
+    #   run: |
+    #     npm publish
+    #   env:
+    #     NODE_AUTH_TOKEN: ${{ secrets.JSSM_PUBLISH_TOKEN_FOR_GH_CI_CD }}
