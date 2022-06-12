@@ -43,6 +43,9 @@ jobs:
         cache: 'npm'
     - name: Remote-build
       run: |
+        echo Identifying to Git
+        git config --global user.email "stonecypher@users.noreply.github.com"
+        git config --global user.name "John Haugeland through Github Actions"
         echo "Attempting automated upgrade to JSSM version '${{ github.event.client_payload.lib_version }}' "
         echo "  - Installing base"
         npm install
@@ -78,6 +81,9 @@ jobs:
         cache: 'npm'
     - name: Remote-build
       run: |
+        echo Identifying to Git
+        git config --global user.email "stonecypher@users.noreply.github.com"
+        git config --global user.name "John Haugeland through Github Actions"
         echo "Attempting automated upgrade to JSSM version '${{ github.event.client_payload.lib_version }}' "
         echo "  - Installing base"
         npm install
@@ -102,6 +108,9 @@ jobs:
 
     - name: Remote final build
       run: |
+        echo Identifying to Git
+        git config --global user.email "stonecypher@users.noreply.github.com"
+        git config --global user.name "John Haugeland through Github Actions"
         echo "Attempting automated upgrade to JSSM version '${{ github.event.client_payload.lib_version }}' "
 #        echo "  - Installing base"
 #        npm install
