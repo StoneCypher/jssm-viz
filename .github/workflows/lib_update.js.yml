@@ -109,36 +109,36 @@ jobs:
     - name: Remote final build
       run: |
         echo Identifying to Git
+
         git config --global user.email "stonecypher@users.noreply.github.com"
         git config --global user.name "John Haugeland through Github Actions"
         echo "Attempting automated upgrade to JSSM version '${{ github.event.client_payload.lib_version }}' "
-#        echo "  - Installing base"
-#        npm install
-#        echo "  - Upgrading JSSM"
-#        npm uninstall --save jssm && npm install --save jssm@${{ github.event.client_payload.lib_version }}
-#        echo "  - Analyzing new install"
-#        export NEWTAG=$(awk -F'"' '/"version": ".+"/{ print $4; exit; }' package.json)
-#        echo "NEWTAG=$NEWTAG" >> $GITHUB_ENV
-#        echo "    * JSSM version newly installed is '${{ env.NEWTAG }}' "
-#        echo "  - Updating local version"
-#        npm version ${{ env.NEWTAG }} -f
-#        echo "  - Running new build"
-#        npm run build
+        echo "  - Installing base"
+        npm install
+        echo "  - Upgrading JSSM"
+        npm uninstall --save jssm && npm install --save jssm@${{ github.event.client_payload.lib_version }}
+        echo "  - Analyzing new install"
+        export NEWTAG=$(awk -F'"' '/"version": ".+"/{ print $4; exit; }' package.json)
+        echo "NEWTAG=$NEWTAG" >> $GITHUB_ENV
+        echo "    * JSSM version newly installed is '${{ github.event.client_payload.lib_version }}' "
+        echo "  - Updating local version"
+        npm version ${{ github.event.client_payload.lib_version }} -f
+        echo "  - Running new build"
+        npm run build
+        git tag -a v${github.event.client_payload.lib_version} -m "Update JSSM to ${github.event.client_payload.lib_version}"
+        git push origin --tags
 
-    # - name: Push tags
-    #   run: git push origin --tags
+    - name: Create the release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ env.TAG }}
+        release_name: ${{ env.TAG }}
+        body_path: CHANGELOG.md
 
-    # - name: Create the release
-    #   uses: actions/create-release@v1
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   with:
-    #     tag_name: ${{ env.TAG }}
-    #     release_name: ${{ env.TAG }}
-    #     body_path: CHANGELOG.md
-
-    # - name: Publish to npm
-    #   run: |
-    #     npm publish
-    #   env:
-    #     NODE_AUTH_TOKEN: ${{ secrets.JSSM_PUBLISH_TOKEN_FOR_GH_CI_CD }}
+    - name: Publish to npm
+      run: |
+        npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.JSSM_PUBLISH_TOKEN_FOR_GH_CI_CD }}
