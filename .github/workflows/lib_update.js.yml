@@ -126,7 +126,7 @@ jobs:
         npm version ${{ github.event.client_payload.lib_version }} -f
         echo "  - Running new build"
         npm run build
-        git add package.json && git commit -m "Automated upgrade of jssm library to v${{ github.event.client_payload.lib_version }}"
+        git diff package.json && git add package.json && git commit -m "Automated upgrade of jssm library to v${{ github.event.client_payload.lib_version }}"
         git push origin
 #        git ls-remote --exit-code --tags origin v${{ github.event.client_payload.lib_version }} || git tag -a v${{ github.event.client_payload.lib_version }} -m "Update JSSM to ${{ github.event.client_payload.lib_version }}"
 #        git push origin --tags
