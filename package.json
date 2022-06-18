@@ -1,6 +1,6 @@
 {
   "name": "jssm-viz",
-  "version": "1.19.1",
+  "version": "1.19.2",
   "description": "Visualization of JSSM machines using viz.js",
   "main": "dist/jssm-viz.cjs.js",
   "module": "dist/jssm-viz.es6.js",
@@ -13,6 +13,7 @@
     "eslint": "eslint src/ts/jssm-viz.js",
     "nyc-html": "nyc ava report --reporter=html",
     "coverage": "nyc report --reporter=text-lcov > ./coverage/lcov.info",
+    "changelog": "rm -f CHANGELOG.md && rm -f ./src/doc_md/CHANGELOG.md && better_git_changelog -b && cp CHANGELOG.* ./src/doc_md/",
     "audit": "text_audit -g ./src/ts/*.ts -t MAJOR WASTEFUL ANY MIXED FIXME CHECKME TESTME STOCHABLE TODO COMEBACK WHARGARBL",
     "build": "npm run make && npm run audit && npm run dist",
     "nyc-build": "npm run make && npm run test-verbose && npm run audit && npm run nyc-test",
@@ -54,7 +55,7 @@
   },
   "homepage": "https://github.com/StoneCypher/jssm-viz#readme",
   "dependencies": {
-    "better_git_changelog": "^1.6.1",
+    "better_git_changelog": "^1.6.2",
     "eslint": "^8.15.0",
     "text_audit": "^0.9.2"
   },
