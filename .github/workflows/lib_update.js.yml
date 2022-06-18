@@ -125,7 +125,7 @@ jobs:
         npm version ${{ github.event.client_payload.lib_version }} -f
         echo "  - Running new build"
         npm run build
-        git ls-remote --exit-code --tags origin v${{ github.event.client_payload.lib_version }} || git tag -a v${{ github.event.client_payload.lib_version }} -m "Update JSSM to ${{ github.event.client_payload.lib_version }}"
+#        git ls-remote --exit-code --tags origin v${{ github.event.client_payload.lib_version }} || git tag -a v${{ github.event.client_payload.lib_version }} -m "Update JSSM to ${{ github.event.client_payload.lib_version }}"
 #        git push origin --tags
 
     - name: Create the release
