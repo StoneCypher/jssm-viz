@@ -141,4 +141,4 @@ jobs:
       run: |
         npm publish
       env:
-        NODE_AUTH_TOKEN: ${{ secrets.JSSM_PUBLISH_TOKEN_FOR_GH_CI_CD }}
+        NODE_AUTH_TOKEN: ${{ secrets.JSSM_UPGRADE_PERSONAL_ACCESS_TOKEN }}
