@@ -120,6 +120,7 @@ jobs:
         echo "  - Analyzing new install"
         export NEWTAG=$(awk -F'"' '/"version": ".+"/{ print $4; exit; }' package.json)
         echo "NEWTAG=$NEWTAG" >> $GITHUB_ENV
+        echo "UPGRADETAG=v${{ github.event.client_payload.lib_version }}" >> $GITHUB_ENV
         echo "    * JSSM version newly installed is '${{ github.event.client_payload.lib_version }}' "
         echo "  - Updating local version"
         npm version ${{ github.event.client_payload.lib_version }} -f
@@ -133,8 +134,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ env.NEWTAG }}
-        release_name: ${{ env.NEWTAG }}
+        tag_name: ${{ env.UPGRADETAG }}
+        release_name: ${{ env.UPGRADETAG }}
         body_path: CHANGELOG.md
 
     - name: Publish to npm
