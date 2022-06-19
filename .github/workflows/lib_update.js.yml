@@ -123,7 +123,7 @@ jobs:
         echo "UPGRADETAG=v${{ github.event.client_payload.lib_version }}" >> $GITHUB_ENV
         echo "    * JSSM version newly installed is '${{ github.event.client_payload.lib_version }}' "
         echo "  - Updating local version"
-        npm version ${{ github.event.client_payload.lib_version }} -f
+        npm version ${{ github.event.client_payload.lib_version }} -f --no-git-tag-version --no-commit-hooks
         echo "  - Running new build"
         npm run build
         echo "  - Adding package to git"
@@ -133,7 +133,7 @@ jobs:
         git commit -m "Automated upgrade of jssm library to v${{ github.event.client_payload.lib_version }}"
         echo "  - Pushing package to git"
         git push origin
-#        git ls-remote --exit-code --tags origin v${{ github.event.client_payload.lib_version }} || git tag -a v${{ github.event.client_payload.lib_version }} -m "Update JSSM to ${{ github.event.client_payload.lib_version }}"
+        git ls-remote --exit-code --tags origin v${{ github.event.client_payload.lib_version }} || git tag -a v${{ github.event.client_payload.lib_version }} -m "Update JSSM to ${{ github.event.client_payload.lib_version }}"
 #        git push origin --tags
 
     - name: Create the release
