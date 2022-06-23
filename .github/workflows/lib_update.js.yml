@@ -99,7 +99,7 @@ jobs:
 
 
 
-  completion:
+  release:
 
     needs: [remote-invoked-build, remote-invoked-windows-build]
     runs-on: ubuntu-latest
