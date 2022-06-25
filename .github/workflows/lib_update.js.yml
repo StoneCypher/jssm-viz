@@ -170,7 +170,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Export tag to envvars
       run: |
-        export TAG=$(awk -F'"' '/"version": ".+"/{ print $4; exit; }' package.json)
+        export TAG=${{ github.event.client_payload.lib_version }}
         echo "TAG=$TAG" >> $GITHUB_ENV
 
     - name: CURL RPC to jssm-viz-cli action
