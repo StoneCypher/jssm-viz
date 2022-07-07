@@ -1,7 +1,7 @@
 
-import nodeResolve from 'rollup-plugin-node-resolve';
-import commonjs    from 'rollup-plugin-commonjs';
-import ignore      from 'rollup-plugin-ignore';
+import nodeResolve from '@rollup/plugin-node-resolve';
+import commonjs    from '@rollup/plugin-commonjs';
+// import ignore      from '@rollup/plugin-ignore';
 
 const pkg = require('./package');
 
@@ -22,10 +22,11 @@ const es6config = {
 
   plugins   : [
 
-    ignore(['fs', 'path', 'crypto']),
+//    ignore(['fs', 'path', 'crypto']),
 
     commonjs({
-      include: 'node_modules/**'
+      include: 'node_modules/**',
+      esmExternals: ['jssm']
     }),
 
     nodeResolve({
@@ -57,10 +58,11 @@ const cjsconfig = {
 
   plugins   : [
 
-    ignore(['fs', 'path', 'crypto']),
+//    ignore(['fs', 'path', 'crypto']),
 
     commonjs({
-      include: 'node_modules/**'
+      include: 'node_modules/**',
+      esmExternals: ['jssm']
     }),
 
     nodeResolve({
@@ -92,10 +94,11 @@ const iifeconfig = {
 
   plugins   : [
 
-    ignore(['fs', 'path', 'crypto']),
+//    ignore(['fs', 'path', 'crypto']),
 
     commonjs({
-      include: 'node_modules/**'
+      include: 'node_modules/**',
+      esmExternals: ['jssm']
     }),
 
     nodeResolve({

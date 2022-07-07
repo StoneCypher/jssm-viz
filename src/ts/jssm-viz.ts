@@ -2,6 +2,9 @@
 import * as jssm from 'jssm';
 const sm = jssm.sm;
 
+console.log('jssm is');
+console.log(jssm);
+
 import Viz from 'viz.js';
 import { Module, render } from 'viz.js/full.render.js';
 
