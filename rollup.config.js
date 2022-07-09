@@ -25,8 +25,7 @@ const es6config = {
 //    ignore(['fs', 'path', 'crypto']),
 
     commonjs({
-      include: 'node_modules/**',
-      esmExternals: ['jssm']
+      include: 'node_modules/**'
     }),
 
     nodeResolve({
@@ -61,8 +60,7 @@ const cjsconfig = {
 //    ignore(['fs', 'path', 'crypto']),
 
     commonjs({
-      include: 'node_modules/**',
-      esmExternals: ['jssm']
+      include: 'node_modules/**'
     }),
 
     nodeResolve({
@@ -97,8 +95,7 @@ const iifeconfig = {
 //    ignore(['fs', 'path', 'crypto']),
 
     commonjs({
-      include: 'node_modules/**',
-      esmExternals: ['jssm']
+      include: 'node_modules/**'
     }),
 
     nodeResolve({
