@@ -1,7 +1,8 @@
 
-import nodeResolve from '@rollup/plugin-node-resolve';
-import commonjs    from '@rollup/plugin-commonjs';
-// import ignore      from '@rollup/plugin-ignore';
+import nodeResolve   from '@rollup/plugin-node-resolve';
+import commonjs      from '@rollup/plugin-commonjs';
+import nodePolyfills from 'rollup-plugin-polyfill-node';
+// import ignore     from '@rollup/plugin-ignore';
 
 const pkg = require('./package');
 
@@ -23,6 +24,7 @@ const es6config = {
   plugins   : [
 
 //    ignore(['fs', 'path', 'crypto']),
+    nodePolyfills(),
 
     commonjs({
       include: 'node_modules/**'
@@ -31,7 +33,7 @@ const es6config = {
     nodeResolve({
       module         : true,
       jsnext         : true,
-      browser        : true,
+      // browser        : true,
       extensions     : [ '.js', '.json', '.ts' ],
       preferBuiltins : false
     })
@@ -58,6 +60,7 @@ const cjsconfig = {
   plugins   : [
 
 //    ignore(['fs', 'path', 'crypto']),
+    nodePolyfills(),
 
     commonjs({
       include: 'node_modules/**'
@@ -66,7 +69,7 @@ const cjsconfig = {
     nodeResolve({
       module         : true,
       jsnext         : true,
-      browser        : true,
+      // browser        : true,
       extensions     : [ '.js', '.json', '.ts' ],
       preferBuiltins : false
     })
@@ -93,6 +96,7 @@ const iifeconfig = {
   plugins   : [
 
 //    ignore(['fs', 'path', 'crypto']),
+    nodePolyfills(),
 
     commonjs({
       include: 'node_modules/**'
@@ -101,7 +105,7 @@ const iifeconfig = {
     nodeResolve({
       module         : true,
       jsnext         : true,
-      browser        : true,
+      // browser        : true,
       extensions     : [ '.js', '.json', '.ts' ],
       preferBuiltins : false
     })

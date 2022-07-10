@@ -1,17 +1,24 @@
 
-import * as jssm from 'jssm';
-const sm = jssm.sm;
+import Viz                    from '@aduh95/viz.js';
+import getWorker              from "@aduh95/viz.js/worker";
 
-import Viz from 'viz.js';
-import { Module, render } from 'viz.js/full.render.js';
+// when using mdaines viz, was:
+// import { Module, render }     from 'viz.js/full.render.js';
 
+import * as jssm              from 'jssm';
 import { default_viz_colors } from './default_colors';
 
+const sm = jssm.sm;
 
 
 
 
-var viz = new Viz({ Module, render });
+
+// when using mdaines viz, was:
+// var viz = new Viz({ Module, render });
+
+const worker = getWorker(),
+      viz    = new Viz({ worker });
 
 
 
