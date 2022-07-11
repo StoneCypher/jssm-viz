@@ -1,6 +1,6 @@
 {
   "name": "jssm-viz",
-  "version": "5.77.1",
+  "version": "5.78.1",
   "description": "Visualization of JSSM machines using viz.js",
   "main": "dist/jssm-viz.cjs.js",
   "module": "dist/jssm-viz.es6.js",
@@ -18,7 +18,8 @@
     "build": "npm run make && npm run audit && npm run dist",
     "nyc-build": "npm run make && npm run test-verbose && npm run audit && npm run nyc-test",
     "minify": "uglifyjs ./build/rollup/jssm-viz.cjs.js -o ./build/jssm-viz.es5.cjs.min.js --compress",
-    "dist": "cp build/rollup/jssm-viz.* dist/ && cp src/html/* docs/ && cp dist/* docs/ && cp node_modules/viz.js/lite.render.js docs/ && cp node_modules/viz.js/viz.js docs/",
+    "zdist": "cp build/rollup/jssm-viz.* dist/ && cp src/html/* docs/ && cp dist/* docs/ && cp node_modules/viz.js/lite.render.js docs/ && cp node_modules/viz.js/viz.js docs/",
+    "dist": "cp build/rollup/jssm-viz.* dist/ && cp src/html/* docs/ && cp dist/* docs/",
     "docs": "documentation build src/ts/** -f html -o docs/lib",
     "travis": "npm run nyc-test && npm run coverage"
   },
@@ -61,7 +62,7 @@
     "text_audit": "^0.9.2"
   },
   "devDependencies": {
-    "@aduh95/viz.js": "^3.6.0",
+    "@aduh95/viz.js": "^3.7.0",
     "@rollup/plugin-commonjs": "^22.0.1",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.3.0",

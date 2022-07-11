@@ -17,8 +17,26 @@ const sm = jssm.sm;
 // when using mdaines viz, was:
 // var viz = new Viz({ Module, render });
 
-const worker = getWorker(),
-      viz    = new Viz({ worker });
+function is_worker(w): w is Worker {
+  if ('postMessage' in w) { return true; }
+  return false;
+}
+
+let worker, viz;
+
+async function setup() {
+
+  worker = await getWorker();
+
+  if (worker === undefined) { throw 'Worker undefined!'; }
+  if (!(is_worker(worker))) { throw 'Failed import!'; }
+
+  viz = new Viz({ worker });
+  (window as any).viz = viz;
+
+}
+
+setup();
 
 
 
