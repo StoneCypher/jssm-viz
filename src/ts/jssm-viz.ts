@@ -1,10 +1,4 @@
 
-import Viz                    from '@aduh95/viz.js';
-import getWorker              from "@aduh95/viz.js/worker";
-
-// when using mdaines viz, was:
-// import { Module, render }     from 'viz.js/full.render.js';
-
 import * as jssm              from 'jssm';
 import { default_viz_colors } from './default_colors';
 
@@ -14,37 +8,51 @@ const sm = jssm.sm;
 
 
 
-// when using mdaines viz, was:
-// var viz = new Viz({ Module, render });
+import vizRenderStringSync from "@aduh95/viz.js/sync";
 
-function is_worker(w): w is Worker {
-  if ('postMessage' in w) { return true; }
-  return false;
-}
+// function vizRenderStringSync(x) { return `[[[${x}]]]`; }
 
-let worker, viz;
+console.log(vizRenderStringSync("digraph{1 -> 2 }"));
 
-async function setup() {
+// import Viz       from '@aduh95/viz.js';
+// import getWorker from "@aduh95/viz.js/worker";
 
-  worker = await getWorker();
+// function is_worker(w): w is Worker {
+//   if ('postMessage' in w) { return true; }
+//   return false;
+// }
 
-  if (worker === undefined) { throw 'Worker undefined!'; }
-  if (!(is_worker(worker))) { throw 'Failed import!'; }
+// let worker, viz;
 
-  viz = new Viz({ worker });
-  (window as any).viz = viz;
+// async function setup() {
 
-}
+//   worker = await getWorker();
 
-setup();
+//   if (worker === undefined) { // expected in browser or deno; failure in node
+
+//   } else {
+//     // should be node, TODO verify
+//     if (!(is_worker(worker))) { throw 'Failed import!'; }
+//   }
+
+//   viz = new Viz({ worker });
+//   (window as any).viz = viz;
+
+// }
+
+// setup();
 
 
 
 
 
-function dot_to_svg(dot: string, config? : Object, errorHandler? : Function): Promise<string> {  // whargarbl jssm isn't an any
-  return viz
-    .renderString(dot);
+async function dot_to_svg(dot: string, config? : Object, errorHandler? : Function): Promise<string> {  // whargarbl jssm isn't an any
+
+  // return viz
+  //   .renderString(dot);
+
+  return vizRenderStringSync(dot);
+
 }
 
 
