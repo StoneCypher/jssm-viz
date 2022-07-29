@@ -1,6 +1,6 @@
 {
   "name": "jssm-viz",
-  "version": "5.79.16",
+  "version": "5.79.17",
   "description": "Visualization of JSSM machines using viz.js",
   "main": "dist/jssm-viz.cjs.js",
   "module": "dist/jssm-viz.es6.js",
@@ -57,7 +57,7 @@
   "dependencies": {
     "better_git_changelog": "^1.6.2",
     "eslint": "^8.15.0",
-    "jssm": "^5.79.16",
+    "jssm": "^5.79.17",
     "text_audit": "^0.9.2"
   },
   "devDependencies": {
