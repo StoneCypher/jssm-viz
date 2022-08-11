@@ -166,7 +166,7 @@ function style_for_state(u_jssm, state): string | undefined {
   const lines = {
     dashed: 'dashed',
     dotted: 'dotted'
-  }[state_decl.linestyle];
+  }[state_decl.lineStyle];
 
   const style = [corners, lines]
                   .filter(f => f !== '')
@@ -200,20 +200,22 @@ function states_to_nodes_string(u_jssm, l_states): string {
 
   return l_states.map( (s) => {
 
-    const bordercolor = border_color_for_state(u_jssm, s),
-          bgcolor     = background_color_for_state(u_jssm, s),
-          fgcolor     = text_color_for_state(u_jssm, s);
+    const style = u_jssm.style_for(s);
+
+    const border_color = style.borderColor,
+          line_style   = style.lineStyle,
+          bgcolor      = style.backgroundColor,
+          fgcolor      = style.textColor,
+          corners      = style.corners;
 
     const this_state = u_jssm.state_for(s),
-//        opening    = u_jssm.state_is_start_state(s),   TODO COMEBACK FIXME
           terminal   = u_jssm.state_is_terminal(s),
           final      = u_jssm.state_is_final(s),
           complete   = u_jssm.state_is_complete(s),
           features   = [
                         ['label',       s],
-                        ['shape',       shape_for_state(u_jssm, s)   || ''],
-                        ['peripheries', complete? 2 : 1  ],  // TODO COMEBACK use peripheries for current state instead
-                        ['color',       bordercolor                  || '' ],
+                        ['shape',       style.shape                  || ''],
+                        ['color',       border_color                 || '' ],
                         ['style',       style_for_state(u_jssm, s)   || '' ],
                         ['fontcolor',   fgcolor                      || '' ],
                         ['fillcolor',   bgcolor ? bgcolor             :
