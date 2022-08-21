@@ -4413,11 +4413,11 @@ function style_for_state(u_jssm, state) {
 function states_to_nodes_string(u_jssm, l_states) {
     return l_states.map((s) => {
         const style = u_jssm.style_for(s);
-        const bordercolor = style.borderColor, bgcolor = style.backgroundColor, fgcolor = style.textColor;
+        const border_color = style.borderColor; style.lineStyle; const bgcolor = style.backgroundColor, fgcolor = style.textColor; style.corners;
         u_jssm.state_for(s); const terminal = u_jssm.state_is_terminal(s), final = u_jssm.state_is_final(s), complete = u_jssm.state_is_complete(s), features = [
             ['label', s],
             ['shape', style.shape || ''],
-            ['color', bordercolor || ''],
+            ['color', border_color || ''],
             ['style', style_for_state(u_jssm, s) || ''],
             ['fontcolor', fgcolor || ''],
             ['fillcolor', bgcolor ? bgcolor :
