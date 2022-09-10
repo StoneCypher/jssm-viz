@@ -57,7 +57,6 @@
   "dependencies": {
     "better_git_changelog": "^1.6.2",
     "eslint": "^8.15.0",
-    "jssm": "^5.82.0",
     "text_audit": "^0.9.2"
   },
   "devDependencies": {
@@ -66,6 +65,7 @@
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@types/jest": "^26.0.23",
     "jest": "^26.6.3",
+    "jssm": "file:../jssm",
     "nyc": "^14.1.1",
     "pegjs": "^0.10.0",
     "rimraf": "^2.7.1",
