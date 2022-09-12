@@ -212,8 +212,9 @@ function states_to_nodes_string(u_jssm, l_states): string {
           terminal   = u_jssm.state_is_terminal(s),
           final      = u_jssm.state_is_final(s),
           complete   = u_jssm.state_is_complete(s),
+          use_label  = u_jssm.display_text(s),
           features   = [
-                        ['label',       s],
+                        ['label',       use_label],
                         ['shape',       style.shape                  || ''],
                         ['color',       border_color                 || '' ],
                         ['style',       style_for_state(u_jssm, s)   || '' ],
