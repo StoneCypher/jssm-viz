@@ -1,17 +1,19 @@
 
-import * as jssm from 'jssm';
-const sm = jssm.sm;
+import * as jssm               from 'jssm';
 
-import Viz from 'viz.js';
-import { Module, render } from 'viz.js/full.render.js';
+import Viz                     from 'viz.js';
+import { Module, render }      from 'viz.js/full.render.js';
 
-import { default_viz_colors } from './default_colors';
+import { default_viz_colors }  from './default_colors';
 
-
-
+import { version, build_time } from './generated_code/version';
 
 
-var viz = new Viz({ Module, render });
+
+
+
+const sm  = jssm.sm;
+var   viz = new Viz({ Module, render });
 
 
 
@@ -447,5 +449,6 @@ export {
   dot, dot_to_svg, // svg_el,
   fsl_to_dot, fsl_to_svg_string,
   machine_to_dot,
-  jssm
+  jssm,
+  version, build_time
 };

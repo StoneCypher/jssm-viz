@@ -6,10 +6,11 @@
   "module": "dist/jssm-viz.es6.js",
   "scripts": {
     "test": "jest --verbose",
-    "clean": "rimraf build -f && rimraf dist -f && rimraf docs -f && mkdir build && cd build && mkdir terser && cd .. && mkdir dist && mkdir docs && cd docs && mkdir docs && cd ..",
+    "clean": "rimraf build -f && rimraf dist -f && rimraf docs -f && mkdir build && cd build && mkdir terser && cd .. && mkdir dist && mkdir docs && cd docs && mkdir docs && cd ../src/ts && rimraf -f generated_code && mkdir generated_code && cd ../..",
     "rollup": "rollup -c",
     "typescript": "tsc --build tsconfig.json",
-    "make": "npm run clean && npm run typescript && npm run rollup",
+    "version": "node ./src/build_js/set_version.js",
+    "make": "npm run clean && npm run version && npm run typescript && npm run rollup",
     "eslint": "eslint src/ts/jssm-viz.js",
     "nyc-html": "nyc ava report --reporter=html",
     "coverage": "nyc report --reporter=text-lcov > ./coverage/lcov.info",
