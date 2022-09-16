@@ -4823,7 +4823,7 @@ const default_viz_colors = {
     'text_complete_solo': '#007700'
 };
 
-const version = "5.85.7", build_time = 1663037525687;
+const version = "5.85.9", build_time = 1663369998381;
 
 const sm = sm$1;
 var viz = new Viz({ Module: full_render.exports.Module, render: full_render.exports.render });
@@ -4971,6 +4971,9 @@ function fsl_to_dot(fsl) {
 function fsl_to_svg_string(fsl, errorHandler) {
     return dot_to_svg(fsl_to_dot(fsl));
 }
+function machine_to_svg_string(u_jssm, errorHandler) {
+    return dot_to_svg(machine_to_dot(u_jssm));
+}
 
 exports.build_time = build_time;
 exports.dot = dot;
@@ -4979,5 +4982,6 @@ exports.fsl_to_dot = fsl_to_dot;
 exports.fsl_to_svg_string = fsl_to_svg_string;
 exports.jssm = jssm;
 exports.machine_to_dot = machine_to_dot;
+exports.machine_to_svg_string = machine_to_svg_string;
 exports.version = version;
 //# sourceMappingURL=jssm-viz.cjs.js.map
