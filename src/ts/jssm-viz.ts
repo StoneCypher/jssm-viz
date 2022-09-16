@@ -437,6 +437,14 @@ function fsl_to_svg_string(fsl: string, errorHandler?: Function): Promise<string
 
 
 
+function machine_to_svg_string(u_jssm: any, errorHandler?: Function): Promise<string> {
+  return dot_to_svg(machine_to_dot(u_jssm), errorHandler);
+}
+
+
+
+
+
 // function fsl_to_parsed_svg(fsl: string): SVGElement {
 //   return fsl_to_svg_string(fsl);
 // }
@@ -448,7 +456,7 @@ function fsl_to_svg_string(fsl: string, errorHandler?: Function): Promise<string
 export {
   dot, dot_to_svg, // svg_el,
   fsl_to_dot, fsl_to_svg_string,
-  machine_to_dot,
+  machine_to_dot, machine_to_svg_string,
   jssm,
   version, build_time
 };
