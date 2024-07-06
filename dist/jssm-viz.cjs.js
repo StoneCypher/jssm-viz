@@ -543,7 +543,7 @@ const default_viz_colors = {
     'text_complete_solo': '#007700'
 };
 
-const version = "5.98.2", build_time = 1720287523065;
+const version = "5.98.2", build_time = 1720290327276;
 
 const sm = sm$1;
 var viz = new Viz({ Module: full_render.exports.Module, render: full_render.exports.render });
@@ -570,12 +570,14 @@ ${arranges}
 }`;
 }
 function vc(col) {
-    return default_viz_colors[col] || '';
+    var _a;
+    return (_a = default_viz_colors[col]) !== null && _a !== void 0 ? _a : '';
 }
 function node_of(state, l_states) {
     return `n${l_states.indexOf(state)}`;
 }
 function style_for_state(u_jssm, state) {
+    var _a, _b;
     const decls = u_jssm._state_declarations;
     if (!decls) {
         return undefined;
@@ -586,12 +588,14 @@ function style_for_state(u_jssm, state) {
     }
     const corners = {
         rounded: 'rounded',
-        lined: 'diagonals'
-    }[state_decl.corners];
+        lined: 'diagonals',
+        regular: 'regular'
+    }[(_a = state_decl.corners) !== null && _a !== void 0 ? _a : 'regular'];
     const lines = {
         dashed: 'dashed',
-        dotted: 'dotted'
-    }[state_decl.lineStyle];
+        dotted: 'dotted',
+        solid: 'solid'
+    }[(_b = state_decl.lineStyle) !== null && _b !== void 0 ? _b : 'solid'];
     const style = [corners, lines]
         .filter(f => f !== '')
         .join(',');
@@ -624,8 +628,8 @@ function states_to_edges_string(u_jssm, l_states, strike) {
         if (strike.find(row => (row[0] === s) && (row[1] == ex))) {
             return '';
         }
-        const doublequote = txt => txt.replace('"', '\\"');
-        const edge = u_jssm.list_transitions(s, ex), edge_tr = u_jssm.lookup_transition_for(s, ex), pair = u_jssm.list_transitions(ex, s), pair_id = u_jssm.get_transition_by_state_names(ex, s), pair_tr = u_jssm.lookup_transition_for(ex, s), double = pair_id && (s !== ex), if_obj_field = (obj, field) => obj ? (obj[field] || '') : '', h_final = u_jssm.state_is_final(s), h_complete = u_jssm.state_is_complete(s), h_terminal = u_jssm.state_is_terminal(s), t_final = u_jssm.state_is_final(ex), t_complete = u_jssm.state_is_complete(ex), t_terminal = u_jssm.state_is_terminal(ex), lineColor = (final, complete, terminal, lkind, _solo_1_2 = '_solo') => final ? (vc(`${lkind}_final` + _solo_1_2)) :
+        const doublequote = (txt) => txt.replace('"', '\\"');
+        const edge = u_jssm.list_transitions(s), edge_tr = u_jssm.lookup_transition_for(s, ex), pair = u_jssm.list_transitions(ex), pair_id = u_jssm.get_transition_by_state_names(ex, s), pair_tr = u_jssm.lookup_transition_for(ex, s), double = pair_id && (s !== ex), if_obj_field = (obj, field) => { var _a; return obj ? ((_a = obj[field]) !== null && _a !== void 0 ? _a : '') : ''; }, h_final = u_jssm.state_is_final(s), h_complete = u_jssm.state_is_complete(s), h_terminal = u_jssm.state_is_terminal(s), t_final = u_jssm.state_is_final(ex), t_complete = u_jssm.state_is_complete(ex), t_terminal = u_jssm.state_is_terminal(ex), lineColor = (final, complete, terminal, lkind, _solo_1_2 = '_solo') => final ? (vc(`${lkind}_final` + _solo_1_2)) :
             (complete ? (vc(`${lkind}_complete` + _solo_1_2)) :
                 (terminal ? (vc(`${lkind}_terminal` + _solo_1_2)) :
                     vc(`${lkind}` + _solo_1_2))), textColor = (final, complete, terminal, _solo_1_2 = '_solo') => final ? (vc('text_final' + _solo_1_2)) :
@@ -635,7 +639,7 @@ function states_to_edges_string(u_jssm, l_states, strike) {
             [pair, 'probability', 'headlabel', 'name', 'action', double, headColor],
             [edge, 'probability', 'taillabel', 'name', 'action', true, tailColor]
         ]
-            .map(r => ({ which: r[2], whether: (r[5] ? ([(if_obj_field(r[0], r[5])), (if_obj_field(r[0], r[1])), (if_obj_field(r[0], r[3]))].filter(q => q).join('<br/>') || '') : ''), color: r[6] }))
+            .map((r) => ({ which: r[2], whether: (r[5] ? ([(if_obj_field(r[0], r[5])), (if_obj_field(r[0], r[1])), (if_obj_field(r[0], r[3]))].filter(q => q).join('<br/>') || '') : ''), color: r[6] }))
             .filter(present => present.whether)
             .map(r => `${r.which}=${(r.color) ? `<<font color="${(r.color)}">${(r.whether)}</font>>` : `"${(r.whether)}"`};`)
             .join(' '), label = edge_tr ? ([`${((edge_tr.action || ''))}`, `${((edge_tr.probability || ''))}`]
@@ -674,8 +678,7 @@ function arranges_for(u_jssm, l_states) {
     return decl;
 }
 function machine_to_dot(u_jssm) {
-    const l_states = u_jssm.states();
-    const nodes = states_to_nodes_string(u_jssm, l_states);
+    const l_states = u_jssm.states(), nodes = states_to_nodes_string(u_jssm, l_states);
     const strike = [];
     const edges = states_to_edges_string(u_jssm, l_states, strike);
     const arranges = arranges_for(u_jssm, l_states);

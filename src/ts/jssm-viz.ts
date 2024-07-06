@@ -39,7 +39,7 @@ return 'todo';
 
 
 
-function dot_template(RankDir, GraphBgColor, nodes, edges, arranges, preamble = "") {
+function dot_template(RankDir: string, GraphBgColor: string, nodes: string, edges: string, arranges: string, preamble: string = ""): string {
 
   return `digraph G {
 ${preamble}
@@ -64,15 +64,15 @@ ${arranges}
 
 
 
-function vc(col) {
-  return default_viz_colors[col] || '';  // todo make these configurable
+function vc(col: any): string {
+  return (default_viz_colors as any)[col] ?? '';  // todo make these configurable
 }
 
 
 
 
 
-function node_of(state, l_states): string {
+function node_of(state: string, l_states: string[]): string {
   return `n${l_states.indexOf(state)}`;
 }
 
@@ -104,7 +104,7 @@ function u_color8to6(color8?: string): string | undefined {
 
 
 
-function border_color_for_state(u_jssm, state): string | undefined {
+function border_color_for_state(u_jssm: jssm.Machine<string>, state: string): string | undefined {
 
   const decls = u_jssm._state_declarations;
   if (!decls) { return undefined; }
@@ -120,7 +120,7 @@ function border_color_for_state(u_jssm, state): string | undefined {
 
 
 
-function text_color_for_state(u_jssm, state): string | undefined {
+function text_color_for_state(u_jssm: jssm.Machine<string>, state: string): string | undefined {
 
   const decls = u_jssm._state_declarations;
   if (!decls) { return undefined; }
@@ -136,7 +136,7 @@ function text_color_for_state(u_jssm, state): string | undefined {
 
 
 
-function shape_for_state(u_jssm, state): string | undefined {
+function shape_for_state(u_jssm: jssm.Machine<string>, state: string): string | undefined {
 
   const decls = u_jssm._state_declarations;
   if (!decls) { return undefined; }
@@ -152,7 +152,7 @@ function shape_for_state(u_jssm, state): string | undefined {
 
 
 
-function style_for_state(u_jssm, state): string | undefined {
+function style_for_state(u_jssm: jssm.Machine<string>, state: string): string | undefined {
 
   const decls = u_jssm._state_declarations;
   if (!decls) { return undefined; }
@@ -162,13 +162,15 @@ function style_for_state(u_jssm, state): string | undefined {
 
   const corners = {
     rounded: 'rounded',
-    lined:   'diagonals'
-  }[state_decl.corners];
+    lined:   'diagonals',
+    regular: 'regular'
+  }[state_decl.corners ?? 'regular'];
 
   const lines = {
     dashed: 'dashed',
-    dotted: 'dotted'
-  }[state_decl.lineStyle];
+    dotted: 'dotted',
+    solid:  'solid'
+  }[state_decl.lineStyle ?? 'solid'];
 
   const style = [corners, lines]
                   .filter(f => f !== '')
@@ -182,7 +184,7 @@ function style_for_state(u_jssm, state): string | undefined {
 
 
 
-function background_color_for_state(u_jssm, state): string | undefined {
+function background_color_for_state(u_jssm: jssm.Machine<string>, state: string): string | undefined {
 
   const decls = u_jssm._state_declarations;
   if (!decls) { return undefined; }
@@ -198,7 +200,7 @@ function background_color_for_state(u_jssm, state): string | undefined {
 
 
 
-function states_to_nodes_string(u_jssm, l_states): string {
+function states_to_nodes_string(u_jssm: jssm.Machine<string>, l_states: string[]): string {
 
   return l_states.map( (s) => {
 
@@ -241,7 +243,7 @@ function states_to_nodes_string(u_jssm, l_states): string {
 
 
 
-function states_to_edges_string(u_jssm, l_states, strike): string {
+function states_to_edges_string(u_jssm: jssm.Machine<string>, l_states: string[], strike: [string, string][]): string {
 
   return u_jssm.states().map( (s) =>
 
@@ -251,12 +253,12 @@ function states_to_edges_string(u_jssm, l_states, strike): string {
           return '';  // already did the pair
       }
 
-      const doublequote    = txt => txt.replace('"', '\\"');
+      const doublequote    = (txt: string) => txt.replace('"', '\\"');
 
-      const edge           = u_jssm.list_transitions(s, ex),
+      const edge           = u_jssm.list_transitions(s),  // (s, ex)
 //          edge_id        = u_jssm.get_transition_by_state_names(s, ex),
             edge_tr        = u_jssm.lookup_transition_for(s, ex),
-            pair           = u_jssm.list_transitions(ex, s),
+            pair           = u_jssm.list_transitions(ex), // (ex, s),
             pair_id        = u_jssm.get_transition_by_state_names(ex, s),
             pair_tr        = u_jssm.lookup_transition_for(ex, s),
             double         = pair_id && (s !== ex),
@@ -264,9 +266,12 @@ function states_to_edges_string(u_jssm, l_states, strike): string {
 //            head_state     = u_jssm.state_for(s),
 //            tail_state     = u_jssm.state_for(ex),
 
-            nlJoinIfAny    = items => items.filter(item => !([undefined, ''].includes(item))).join('\n'),
+            nlJoinIfAny    = (items: string[]) =>
+                               items.filter(item =>
+                                 !([undefined, ''].includes(item)))
+                               .join('\n'),
 
-            if_obj_field   = (obj, field) => obj? (obj[field] || '') : '',
+            if_obj_field   = (obj: any, field: string) => obj? (obj[field] ?? '') : '',
 
             h_final        = u_jssm.state_is_final(s),
             h_complete     = u_jssm.state_is_complete(s),
@@ -276,13 +281,13 @@ function states_to_edges_string(u_jssm, l_states, strike): string {
             t_complete     = u_jssm.state_is_complete(ex),
             t_terminal     = u_jssm.state_is_terminal(ex),
 
-            lineColor      = (final, complete, terminal, lkind, _solo_1_2 = '_solo') =>
+            lineColor      = (final: boolean, complete: boolean, terminal: boolean, lkind: string, _solo_1_2: string = '_solo') =>
                                final   ? (vc(`${lkind}_final`    + _solo_1_2)) :
                               (complete? (vc(`${lkind}_complete` + _solo_1_2)) :
                               (terminal? (vc(`${lkind}_terminal` + _solo_1_2)) :
                                           vc(`${lkind}`          + _solo_1_2))),
 
-            textColor      = (final, complete, terminal, _solo_1_2 = '_solo') : string =>
+            textColor      = (final: boolean, complete: boolean, terminal: boolean, _solo_1_2: string = '_solo') : string =>
                                final   ? (vc('text_final'    + _solo_1_2)) :
                               (complete? (vc('text_complete' + _solo_1_2)) :
                               (terminal? (vc('text_terminal' + _solo_1_2)) :
@@ -296,7 +301,7 @@ function states_to_edges_string(u_jssm, l_states, strike): string {
                                [pair, 'probability', 'headlabel', 'name', 'action', double, headColor],
                                [edge, 'probability', 'taillabel', 'name', 'action', true,   tailColor]
                              ]
-                             .map(    r       => ({ which: r[2], whether: (r[5]? ([(if_obj_field(r[0], r[5])), (if_obj_field(r[0], r[1])), (if_obj_field(r[0], r[3]))].filter(q=>q).join('<br/>') || '') : ''), color: r[6] }) )
+                             .map(   (r: any) => ({ which: r[2], whether: (r[5]? ([(if_obj_field(r[0], r[5])), (if_obj_field(r[0], r[1])), (if_obj_field(r[0], r[3]))].filter(q=>q).join('<br/>') || '') : ''), color: r[6] }) )
                              .filter( present => present.whether )
                              .map(    r       => `${r.which}=${(r.color)? `<<font color="${(r.color)}">${(r.whether)}</font>>` : `"${(r.whether)}"`};`)
                              .join(' '),
@@ -341,7 +346,7 @@ function states_to_edges_string(u_jssm, l_states, strike): string {
 
 
 
-function flow_direction_to_rankdir(flow_direction) {
+function flow_direction_to_rankdir(flow_direction: string) {
 
   switch (flow_direction) {
 
@@ -360,7 +365,7 @@ function flow_direction_to_rankdir(flow_direction) {
 
 
 
-function arranges_for(u_jssm: any, l_states: any) {
+function arranges_for(u_jssm: jssm.Machine<string>, l_states: string[]) {
 
   let decl = '';
 
@@ -390,19 +395,18 @@ function arranges_for(u_jssm: any, l_states: any) {
 
 
 
-function machine_to_dot(u_jssm: any) {  // whargarbl jssm isn't an any
+function machine_to_dot(u_jssm: jssm.Machine<string>) {  // whargarbl jssm isn't an any
 
-  const l_states = u_jssm.states();
+  const l_states : string[]        = u_jssm.states(),
+        nodes    : string          = states_to_nodes_string(u_jssm, l_states);
 
-  const nodes : string = states_to_nodes_string(u_jssm, l_states);
+  const strike: [string, string][] = [];
+  const edges                      = states_to_edges_string(u_jssm, l_states, strike);
 
-  const strike = [];
-  const edges  = states_to_edges_string(u_jssm, l_states, strike);
+  const arranges                   = arranges_for(u_jssm, l_states);
 
-  const arranges = arranges_for(u_jssm, l_states);
-
-  let RankDir  = flow_direction_to_rankdir(u_jssm.flow() || 'down'),
-      preamble = u_jssm.dot_preamble() || '';
+  let RankDir                      = flow_direction_to_rankdir(u_jssm.flow() || 'down'),
+      preamble                     = u_jssm.dot_preamble() || '';
 
   return dot_template(RankDir, vc('graph_bg_color'), nodes, edges, arranges, preamble);
 
@@ -437,7 +441,7 @@ function fsl_to_svg_string(fsl: string, errorHandler?: Function): Promise<string
 
 
 
-function machine_to_svg_string(u_jssm: any, errorHandler?: Function): Promise<string> {
+function machine_to_svg_string(u_jssm: jssm.Machine<string>, errorHandler?: Function): Promise<string> {
   return dot_to_svg(machine_to_dot(u_jssm), errorHandler);
 }
 
