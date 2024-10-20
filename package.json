@@ -1,6 +1,7 @@
 {
   "name": "jssm-viz",
   "version": "5.99.0",
+  "type": "module",
   "description": "Visualization of JSSM machines using viz.js",
   "main": "dist/jssm-viz.cjs.js",
   "module": "dist/jssm-viz.es6.js",
@@ -9,7 +10,7 @@
     "clean": "rimraf build -f && rimraf dist -f && rimraf docs -f && mkdir build && cd build && mkdir terser && cd .. && mkdir dist && mkdir docs && cd docs && mkdir docs && cd ../src/ts && rimraf -f generated_code && mkdir generated_code && cd ../..",
     "rollup": "rollup -c",
     "typescript": "tsc --build tsconfig.json",
-    "version": "node ./src/build_js/set_version.js",
+    "version": "node ./src/build_js/set_version.cjs",
     "make": "npm run clean && npm run version && npm run typescript && npm run rollup",
     "eslint": "eslint src/ts/jssm-viz.js",
     "nyc-html": "nyc ava report --reporter=html",
