@@ -37,10 +37,10 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Node ${{ matrix.node-version }} ${{ matrix.os }} remote build
       if: github.event.action == 'upgrade_jssm'
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: 18.x
         cache: 'npm'
@@ -76,10 +76,10 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Node ${{ matrix.node-version }} ${{ matrix.os }} remote build
       if: github.event.action == 'upgrade_jssm'
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: 18.x
         cache: 'npm'
@@ -105,7 +105,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Use Node.js 18.x
       uses: actions/setup-node@v1
@@ -167,7 +167,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Export tag to envvars
       run: |
         export TAG=${{ github.event.client_payload.lib_version }}
@@ -186,7 +186,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Export tag to envvars
       run: |
         export TAG=${{ github.event.client_payload.lib_version }}
