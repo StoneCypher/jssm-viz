@@ -1,9 +1,6 @@
 
 import nodeResolve from '@rollup/plugin-node-resolve';
 import commonjs    from '@rollup/plugin-commonjs';
-// import ignore      from '@rollup/plugin-ignore';
-
-const pkg = require('./package');
 
 
 
