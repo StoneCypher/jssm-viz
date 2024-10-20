@@ -12,13 +12,9 @@ jobs:
             os: ubuntu-latest
           - node-version: 23.x   # slowest, so run next. sort by slowest from here to get earliest end through parallelism
             os: macos-latest
-          - node-version: 13.x   # finish check big-3 on latest current
+          - node-version: 23.x   # finish check big-3 on latest current
             os: windows-latest
-          - node-version: 14.x  # lastly check just ubuntu on historic node versions because speed, oldest (slowest) first
-            os: ubuntu-latest
-          - node-version: 15.x
-            os: ubuntu-latest
-          - node-version: 16.x
+          - node-version: 16.x  # lastly check just ubuntu on historic node versions because speed, oldest (slowest) first
             os: ubuntu-latest
           - node-version: 17.x
             os: ubuntu-latest
