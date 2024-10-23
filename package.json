@@ -3,7 +3,7 @@
   "version": "5.101.0",
   "type": "module",
   "description": "Visualization of JSSM machines using viz.js",
-  "main": "dist/jssm-viz.cjs.js",
+  "main": "dist/jssm-viz.cjs.cjs",
   "module": "dist/jssm-viz.es6.js",
   "scripts": {
     "test": "jest --verbose",

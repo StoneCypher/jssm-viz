@@ -46,7 +46,7 @@ const cjsconfig = {
   input     : 'build/typescript/jssm-viz.js',
 
   output    : {
-    file      : 'build/rollup/jssm-viz.cjs.js',
+    file      : 'build/rollup/jssm-viz.cjs.cjs',
     format    : 'cjs',
     name      : 'jssm_viz',
     sourcemap : true,
