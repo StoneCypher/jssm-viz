@@ -5,6 +5,17 @@
   "description": "Visualization of JSSM machines using viz.js",
   "main": "dist/jssm-viz.cjs.cjs",
   "module": "dist/jssm-viz.es6.js",
+  "exports": {
+    "require": {
+      "types": "./dist/jssm-viz.d.cts",
+      "default": "./dist/jssm-viz.cjs.cjs"
+    },
+    "import": {
+      "types": "./dist/jssm-viz.es6.d.ts",
+      "default": "./dist/jssm-viz.es6.js"
+    },
+    "browser": "./dist/jssm-viz.iife.js"
+  },
   "scripts": {
     "test": "jest --verbose",
     "clean": "rimraf build -f && rimraf dist -f && rimraf docs -f && mkdir build && cd build && mkdir terser && cd .. && mkdir dist && mkdir docs && cd docs && mkdir docs && cd ../src/ts && rimraf -f generated_code && mkdir generated_code && cd ../..",
@@ -74,6 +85,7 @@
     "pegjs": "^0.10.0",
     "rimraf": "^2.7.1",
     "rollup": "^4.22.4",
+    "rollup-plugin-dts": "^6.1.1",
     "typescript": "^5.5.3",
     "uglify-js": "^3.6.2",
     "viz.js": "^2.1.2"
