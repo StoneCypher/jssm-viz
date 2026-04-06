@@ -1,10 +1,21 @@
 {
   "name": "jssm-viz",
-  "version": "5.101.0",
+  "version": "5.104.2",
   "type": "module",
   "description": "Visualization of JSSM machines using viz.js",
-  "main": "dist/jssm-viz.cjs.js",
+  "main": "dist/jssm-viz.cjs.cjs",
   "module": "dist/jssm-viz.es6.js",
+  "exports": {
+    "require": {
+      "types": "./dist/jssm-viz.d.cts",
+      "default": "./dist/jssm-viz.cjs.cjs"
+    },
+    "import": {
+      "types": "./dist/jssm-viz.es6.d.ts",
+      "default": "./dist/jssm-viz.es6.js"
+    },
+    "browser": "./dist/jssm-viz.iife.js"
+  },
   "scripts": {
     "test": "jest --verbose",
     "clean": "rimraf build -f && rimraf dist -f && rimraf docs -f && mkdir build && cd build && mkdir terser && cd .. && mkdir dist && mkdir docs && cd docs && mkdir docs && cd ../src/ts && rimraf -f generated_code && mkdir generated_code && cd ../..",
@@ -59,7 +70,7 @@
   "dependencies": {
     "better_git_changelog": "^1.6.2",
     "eslint": "^8.15.0",
-    "jssm": "^5.101.0",
+    "jssm": "^5.104.2",
     "reduce-to-639-1": "^1.1.0",
     "text_audit": "^0.9.2"
   },
@@ -70,10 +81,11 @@
     "@types/jest": "^29.5.12",
     "@types/viz.js": "^2.1.2",
     "jest": "^29.7.0",
-    "nyc": "^14.1.1",
+    "nyc": "^17.1.0",
     "pegjs": "^0.10.0",
     "rimraf": "^2.7.1",
     "rollup": "^4.22.4",
+    "rollup-plugin-dts": "^6.1.1",
     "typescript": "^5.5.3",
     "uglify-js": "^3.6.2",
     "viz.js": "^2.1.2"

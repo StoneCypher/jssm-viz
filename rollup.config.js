@@ -1,12 +1,12 @@
 
 import nodeResolve from '@rollup/plugin-node-resolve';
 import commonjs    from '@rollup/plugin-commonjs';
+import dts         from "rollup-plugin-dts";
 
 
 
 
-
-const es6config = {
+const es6config = [{
 
   input     : 'build/typescript/jssm-viz.js',
 
@@ -35,18 +35,31 @@ const es6config = {
 
   ]
 
-};
+}, {
+
+  input: 'build/typescript/jssm-viz.d.ts',
+
+  output: { 
+    file   : './build/rollup/jssm-viz.es6.d.ts',
+    format : 'es'
+  },
+
+  plugins : [
+
+    dts()
+  ]}
+];
 
 
 
 
 
-const cjsconfig = {
+const cjsconfig = [{
 
   input     : 'build/typescript/jssm-viz.js',
 
   output    : {
-    file      : 'build/rollup/jssm-viz.cjs.js',
+    file      : 'build/rollup/jssm-viz.cjs.cjs',
     format    : 'cjs',
     name      : 'jssm_viz',
     sourcemap : true,
@@ -70,13 +83,26 @@ const cjsconfig = {
 
   ]
 
-};
+}, {
+
+  input: 'build/typescript/jssm-viz.d.ts',
+
+  output: { 
+    file   : './build/rollup/jssm-viz.cjs.d.cts',
+    format : 'cjs'
+  },
+
+  plugins : [
+
+    dts()
+  ]}
+];
 
 
 
 
 
-const iifeconfig = {
+const iifeconfig = [{
 
   input     : 'build/typescript/jssm-viz.js',
 
@@ -105,10 +131,10 @@ const iifeconfig = {
 
   ]
 
-};
+}];
 
 
 
 
 
-export default [ es6config, cjsconfig, iifeconfig ];
+export default [ ...es6config, ...cjsconfig, ...iifeconfig ];
