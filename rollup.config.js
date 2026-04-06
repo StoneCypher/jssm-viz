@@ -9,6 +9,7 @@ import dts         from "rollup-plugin-dts";
 const es6config = [{
 
   input     : 'build/typescript/jssm-viz.js',
+  external  : ['@resvg/resvg-wasm', 'fs', 'module'],
 
   output    : {
     file      : 'build/rollup/jssm-viz.es6.js',
@@ -57,6 +58,7 @@ const es6config = [{
 const cjsconfig = [{
 
   input     : 'build/typescript/jssm-viz.js',
+  external  : ['@resvg/resvg-wasm', 'fs', 'module'],
 
   output    : {
     file      : 'build/rollup/jssm-viz.cjs.cjs',
@@ -105,12 +107,14 @@ const cjsconfig = [{
 const iifeconfig = [{
 
   input     : 'build/typescript/jssm-viz.js',
+  external  : ['@resvg/resvg-wasm', 'fs', 'module'],
 
   output    : {
     file      : 'build/rollup/jssm-viz.iife.js',
     format    : 'iife',
     name      : 'jssm_viz',
     sourcemap : true,
+    globals   : { '@resvg/resvg-wasm': 'resvg_wasm', 'fs': 'fs', 'module': 'module' }
   },
 
   plugins   : [

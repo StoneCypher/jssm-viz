@@ -1,6 +1,6 @@
 {
   "name": "jssm-viz",
-  "version": "5.104.2",
+  "version": "5.105.0",
   "type": "module",
   "description": "Visualization of JSSM machines using viz.js",
   "main": "dist/jssm-viz.cjs.cjs",
@@ -59,7 +59,8 @@
     "fsm-graph",
     "vis",
     "viz",
-    "svg"
+    "svg",
+    "png"
   ],
   "author": "John Haugeland <stonecypher@gmail.com>",
   "license": "MIT",
@@ -68,6 +69,7 @@
   },
   "homepage": "https://github.com/StoneCypher/jssm-viz#readme",
   "dependencies": {
+    "@resvg/resvg-wasm": "^2.6.2",
     "better_git_changelog": "^1.6.2",
     "eslint": "^8.15.0",
     "jssm": "^5.104.2",
@@ -86,6 +88,7 @@
     "rimraf": "^2.7.1",
     "rollup": "^4.22.4",
     "rollup-plugin-dts": "^6.1.1",
+    "ts-jest": "^29.4.9",
     "typescript": "^5.5.3",
     "uglify-js": "^3.6.2",
     "viz.js": "^2.1.2"

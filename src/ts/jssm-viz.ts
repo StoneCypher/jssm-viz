@@ -4,6 +4,8 @@ import * as jssm               from 'jssm';
 import Viz                     from 'viz.js';
 import { Module, render }      from 'viz.js/full.render.js';
 
+import { initWasm, Resvg }     from '@resvg/resvg-wasm';
+
 import { default_viz_colors }  from './default_colors';
 
 import { version, build_time } from './generated_code/version';
@@ -27,13 +29,138 @@ function dot_to_svg(dot: string, config? : Object, errorHandler? : Function): Pr
 
 
 
-/* todo
-function png_el(dot: string, config? : Object): HTMLImageElement {  // whargarbl jssm isn't an any // whargarbl should return an image element, not a string
-  var cfg = Object.assign({}, config, { format: "png-image-element" });
-//  return vizjs(dot, cfg);
-return 'todo';
+let png_initialized = false;
+
+
+/**
+ * Initialize PNG rendering support by loading the resvg WASM module.
+ *
+ * In Node.js, call with no arguments to auto-load the WASM binary from the
+ * installed `@resvg/resvg-wasm` package. In browsers, pass a `BufferSource`
+ * or `Response` containing the WASM binary.
+ *
+ * Must be called before any `*_to_png` function. Subsequent calls are no-ops.
+ *
+ * @param wasm_source - The WASM binary. Omit for Node.js auto-detection.
+ *
+ * @example
+ * // Node.js — auto-loads from node_modules
+ * await init_png();
+ * const png = await fsl_to_png('a -> b;');
+ *
+ * @example
+ * // Browser — pass fetched WASM binary
+ * await init_png(fetch('/path/to/index_bg.wasm'));
+ * const png = await fsl_to_png('a -> b;');
+ */
+async function init_png(wasm_source?: any): Promise<void> {
+
+  if (png_initialized) { return; }
+
+  let source = wasm_source;
+
+  if (source === undefined) {
+    try {
+      // @ts-ignore - require available in Node.js / CJS context
+      const fs = require('fs');
+      // @ts-ignore
+      const wasmPath = require.resolve('@resvg/resvg-wasm/index_bg.wasm');
+      source = fs.readFileSync(wasmPath);
+    } catch (e) {
+      throw new Error(
+        'PNG auto-init failed. In Node.js, ensure @resvg/resvg-wasm is installed. ' +
+        'In browsers, call init_png(wasmBuffer) with the WASM binary first.'
+      );
+    }
+  }
+
+  await initWasm(source);
+  png_initialized = true;
+
 }
-*/
+
+
+/**
+ * Convert an SVG string to a PNG `Uint8Array`.
+ *
+ * Requires {@link init_png} to have been called first.
+ *
+ * @param svg - An SVG document string.
+ * @returns A PNG-encoded image as a `Uint8Array`.
+ *
+ * @example
+ * await init_png();
+ * const svg = await dot_to_svg('digraph { a -> b }');
+ * const png = svg_to_png(svg);
+ */
+function svg_to_png(svg: string): Uint8Array {
+
+  if (!png_initialized) {
+    throw new Error('PNG support not initialized. Call init_png() first.');
+  }
+
+  const resvg    = new Resvg(svg);
+  const rendered = resvg.render();
+
+  return rendered.asPng();
+
+}
+
+
+/**
+ * Render a Graphviz DOT string to a PNG `Uint8Array`.
+ *
+ * Requires {@link init_png} to have been called first.
+ *
+ * @param dot - A Graphviz DOT language string.
+ * @returns A PNG-encoded image as a `Uint8Array`.
+ *
+ * @example
+ * await init_png();
+ * const png = await dot_to_png('digraph { a -> b }');
+ */
+async function dot_to_png(dot: string): Promise<Uint8Array> {
+  const svg = await dot_to_svg(dot);
+  return svg_to_png(svg);
+}
+
+
+/**
+ * Render an FSL string to a PNG `Uint8Array`.
+ *
+ * Requires {@link init_png} to have been called first.
+ *
+ * @param fsl - An FSL (Finite State Language) string.
+ * @returns A PNG-encoded image as a `Uint8Array`.
+ *
+ * @example
+ * await init_png();
+ * const png = await fsl_to_png('a -> b -> c;');
+ */
+async function fsl_to_png(fsl: string): Promise<Uint8Array> {
+  const svg = await fsl_to_svg_string(fsl);
+  return svg_to_png(svg);
+}
+
+
+/**
+ * Render a JSSM machine instance to a PNG `Uint8Array`.
+ *
+ * Requires {@link init_png} to have been called first.
+ *
+ * @param u_jssm - A JSSM `Machine` instance.
+ * @returns A PNG-encoded image as a `Uint8Array`.
+ *
+ * @example
+ * import { sm } from 'jssm';
+ * await init_png();
+ * const machine = sm`a -> b -> c;`;
+ * const png = await machine_to_png(machine);
+ */
+async function machine_to_png(u_jssm: jssm.Machine<string>): Promise<Uint8Array> {
+  const svg = await machine_to_svg_string(u_jssm);
+  return svg_to_png(svg);
+}
 
 
 
@@ -461,6 +588,8 @@ export {
   dot, dot_to_svg, // svg_el,
   fsl_to_dot, fsl_to_svg_string,
   machine_to_dot, machine_to_svg_string,
+  init_png, svg_to_png, dot_to_png,
+  fsl_to_png, machine_to_png,
   jssm,
   version, build_time
 };
