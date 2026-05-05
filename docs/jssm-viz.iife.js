@@ -555,7 +555,7 @@ var jssm_viz = (function (exports, require$$0, resvgWasm) {
       'text_complete_solo': '#007700'
   };
 
-  const version = "5.105.0", build_time = 1775515590581;
+  const version = "5.105.0", build_time = 1777959854080;
 
   const sm = sm$1;
   var viz = new Viz({ Module: full_renderExports.Module, render: full_renderExports.render });
