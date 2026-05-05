@@ -325,6 +325,39 @@ function background_color_for_state(u_jssm: jssm.Machine<string>, state: string)
 
 
 
+/**
+ * Retrieve the image path for a state, if one has been declared.
+ *
+ * Image support allows nodes to display an image inside the node shape.
+ * The image is read from the state declaration's `image` property, which
+ * can be set programmatically on the machine's `_state_declarations` map.
+ *
+ * @param u_jssm - A JSSM `Machine` instance.
+ * @param state  - The state name to look up.
+ * @returns The image path string, or `undefined` if none is set.
+ *
+ * @example
+ * const m = sm`a -> b -> c;`;
+ * const decl = m._state_declarations.get('b') || { declarations: [] };
+ * (decl as any).image = 'icon.png';
+ * m._state_declarations.set('b', decl);
+ * image_for_state(m, 'b');  // 'icon.png'
+ * image_for_state(m, 'a');  // undefined
+ */
+function image_for_state(u_jssm: jssm.Machine<string>, state: string): string | undefined {
+
+  const decls = u_jssm._state_declarations;
+  if (!decls) { return undefined; }
+
+  const state_decl = decls.get(state);
+  if (!state_decl) { return undefined; }
+
+  return (state_decl as any).image;
+
+}
+
+
+
 
 
 function states_to_nodes_string(u_jssm: jssm.Machine<string>, l_states: string[]): string {
@@ -344,6 +377,7 @@ function states_to_nodes_string(u_jssm: jssm.Machine<string>, l_states: string[]
           final      = u_jssm.state_is_final(s),
           complete   = u_jssm.state_is_complete(s),
           use_label  = u_jssm.display_text(s),
+          image      = image_for_state(u_jssm, s),
           features   = [
                         ['label',       use_label],
                         ['shape',       style.shape                  || ''],
@@ -354,7 +388,13 @@ function states_to_nodes_string(u_jssm: jssm.Machine<string>, l_states: string[]
                                        (final   ? vc('fill_final')    :
                                        (complete? vc('fill_complete') :
                                        (terminal? vc('fill_terminal') :
-                                                  ''))) ]
+                                                  ''))) ],
+                        ['image',      image                         || '' ],
+                        ['labelloc',   image ? 'b'                   : '' ],
+                        ['imagescale', image ? 'both'                : '' ],
+                        ['fixedsize',  image ? 'true'                : '' ],
+                        ['width',      image ? '0.75'                : '' ],
+                        ['height',     image ? '0.75'                : '' ]
                        ]
                         .filter(r => r[1])
                         .map(   r => `${r[0]}="${r[1]}"`)

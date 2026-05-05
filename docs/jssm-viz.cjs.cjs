@@ -557,7 +557,7 @@ const default_viz_colors = {
     'text_complete_solo': '#007700'
 };
 
-const version = "5.105.0", build_time = 1775497552768;
+const version = "5.105.0", build_time = 1775515590581;
 
 const sm = sm$1;
 var viz = new Viz({ Module: full_renderExports.Module, render: full_renderExports.render });
@@ -655,11 +655,22 @@ function style_for_state(u_jssm, state) {
         .join(',');
     return style ? `${style},filled` : '';
 }
+function image_for_state(u_jssm, state) {
+    const decls = u_jssm._state_declarations;
+    if (!decls) {
+        return undefined;
+    }
+    const state_decl = decls.get(state);
+    if (!state_decl) {
+        return undefined;
+    }
+    return state_decl.image;
+}
 function states_to_nodes_string(u_jssm, l_states) {
     return l_states.map((s) => {
         const style = u_jssm.style_for(s);
         const border_color = style.borderColor; style.lineStyle; const bgcolor = style.backgroundColor, fgcolor = style.textColor; style.corners;
-        u_jssm.state_for(s); const terminal = u_jssm.state_is_terminal(s), final = u_jssm.state_is_final(s), complete = u_jssm.state_is_complete(s), use_label = u_jssm.display_text(s), features = [
+        u_jssm.state_for(s); const terminal = u_jssm.state_is_terminal(s), final = u_jssm.state_is_final(s), complete = u_jssm.state_is_complete(s), use_label = u_jssm.display_text(s), image = image_for_state(u_jssm, s), features = [
             ['label', use_label],
             ['shape', style.shape || ''],
             ['color', border_color || ''],
@@ -669,7 +680,13 @@ function states_to_nodes_string(u_jssm, l_states) {
                     (final ? vc('fill_final') :
                         (complete ? vc('fill_complete') :
                             (terminal ? vc('fill_terminal') :
-                                '')))]
+                                '')))],
+            ['image', image || ''],
+            ['labelloc', image ? 'b' : ''],
+            ['imagescale', image ? 'both' : ''],
+            ['fixedsize', image ? 'true' : ''],
+            ['width', image ? '0.75' : ''],
+            ['height', image ? '0.75' : '']
         ]
             .filter(r => r[1])
             .map(r => `${r[0]}="${r[1]}"`)
