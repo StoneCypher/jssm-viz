@@ -557,7 +557,7 @@ const default_viz_colors = {
     'text_complete_solo': '#007700'
 };
 
-const version = "5.105.0", build_time = 1778578481614;
+const version = "5.105.0", build_time = 1778578617925;
 
 const sm = sm$1;
 var viz = new Viz({ Module: full_renderExports.Module, render: full_renderExports.render });
