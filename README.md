@@ -6,6 +6,22 @@ Visualization of [JSSM](https://github.com/StoneCypher/jssm/) machines using [vi
 
 <br/><br/>
 
+## Deprecated!
+
+This was written when tree shaking and alternate entrypoints weren't native to node.  Now they are.  This project was created to prevent the high size of one dependency from impacting the main library.  That no longer makes sense.
+
+All JSSM support libraries have been folded into JSSM.
+
+***As of May 12 2026, 5.105.0 is the final version of standalone jssm-viz***.
+
+jssm-viz is now [part of jssm](https://github.com/StoneCypher/jssm) and no longer exists as a standalone project.
+
+
+
+
+
+<br/><br/>
+
 ## TL;DR
 
 Easy to use `fsl` to `svg` through `jssm`.
@@ -86,8 +102,8 @@ Et voila: `svg` of your `fsl`.
 
 ## What is this?
 
-`jssm-viz` is a way to render your `fsl` and `jssm` to `svg` (and from there to `jpeg` and `png`.)
+`jssm-viz` was a way to render your `fsl` and `jssm` to `svg` (and from there to `jpeg` and `png`.)
+
+Now it's just built into JSSM directly.
 
 [See it in use](https://stonecypher.github.io/jssm-viz-demo/graph_explorer.html).
-
-TODO: write a better readme
